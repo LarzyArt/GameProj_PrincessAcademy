@@ -1,4 +1,4 @@
-package charmees.Util;
+package src.main.charmees.util;
 
 import java.util.Scanner;
 
