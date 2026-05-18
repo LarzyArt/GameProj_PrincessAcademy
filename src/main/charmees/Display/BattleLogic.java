@@ -62,6 +62,34 @@ public class BattleLogic {
     // PLAYER ACTIONS
     // =================================================
 
+    // SWITCH — swap active fighter (Lazuli never an option)
+    private void onSwitch() {
+        BattleDisplay.showSwitchMenu(characters, activeIdx, charMaxHP);
+        int pick = Display.readInt(sc);
+
+        if (pick == 0) { BattleDisplay.log("Cancelled."); return; }
+
+        // walk through valid options and find the one the player picked
+        int count = 0;
+        for (int i = 0; i < characters.length; i++) {
+            if (i == 2) continue;
+            if (i == activeIdx) continue;
+            if (!characters[i].isAlive()) continue;
+
+            count++;
+            if (count == pick) {
+                String oldName = characters[activeIdx].getName();
+                activeIdx = i;
+                BattleDisplay.log(oldName + " switched out!  "
+                        + characters[activeIdx].getName() + " enters the battle!");
+                endPlayerTurn();
+                return;
+            }
+        }
+
+        BattleDisplay.log("Invalid choice.");
+    }
+
     // =================================================
     // TURN FLOW
     // =================================================
