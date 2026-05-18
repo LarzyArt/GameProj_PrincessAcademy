@@ -12,14 +12,28 @@ public class Display {
     public static final String LINE = "=".repeat(WIDTH);
     public static final String THIN = "-".repeat(WIDTH);
 
+    // ── Terminal colours ────────────────────────────────────
+    public static final String RESET   = "\033[0m";
+    public static final String BOLD    = "\033[1m";
+    public static final String DIM     = "\033[2m";
+    public static final String CYAN    = "\033[36m";
+    public static final String YELLOW  = "\033[33m";
+    public static final String GREEN   = "\033[32m";
+    public static final String RED     = "\033[31m";
+    public static final String MAGENTA = "\033[35m";
+
     //border / header helpers
 
-    /** Prints a full-width "===...===" line */
+    /**
+     * Prints a full-width "===...===" line
+     */
     public static void line() {
         System.out.println(LINE);
     }
 
-    /** Prints a full-width "---...---" line */
+    /**
+     * Prints a full-width "---...---" line
+     */
     public static void thin() {
         System.out.println(THIN);
     }
@@ -27,7 +41,8 @@ public class Display {
     /**
      * Prints the game title
      * Call this at the top of every screen.
-     */    public static void banner() {
+     */
+    public static void banner() {
         line();
         centered("Princess Académie: Jumelles de la Destinée");
         line();
@@ -35,9 +50,9 @@ public class Display {
 
     /**
      * Prints a section header like:
-     *   ==================================================
-     *   |              YOUR TITLE HERE                   |
-     *   ==================================================
+     * ==================================================
+     * |              YOUR TITLE HERE                   |
+     * ==================================================
      */
     public static void header(String title) {
         line();
