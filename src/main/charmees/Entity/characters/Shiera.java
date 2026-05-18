@@ -58,7 +58,7 @@ public class Shiera extends Character {
 
     @Override
     public String[] getSkillList() {
-        return new String[]{"1) Stone Spikes - Cost: 4 MP","2) Earth Wall - Cost: 6 MP","3) Iron Maiden - Cost: 10 MP"};
+        return new String[]{"[1] Stone Spikes - Cost: 4 MP","2) Earth Wall - Cost: 6 MP","3) Iron Maiden - Cost: 10 MP"};
     }
 
     @Override

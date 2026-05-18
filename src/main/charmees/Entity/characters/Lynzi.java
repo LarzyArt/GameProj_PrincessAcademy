@@ -51,7 +51,7 @@ public class Lynzi extends Character {
 
     @Override
     public String[] getSkillList() {
-        return new String[]{"1) Majestic Kick - Cost: 0 MP","2) Galactic Fist - Cost: 2 MP","3) Meteoric Smash - Cost: 10 MP"};
+        return new String[]{"[1] Majestic Kick - Cost: 0 MP","2) Galactic Fist - Cost: 2 MP","3) Meteoric Smash - Cost: 10 MP"};
     }
 
     @Override

@@ -48,7 +48,7 @@ public class Giantha extends Character {
 
     @Override
     public String[] getSkillList() {
-        return new String[]{"1) Giant Punch - Cost: 0 MP","2) Giant's Roar - Cost: 1 MP","3) Club Smash - Cost: 9 MP"};
+        return new String[]{"[1] Giant Punch - Cost: 0 MP","2) Giant's Roar - Cost: 1 MP","3) Club Smash - Cost: 9 MP"};
     }
 
     @Override

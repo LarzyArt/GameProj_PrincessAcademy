@@ -63,7 +63,7 @@ public class Lazuli extends Character {
 
     @Override
     public String[] getSkillList() {
-        return new String[]{"1) Basic Heal - Cost: 10 MP","2) Ocean's Blessing - Cost: 20 MP","3) Harmonic Wave - Requires 0 MP"};
+        return new String[]{"[1] Basic Heal - Cost: 10 MP","2) Ocean's Blessing - Cost: 20 MP","3) Harmonic Wave - Requires 0 MP"};
     }
 
     @Override

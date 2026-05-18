@@ -55,7 +55,7 @@ public class Audry extends Character {
 
     @Override
     public String[] getSkillList() {
-        return new String[]{"1) Slime Bounce - Cost: 3 MP","2) Acid Shot - Cost: 7 MP","3) Beyond the Abyss - Cost: 15 MP"};
+        return new String[]{"[1] Slime Bounce - Cost: 3 MP","2) Acid Shot - Cost: 7 MP","3) Beyond the Abyss - Cost: 15 MP"};
     }
 
     @Override
