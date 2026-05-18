@@ -1,6 +1,6 @@
 package charmees.Entity.characters;
-import charmees.util.MobNPC;
 import charmees.util.Character;
+import charmees.util.MobNPC;
 
 public class Audry extends Character {
 
@@ -10,11 +10,6 @@ public class Audry extends Character {
 
     @Override
     public void useSkill(int skill, MobNPC target, Character ally, Character[] party) {
-        // if this character is stunned, they cannot use skills
-        if (this.isStunned()) {
-            System.out.println(this.getName() + " is stunned and cannot use skills.");
-            return;
-        }
         audrySkills(skill, target);
     }
 
@@ -55,7 +50,9 @@ public class Audry extends Character {
 
     @Override
     public String[] getSkillList() {
-        return new String[]{"[1] Slime Bounce - Cost: 3 MP","2) Acid Shot - Cost: 7 MP","3) Beyond the Abyss - Cost: 15 MP"};
+        return new String[]{"[1] Slime Bounce - Cost: 3 MP",
+        "[2] Acid Shot - Cost: 7 MP",
+        "[3] Beyond the Abyss - Cost: 15 MP"};
     }
 
     @Override

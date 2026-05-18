@@ -1,6 +1,6 @@
 package charmees.Entity.characters;
-import charmees.util.MobNPC;
 import charmees.util.Character;
+import charmees.util.MobNPC;
 
 public class Shiera extends Character {
 
@@ -10,11 +10,6 @@ public class Shiera extends Character {
 
     @Override
     public void useSkill(int skill, MobNPC target, Character ally, Character[] party) {
-        // if this character is stunned, they cannot use skills
-        if (this.isStunned()) {
-            System.out.println(this.getName() + " is stunned and cannot use skills.");
-            return;
-        }
         shieraSkills(skill, target, ally);
     }
 
@@ -58,7 +53,9 @@ public class Shiera extends Character {
 
     @Override
     public String[] getSkillList() {
-        return new String[]{"[1] Stone Spikes - Cost: 4 MP","2) Earth Wall - Cost: 6 MP","3) Iron Maiden - Cost: 10 MP"};
+        return new String[]{"[1] Stone Spikes - Cost: 4 MP",
+        "[2] Earth Wall - Cost: 6 MP",
+        "[3] Iron Maiden - Cost: 10 MP"};
     }
 
     @Override

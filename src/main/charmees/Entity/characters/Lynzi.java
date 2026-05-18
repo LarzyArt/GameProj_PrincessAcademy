@@ -1,6 +1,6 @@
 package charmees.Entity.characters;
-import charmees.util.MobNPC;
 import charmees.util.Character;
+import charmees.util.MobNPC;
 
 public class Lynzi extends Character {
 
@@ -10,11 +10,6 @@ public class Lynzi extends Character {
 
     @Override
     public void useSkill(int skill, MobNPC target, Character ally, Character[] party) {
-        // if this character is stunned, they cannot use skills
-        if (this.isStunned()) {
-            System.out.println(this.getName() + " is stunned and cannot use skills.");
-            return;
-        }
         lynziSkills(skill, target);
     }
 
@@ -41,8 +36,6 @@ public class Lynzi extends Character {
                     manaPoints -= 10;
                     damage = (int)(Math.random() * 151) + 100;
                     target.takedamage(damage);
-                    // Lynzi becomes unable to act for 2 turns after using Meteoric Smash
-                    this.stunnedTurns = Math.max(this.stunnedTurns, 2);
                     System.out.println(name + " used Ultimate, Meteoric Smash! Deals " + damage + " damage and is exhausted for 2 turns.");
                 } else System.out.println(name + " doesn't have enough mana!");
                 break;
@@ -51,7 +44,9 @@ public class Lynzi extends Character {
 
     @Override
     public String[] getSkillList() {
-        return new String[]{"[1] Majestic Kick - Cost: 0 MP","2) Galactic Fist - Cost: 2 MP","3) Meteoric Smash - Cost: 10 MP"};
+        return new String[]{"[1] Majestic Kick - Cost: 0 MP",
+        "[2] Galactic Fist - Cost: 2 MP",
+        "[3] Meteoric Smash - Cost: 10 MP"};
     }
 
     @Override

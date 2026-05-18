@@ -1,6 +1,6 @@
 package charmees.Entity.characters;
-import charmees.util.MobNPC;
 import charmees.util.Character;
+import charmees.util.MobNPC;
 
 public class Giantha extends Character {
 
@@ -10,11 +10,6 @@ public class Giantha extends Character {
 
     @Override
     public void useSkill(int skill, MobNPC target, Character ally, Character[] party) {
-        // if this character is stunned, they cannot use skills
-        if (this.isStunned()) {
-            System.out.println(this.getName() + " is stunned and cannot use skills.");
-            return;
-        }
         gianthaSkills(skill, target);
     }
 
@@ -48,7 +43,9 @@ public class Giantha extends Character {
 
     @Override
     public String[] getSkillList() {
-        return new String[]{"[1] Giant Punch - Cost: 0 MP","2) Giant's Roar - Cost: 1 MP","3) Club Smash - Cost: 9 MP"};
+        return new String[]{"[1] Giant Punch - Cost: 0 MP",
+        "[2] Giant's Roar - Cost: 1 MP",
+        "[3] Club Smash - Cost: 9 MP"};
     }
 
     @Override
