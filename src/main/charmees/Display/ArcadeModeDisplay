@@ -154,4 +154,25 @@ public static void showCharVsCharDescription() {
         Display.line();
     }
 
+    public static void showCombatLog(String[] combatLog, int logPointer) {
+        boolean hasContent = false;
+        for (String s : combatLog)
+            if (s != null && !s.isEmpty()) { hasContent = true; break; }
+        if (!hasContent) return;
+
+        System.out.println("  Recent Events:");
+        for (int i = 0; i < combatLog.length; i++) {
+            int slot = (logPointer - combatLog.length + i + combatLog.length) % combatLog.length;
+            String line = combatLog[slot];
+            if (line != null && !line.isEmpty())
+                System.out.println("    > " + line);
+        }
+        Display.thin();
+    }
+
+    private static int pct(int val, int max) {
+        return max <= 0 ? 0 : (int) ((double) val / max * 100);
+    }
+
+
     
