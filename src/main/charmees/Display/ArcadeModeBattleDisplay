@@ -1,0 +1,42 @@
+package charmees.Display;
+
+import charmees.util.Character;
+import charmees.util.Display;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class ArcadeModeBattleDisplay {
+
+    private final Scanner sc;
+    private final Random rng;
+
+    private final Character hero;
+    private final int heroMaxHP, heroMaxMP;
+
+    private final Character opponent;
+    private final int oppMaxHP, oppMaxMP;
+
+    private final String[] combatLog = new String[4];
+    private int logPointer = 0;
+
+    private int totalDealt, totalTaken, turnCount;
+
+    public ArcadeModeBattleDisplay(
+            Character hero, int heroMaxHP, int heroMaxMP,
+            Character opponent, int oppMaxHP, int oppMaxMP,
+            Scanner sc, Random rng) {
+        this.hero       = hero;
+        this.heroMaxHP  = heroMaxHP;
+        this.heroMaxMP  = heroMaxMP;
+        this.opponent   = opponent;
+        this.oppMaxHP   = oppMaxHP;
+        this.oppMaxMP   = oppMaxMP;
+        this.sc         = sc;
+        this.rng        = rng;
+        this.turnCount  = 1;
+        this.totalDealt = 0;
+        this.totalTaken = 0;
+        clearLog();
+    }
+}
