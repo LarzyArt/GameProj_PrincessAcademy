@@ -44,4 +44,38 @@ public class MainMenuDisplay {
             }
         }
     }
+
+
+    // Display game subtitle
+    Display.centered("A story-driven turn-based RPG");
+            Display.gap();
+
+
+    String border = Display.CYAN + "+" + "-".repeat(Display.WIDTH - 2) + "+" + Display.RESET;
+            System.out.println(border);
+
+
+            System.out.println(Display.YELLOW + Display.BOLD + "|" + centerText("M E N U", Display.WIDTH - 2) + "|" + Display.RESET);
+            System.out.println(border);
+
+            // Menu option 1: Story Mode
+            System.out.println(Display.GREEN + "|  [1]  Story Mode" + padRight("", Display.WIDTH - 19) + "|" + Display.RESET);
+            System.out.println("|       > Experience the epic narrative" + padRight("", Display.WIDTH - 39) + "|");
+            System.out.println("|" + padRight("", Display.WIDTH - 2) + "|");
+
+            // Menu option 2: Journal
+            System.out.println(Display.CYAN + "|  [2]  Journal" + padRight("", Display.WIDTH - 17) + "|" + Display.RESET);
+            System.out.println("|       > Study your enemies' weaknesses" + padRight("", Display.WIDTH - 38) + "|");
+            System.out.println("|" + padRight("", Display.WIDTH - 2) + "|");
+
+            // Menu option 3: Arcade Mode
+            System.out.println(Display.YELLOW + "|  [3]  Arcade Mode" + padRight("", Display.WIDTH - 20) + "|" + Display.RESET);
+            System.out.println("|       > L████'s Playground" + padRight("", Display.WIDTH - 39) + "|");
+            System.out.println("|" + padRight("", Display.WIDTH - 2) + "|");
+
+            // Menu option 4: Exit
+            System.out.println(Display.RED + "|  [4]  Exit" + padRight("", Display.WIDTH - 13) + "|" + Display.RESET);
+            System.out.println("|       > L████: Bye Bye!" + padRight("", Display.WIDTH - 24) + "|");
+            System.out.println(border);
+
 }
