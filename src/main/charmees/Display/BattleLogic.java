@@ -105,6 +105,25 @@ public class BattleLogic {
         executeCharacterSkill(actor, pick);
     }
 
+    // ultimate move logic
+    private void onUlt(){
+        Character actor = characters[activeIdx];
+
+        // if the active character has no sig, show message and return
+        String[] skills = actor.getSkillList();
+        if(skills.length < 3){
+            BattleDisplay.log(actor.getName() + "has no Ultimate Move available.");
+            return;
+        }
+
+        BattleDisplay.showUltimateConfirm(actor);
+        int confirm = Display.readInt(sc);
+
+        if(confirm != 1){ BattleDisplay.log("Cancelled."); return; }
+
+        // execute ultimate move (assumed to be skill 3)
+        executeCharacterSkill(actor, 3);
+    }
     
 
     // helper method to execute a character skill after picking the skill and target
