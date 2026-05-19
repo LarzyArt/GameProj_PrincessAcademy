@@ -1,12 +1,12 @@
 package charmees.Display;
 import charmees.util.Display;
-import charmees.util.Display.*;
-import src.main.charmees.util.Display;
-
 import java.util.Scanner;
 
 public class JournalDisplay {
     static Scanner scanner = new Scanner(System.in);
+    public static void main(String[] args) {
+        showJournalDisplay();
+    }
 
     // Helpers
     static void printCharacter(String name, String desc, String stats) {
@@ -61,16 +61,18 @@ public class JournalDisplay {
     static void showJournalDisplay() {
         while (true) {
             clearScreen();
-            printHeader("JOURNAL;");
+            printHeader("JOURNAL");
             System.out.println(Display.CYAN + " [1] CREDITS " + Display.RESET);
             System.out.println(Display.GREEN + " [2] INFO " + Display.RESET);
             System.out.println(Display.RED + " [3] BACK " + Display.RESET);
             System.out.println();
+            System.out.print(Display.BOLD + "Choose an option: " + Display.RESET);
             String input = scanner.nextLine().trim();
             switch (input) {
                 case "1" -> showCreditsScreen();
                 case "2" -> showInfoScreen();
                 case "3" -> showTitleScreen();
+                default -> showError("Invalid option. Press Enter to try again.");
             }
         }
     }
@@ -87,11 +89,11 @@ public class JournalDisplay {
         System.out.println("    Melody Ness Ecarma");
         System.out.println();
 
-        System.out.println(Display.BOLD + Display.MAGENTA + "  DEVELOPER" + Display.RESET);
+        System.out.println(Display.BOLD + Display.MAGENTA + " DEVELOPER" + Display.RESET);
         System.out.println("    Kimberly Daydayan");
         System.out.println();
 
-        System.out.println(Display.BOLD + Display.MAGENTA + "  DEVELOPER" + Display.RESET);
+        System.out.println(Display.BOLD + Display.MAGENTA + " DEVELOPER" + Display.RESET);
         System.out.println("    Neilcen Pedrosa");
         System.out.println();
 
@@ -137,7 +139,7 @@ public class JournalDisplay {
     // CHARACTER INFO
     static void showCharactersScreen() {
         clearScreen();
-        printHeader(" CHARACTER");
+        printHeader("CHARACTER");
 
         printCharacter(
                 "Audry",
@@ -220,7 +222,7 @@ public class JournalDisplay {
     // BOSS SCREEN
     static void showBossScreen() {
         clearScreen();
-        printHeader("Boss");
+        printHeader("BOSS");
 
         printEnemy(
                 "Kassundre",
