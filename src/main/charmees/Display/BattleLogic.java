@@ -89,6 +89,43 @@ public class BattleLogic {
 
         BattleDisplay.log("Invalid choice.");
     }
+    // LAZULI HEAL — if Lazuli is in the party, player can choose to heal with her instead of attacking
+    private void onLazuliHeal() {
+        Character lazuli = characters[2];
+        if (!lazuli.isAlive()) {
+            BattleDisplay.log("Lazuli has fallen and cannot heal.");
+            return;
+        }
+
+        BattleDisplay.showHealMenu(lazuli);
+        int pick = Display.readInt(sc);
+
+        String[] skills = lazuli.getSkillList();
+        if (pick < 1 || pick > skills.length) {
+            BattleDisplay.log("Cancelled.");
+            return;
+        }
+
+        String tType = lazuli.getSkillTargetType(pick);
+
+        if (tType.equals("ALLY")) {
+            Character ally = pickAlly();
+            if (ally == null) return;
+            BattleDisplay.log("Lazuli heals " + ally.getName() + "!");
+            lazuli.useSkill(pick, null, ally, characters);
+        } else { // ALL
+            BattleDisplay.log("Lazuli uses " + skills[pick - 1] + "!");
+            lazuli.useSkill(pick, null, lazuli, characters);
+        }
+
+        // cap all HP at max — no overhealing
+        for (int i = 0; i < characters.length; i++) {
+            if (characters[i].healthPoints > charMaxHP[i])
+                characters[i].healthPoints = charMaxHP[i];
+        }
+
+        endPlayerTurn();
+    }
 
     // =================================================
     // TURN FLOW
