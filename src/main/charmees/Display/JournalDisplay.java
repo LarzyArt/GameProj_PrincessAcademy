@@ -107,5 +107,30 @@ public class JournalDisplay {
         System.out.println();
         pressEnterToGoBack();
        }
+
+    // INFO SCREEN
+    static void showInfoScreen(){
+        while(true){
+            clearScreen();
+            printHeader("INFO");
+            System.out.println(DIM + "  Learn about the world: characters, mobs & bosses." + RESET);
+            System.out.println();
+            System.out.println(CYAN + "  [1] CHARACTERS" + RESET);
+            System.out.println(CYAN + "  [2] MOBS"       + RESET);
+            System.out.println(CYAN + "  [3] BOSS"       + RESET);
+            System.out.println(RED  + "  [4] BACK"       + RESET);
+            System.out.println();
+            System.out.print(BOLD + "Choose an option: " + RESET);
+            String input = scanner.nextLine().trim();
+            switch (input) {
+                case "1" -> showCharactersScreen();
+                case "2" -> showMobsScreen();
+                case "3" -> showBossScreen();
+                case "4" -> { return; }
+                default  -> showError("Invalid option. Press Enter to try again.");
+              }
+           }
+        }
+
     }
 }
