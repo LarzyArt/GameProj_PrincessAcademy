@@ -1,0 +1,24 @@
+package charmees.Display;
+
+import charmees.util.Character;
+import charmees.util.Display;
+
+public class ArcadeModeDisplay {
+
+    public static void showArcadeScreen() {
+        Display.gap();
+        Display.banner();
+        Display.header("ARCADE MODE");
+        Display.gap();
+        System.out.println("  Current Modes:");
+        Display.gap();
+        System.out.println("  [1] Character vs Character (Class)");
+        System.out.println("      Pick your fighter and face a class rival.");
+        Display.gap();
+        System.out.println("  [2] Character vs Easter Egg");
+        System.out.println("      You think this is a game?  ...It literally is.");
+        Display.gap();
+        Display.option(0, "Back to Main Menu");
+        Display.line();
+    }
+}
