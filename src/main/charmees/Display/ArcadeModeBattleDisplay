@@ -40,3 +40,37 @@ public class ArcadeModeBattleDisplay {
         clearLog();
     }
 }
+
+public void run() {
+        Display.gap();
+        Display.header("BATTLE START!");
+        Display.centered(hero.getName() + "  vs  " + opponent.getName());
+        Display.line();
+        Display.pressEnter(sc);
+
+        while (hero.isAlive() && opponent.isAlive()) {
+            Display.gap();
+            System.out.printf("  ======  TURN %d  ======%n", turnCount);
+            Display.gap();
+
+            ArcadeModeDisplay.showCombatLog(combatLog, logPointer);
+            ArcadeModeDisplay.showCharVsCharHUD(
+                    hero, heroMaxHP, heroMaxMP,
+                    opponent, oppMaxHP, oppMaxMP);
+
+            BattleDisplay.showPlayerPhaseHeader(hero);
+            playerTurn();
+            hero.tickStatus();
+            if (!opponent.isAlive()) break;
+
+            BattleDisplay.showEnemyPhaseHeader();
+            opponentTurn();
+            opponent.tickStatus();
+            turnCount++;
+        }
+
+        ArcadeModeDisplay.showCharVsCharResult(
+                hero, heroMaxHP, opponent,
+                turnCount, totalDealt, totalTaken);
+        Display.pressEnter(sc);
+    }
