@@ -100,3 +100,22 @@ private void runCharVsCharFlow() {
         oppMaxHP = opponent.healthPoints;
         oppMaxMP = opponent.manaPoints;
     }
+
+
+    public static Character makeCharacter(int idx) {
+        Object[] h = HERO_DEFS[idx];
+        String key = (String) h[1];
+        String n  = (String) h[0];
+        String cl = (String) h[2];
+        String t  = (String) h[3];
+        String w  = (String) h[4];
+        int hp = (int) h[5];
+        int mp = (int) h[6];
+        switch (key) {
+            case "audry":   return new Audry(n, cl, t, w, hp, mp);
+            case "giantha": return new Giantha(n, cl, t, w, hp, mp);
+            case "lazuli":  return new Lazuli(n, cl, t, w, hp, mp);
+            case "lynzi":   return new Lynzi(n, cl, t, w, hp, mp);
+            default:        return new Shiera(n, cl, t, w, hp, mp);
+        }
+    }
