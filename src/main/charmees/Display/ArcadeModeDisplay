@@ -22,3 +22,33 @@ public class ArcadeModeDisplay {
         Display.line();
     }
 }
+
+public static void showCharVsCharDescription() {
+        Display.gap();
+        Display.header("CHARACTER vs CHARACTER (Class)");
+        Display.gap();
+        System.out.println("  Two fighters. One winner.");
+        System.out.println("  Pick your hero and challenge a class rival.");
+        System.out.println("  Use your skills wisely — there is no running.");
+        Display.gap();
+        Display.option(1, "Start");
+        Display.option(2, "Back");
+        Display.line();
+    }
+
+    public static void showHeroSelect(Object[][] heroDefs, String title) {
+        Display.gap();
+        Display.header(title);
+        Display.gap();
+        System.out.printf("  %-4s %-12s %-10s %-7s %-20s  HP    MP%n",
+                "#", "NAME", "CLASS", "TYPE", "WEAPON");
+        Display.thin();
+        for (int i = 0; i < heroDefs.length; i++) {
+            Object[] h = heroDefs[i];
+            System.out.printf("  [%d] %-12s %-10s %-7s %-20s  %-5s %-4s%n",
+                    i + 1, h[0], h[2], h[3], h[4], h[5], h[6]);
+        }
+        Display.gap();
+        Display.option(0, "Back");
+        Display.line();
+    }
