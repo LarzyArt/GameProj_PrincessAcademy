@@ -92,12 +92,12 @@ public class BattleLogic {
         Character actor = characters[activeIdx];
 
         // if the active character has no skills, show message and return
-        BattleDisplay.showSkillMenu(actor);
+        BattleDIsplay.showSkillMenu(actor);
         int pick = Display.readInt(sc);
 
         // if player picks invalid number, return to main menu
         if(pick < 1 || pick > Math.min(2, actor.getSkillList().length)){
-            BattleDisplay.log("Cancelled.");
+            BattleDIsplay.log("Cancelled.");
             return;
         }
 
@@ -112,14 +112,14 @@ public class BattleLogic {
         // if the active character has no sig, show message and return
         String[] skills = actor.getSkillList();
         if(skills.length < 3){
-            BattleDisplay.log(actor.getName() + "has no Ultimate Move available.");
+            BattleDIsplay.log(actor.getName() + "has no Ultimate Move available.");
             return;
         }
 
-        BattleDisplay.showUltimateConfirm(actor);
+        BattleDIsplay.showUltimateConfirm(actor);
         int confirm = Display.readInt(sc);
 
-        if(confirm != 1){ BattleDisplay.log("Cancelled."); return; }
+        if(confirm != 1){ BattleDIsplay.log("Cancelled."); return; }
 
         // execute ultimate move (assumed to be skill 3)
         executeCharacterSkill(actor, 3);
@@ -137,6 +137,7 @@ public class BattleLogic {
             BattleDIsplay.log(actor.getName() + " uses "
                 +actor .getSkillList()[skillNum - 1] + " on " + target.getName() + "!");
             actor.useSkill(skillNum, target, null, characters);
+            BattleDIsplay.pause(700);
         } 
         // if the skill targets an ally, open ally picker instead and pass the picked ally to the useSkill method
         else if(targetType.equals("ALLY")){
@@ -145,12 +146,14 @@ public class BattleLogic {
             BattleDIsplay.log(actor.getName() + " uses "
                 +actor .getSkillList()[skillNum - 1] + " on " + ally.getName() + "!");
             actor.useSkill(skillNum, null, ally, characters);
+            BattleDIsplay.pause(700);
         }
         // if the skill targets self, just pass null for the target and let the useSkill method handle it
         else {
             BattleDIsplay.log(actor.getName() + " uses "
                 +actor .getSkillList()[skillNum - 1] + "!");
             actor.useSkill(skillNum, null, null, characters);
+            BattleDIsplay.pause(700);
         }
 
         endPlayerTurn();
@@ -178,6 +181,7 @@ public class BattleLogic {
                 activeIdx = i;
                 BattleDIsplay.log(oldName + " switched out!  "
                         + characters[activeIdx].getName() + " enters the battle!");
+                BattleDIsplay.pause(500);
                 endPlayerTurn();
                 return;
             }
@@ -209,9 +213,11 @@ public class BattleLogic {
             if (ally == null) return;
             BattleDIsplay.log("Lazuli heals " + ally.getName() + "!");
             lazuli.useSkill(pick, null, ally, characters);
+            BattleDIsplay.pause(600);
         } else { // ALL
             BattleDIsplay.log("Lazuli uses " + skills[pick - 1] + "!");
             lazuli.useSkill(pick, null, lazuli, characters);
+            BattleDIsplay.pause(600);
         }
 
         // cap all HP at max — no overhealing
@@ -241,6 +247,7 @@ public class BattleLogic {
             Character target = characters[activeIdx];
             int skill = (int) (Math.random() * mob.getSkillCount()) + 1;
             mob.useSkill(skill, target);
+            BattleDIsplay.pause(600);
             
 
             if (!characters[activeIdx].isAlive()) {
