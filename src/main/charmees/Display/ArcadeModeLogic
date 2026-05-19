@@ -62,3 +62,41 @@ public class ArcadeModeLogic {
         }
     }
 }
+
+private void runCharVsCharFlow() {
+        ArcadeModeDisplay.showCharVsCharDescription();
+        int choice = safeReadInt(1, 2);
+        if (choice == 2) return;
+
+        ArcadeModeDisplay.showHeroSelect(HERO_DEFS, "CHAR vs CHAR  -  PICK YOUR FIGHTER");
+        int heroPick = safeReadInt(0, HERO_DEFS.length);
+        if (heroPick == 0) return;
+        heroIdx = heroPick - 1;
+        buildHero(heroIdx);
+
+        int[] indexMap = ArcadeModeDisplay.showOpponentSelect(HERO_DEFS, hero, heroIdx);
+        int oppPick = safeReadInt(0, HERO_DEFS.length - 1);
+        if (oppPick == 0) return;
+        buildOpponent(indexMap[oppPick - 1]);
+
+        ArcadeModeBattleDisplay battleDisplay = new ArcadeModeBattleDisplay(
+                hero, heroMaxHP, heroMaxMP,
+                opponent, oppMaxHP, oppMaxMP,
+                sc, rng);
+        battleDisplay.run();
+
+        ArcadeModeDisplay.showPlayAgain();
+        if (safeReadInt(1, 2) == 1) runCharVsCharFlow();
+    }
+
+    private void buildHero(int idx) {
+        hero = makeCharacter(idx);
+        heroMaxHP = hero.healthPoints;
+        heroMaxMP = hero.manaPoints;
+    }
+
+    private void buildOpponent(int idx) {
+        opponent = makeCharacter(idx);
+        oppMaxHP = opponent.healthPoints;
+        oppMaxMP = opponent.manaPoints;
+    }
