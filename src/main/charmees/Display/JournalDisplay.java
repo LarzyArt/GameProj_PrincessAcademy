@@ -131,6 +131,39 @@ public class JournalDisplay {
               }
            }
         }
+    // CHARACTER INFO
+    static void showCharactersScreen(){
+        clearScreen();
+        printHeader(" CHARACTER");
 
+        printCharacter(
+                "Audry",
+                "An Assassin who excels in close-quarters combat with Acidic Slime.",
+                "Role: Assassin  |  Melee  |  Acidic Slime  |  HP: 100  |  MP: 25"
+        );
+        printCharacter(
+                "Giantha",
+                "A resilient Tank who holds the front line with the World Tree Branch.",
+                "Role: Tank  |  Melee  |  World Tree Branch  |  HP: 250  |  MP: 20"
+        );
+        printCharacter(
+                "Lazuli",
+                "A devoted Healer who supports allies from range with a Staff.",
+                "Role: Healer  |  Ranged  |  Staff  |  HP: 150  |  MP: 30"
+        );
+        printCharacter(
+                "Lynzi",
+                "A hard-hitting Dealer who channels Star Magic in melee.",
+                "Role: Dealer  |  Melee  |  Star Magic  |  HP: 170  |  MP: 30"
+        );
+        printCharacter(
+                "Shiera",
+                "A versatile Support who controls the battlefield with Earth Magic from range.",
+                "Role: Support  |  Ranged  |  Earth Magic  |  HP: 120  |  MP: 25"
+        );
+
+        pressEnterToGoBack();
     }
+
+}
 }
