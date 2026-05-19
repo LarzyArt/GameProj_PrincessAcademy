@@ -74,4 +74,38 @@ public class JournalDisplay {
             }
         }
     }
+
+    // CREDIT SCREEN
+    static void showCreditsScreen(){
+        clearScreen();
+        printHeader("CREDITS");
+        System.out.println(BOLD + MAGENTA + " DEVELOPER" + RESET);
+        System.out.println("    Laurence Andrey Baraga");
+        System.out.println();
+
+        System.out.println(BOLD + MAGENTA " DEVELOPER" + RESET);
+        System.out.println("    Melody Ness Ecarma");
+        System.out.println();
+
+        System.out.println(BOLD + MAGENTA + "  DEVELOPER" + RESET);
+        System.out.println("    Kimberly Daydayan");
+        System.out.println();
+
+        System.out.println(BOLD + MAGENTA + "  DEVELOPER" + RESET);
+        System.out.println("    Neilcen Pedrosa");
+        System.out.println();
+
+        System.out.println(BOLD + MAGENTA + "  DEVELOPER" + RESET);
+        System.out.println("    Abigail Rodrigo");
+        System.out.println();
+
+        System.out.println(BOLD + CYAN + "  SPECIAL THANKS" + RESET);
+        System.out.println("    Everyone who playtested and supported this project.");
+        System.out.println();
+
+        System.out.println(DIM + "  CSIT228 - OBJECT-ORIENTED PROGRAMMING 2 - G11 | 2026 " + RESET);
+        System.out.println();
+        pressEnterToGoBack();
+       }
+    }
 }
