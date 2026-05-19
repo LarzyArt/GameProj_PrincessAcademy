@@ -52,3 +52,61 @@ public static void showCharVsCharDescription() {
         Display.option(0, "Back");
         Display.line();
     }
+
+    public static int[] showOpponentSelect(Object[][] heroDefs, Character hero, int heroIdx) {
+        Display.gap();
+        Display.header("CHAR vs CHAR  -  PICK YOUR OPPONENT");
+        Display.gap();
+        System.out.println("  " + hero.getName() + " will fight...");
+        Display.gap();
+        System.out.printf("  %-4s %-12s %-10s %-7s %-20s  HP    MP%n",
+                "#", "NAME", "CLASS", "TYPE", "WEAPON");
+        Display.thin();
+
+        int[] indexMap = new int[heroDefs.length];
+        int mapCount = 0;
+        int displayNum = 1;
+
+        for (int i = 0; i < heroDefs.length; i++) {
+            if (i == heroIdx) continue;
+            Object[] h = heroDefs[i];
+            indexMap[mapCount++] = i;
+            System.out.printf("  [%d] %-12s %-10s %-7s %-20s  %-5s %-4s%n",
+                    displayNum++, h[0], h[2], h[3], h[4], h[5], h[6]);
+        }
+
+        Display.gap();
+        Display.option(0, "Back");
+        Display.line();
+
+        return indexMap;
+    }
+
+    public static void showCharVsCharHUD(
+            Character hero, int heroMaxHP, int heroMaxMP,
+            Character opponent, int oppMaxHP, int oppMaxMP) {
+
+        final int BAR = 22;
+
+        System.out.println("  YOUR HERO");
+        System.out.printf("  %-14s  HP: %3d/%-3d  MP: %2d/%-2d%n",
+                hero.getName(), hero.healthPoints, heroMaxHP, hero.manaPoints, heroMaxMP);
+        System.out.println("  HP [" + BattleDisplay.hpBar(hero.healthPoints, heroMaxHP, BAR)
+                + "] " + pct(hero.healthPoints, heroMaxHP) + "%");
+        System.out.println("  MP [" + BattleDisplay.hpBar(hero.manaPoints, heroMaxMP, BAR)
+                + "] " + pct(hero.manaPoints, heroMaxMP) + "%");
+        if (hero.healthPoints <= heroMaxHP / 4)
+            System.out.println("  !! LOW HP !!");
+        Display.gap();
+
+        System.out.println("  OPPONENT");
+        System.out.printf("  %-14s  HP: %3d/%-3d  MP: %2d/%-2d%n",
+                opponent.getName(), opponent.healthPoints, oppMaxHP, opponent.manaPoints, oppMaxMP);
+        System.out.println("  HP [" + BattleDisplay.hpBar(opponent.healthPoints, oppMaxHP, BAR)
+                + "] " + pct(opponent.healthPoints, oppMaxHP) + "%");
+        System.out.println("  MP [" + BattleDisplay.hpBar(opponent.manaPoints, oppMaxMP, BAR)
+                + "] " + pct(opponent.manaPoints, oppMaxMP) + "%");
+        if (opponent.healthPoints <= oppMaxHP / 4)
+            System.out.println("  !! LOW HP !!");
+        Display.thin();
+    }
