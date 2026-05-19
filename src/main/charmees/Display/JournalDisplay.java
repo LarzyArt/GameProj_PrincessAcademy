@@ -1,34 +1,32 @@
-package src.main.charmees.Display;
-import static src.main.charmees.util.Display.*;
+package charmees.Display;
+import charmees.util.Display;
+import charmees.util.Display.*;
+import src.main.charmees.util.Display;
 
 import java.util.Scanner;
 
 public class JournalDisplay {
     static Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) {
-        showJournalDisplay();
-    }
-
     // Helpers
     static void printCharacter(String name, String desc, String stats) {
-        System.out.println(BOLD + GREEN + "  / " + name + RESET);
+        System.out.println(Display.BOLD + Display.GREEN+ "  / " + name + Display.RESET);
         System.out.println("    " + desc);
-        System.out.println(DIM + "    " + stats + RESET);
+        System.out.println(Display.DIM + "    " + stats + Display.RESET);
         System.out.println();
     }
 
     static void printEnemy(String name, String desc, String stats) {
-        System.out.println(BOLD + RED + "  X " + name + RESET);
+        System.out.println(Display.BOLD + Display.RED + "  X " + name + Display.RESET);
         System.out.println("    " + desc);
-        System.out.println(DIM + "    " + stats + RESET);
+        System.out.println(Display.DIM + "    " + stats + Display.RESET);
         System.out.println();
     }
 
     static void showTitleScreen() {
         clearScreen();
         printHeader("TITLE SCREEN");
-        System.out.println(GREEN + "  Welcome! Press Enter to return to the Info Screen." + RESET);
+        System.out.println(Display.GREEN + "  Welcome! Press Enter to return to the Journal." + Display.RESET);
         System.out.println();
         scanner.nextLine();
     }
@@ -38,9 +36,9 @@ public class JournalDisplay {
         int width = 38;
         int padding = (width - title.length()) / 2;
         String centered = " ".repeat(Math.max(0, padding)) + title;
-        System.out.println(YELLOW + BOLD + "  ╔" + border + "╗" + RESET);
-        System.out.printf(YELLOW + BOLD + "  ║  %-38s║%n" + RESET, centered);
-        System.out.println(YELLOW + BOLD + "  ╚" + border + "╝" + RESET);
+        System.out.println(Display.YELLOW + Display.BOLD + "  ╔" + border + "╗" + Display.RESET);
+        System.out.printf(Display.YELLOW + Display.BOLD + "  ║  %-38s║%n" + Display.RESET, centered);
+        System.out.println(Display.YELLOW + Display.BOLD + "  ╚" + border + "╝" + Display.RESET);
         System.out.println();
     }
 
@@ -50,12 +48,12 @@ public class JournalDisplay {
     }
 
     static void pressEnterToGoBack() {
-        System.out.print(DIM + "  Press Enter to go back..." + RESET);
+        System.out.print(Display.DIM + "  Press Enter to go back..." + Display.RESET);
         scanner.nextLine();
     }
 
     static void showError(String msg) {
-        System.out.println(RED + "\n  ✖ " + msg + RESET);
+        System.out.println(Display.RED + "\n  ✖ " + msg + Display.RESET);
         scanner.nextLine();
     }
 
@@ -63,10 +61,10 @@ public class JournalDisplay {
     static void showJournalDisplay() {
         while (true) {
             clearScreen();
-            printHeader("JOURNA;");
-            System.out.println(CYAN + " [1] CREDITS " + RESET);
-            System.out.println(GREEN + " [2] CREDITS " + RESET);
-            System.out.println(RED + " [3] CREDITS " + RESET);
+            printHeader("JOURNAL;");
+            System.out.println(Display.CYAN + " [1] CREDITS " + Display.RESET);
+            System.out.println(Display.GREEN + " [2] INFO " + Display.RESET);
+            System.out.println(Display.RED + " [3] BACK " + Display.RESET);
             System.out.println();
             String input = scanner.nextLine().trim();
             switch (input) {
@@ -81,31 +79,31 @@ public class JournalDisplay {
     static void showCreditsScreen() {
         clearScreen();
         printHeader("CREDITS");
-        System.out.println(BOLD + MAGENTA + " DEVELOPER" + RESET);
+        System.out.println(Display.BOLD + Display.MAGENTA + " DEVELOPER" + Display.RESET);
         System.out.println("    Laurence Andrey Baraga");
         System.out.println();
 
-        System.out.println(BOLD + MAGENTA + " DEVELOPER" + RESET);
+        System.out.println(Display.BOLD + Display.MAGENTA + " DEVELOPER" + Display.RESET);
         System.out.println("    Melody Ness Ecarma");
         System.out.println();
 
-        System.out.println(BOLD + MAGENTA + "  DEVELOPER" + RESET);
+        System.out.println(Display.BOLD + Display.MAGENTA + "  DEVELOPER" + Display.RESET);
         System.out.println("    Kimberly Daydayan");
         System.out.println();
 
-        System.out.println(BOLD + MAGENTA + "  DEVELOPER" + RESET);
+        System.out.println(Display.BOLD + Display.MAGENTA + "  DEVELOPER" + Display.RESET);
         System.out.println("    Neilcen Pedrosa");
         System.out.println();
 
-        System.out.println(BOLD + MAGENTA + "  DEVELOPER" + RESET);
+        System.out.println(Display.BOLD + Display.MAGENTA + "  DEVELOPER" + Display.RESET);
         System.out.println("    Abigail Rodrigo");
         System.out.println();
 
-        System.out.println(BOLD + CYAN + "  SPECIAL THANKS" + RESET);
+        System.out.println(Display.BOLD + Display.CYAN + "  SPECIAL THANKS" + Display.RESET);
         System.out.println("    Everyone who playtested and supported this project.");
         System.out.println();
 
-        System.out.println(DIM + "  CSIT228 - OBJECT-ORIENTED PROGRAMMING 2 - G11 | 2026 " + RESET);
+        System.out.println(Display.DIM + "  CSIT228 - OBJECT-ORIENTED PROGRAMMING 2 - G11 | 2026 " + Display.RESET);
         System.out.println();
         pressEnterToGoBack();
     }
@@ -115,14 +113,14 @@ public class JournalDisplay {
         while (true) {
             clearScreen();
             printHeader("INFO");
-            System.out.println(DIM + "  Learn about the world: characters, mobs & bosses." + RESET);
+            System.out.println(Display.DIM + "  Learn about the world: characters, mobs & bosses." + Display.RESET);
             System.out.println();
-            System.out.println(CYAN + "  [1] CHARACTERS" + RESET);
-            System.out.println(CYAN + "  [2] MOBS" + RESET);
-            System.out.println(CYAN + "  [3] BOSS" + RESET);
-            System.out.println(RED + "  [4] BACK" + RESET);
+            System.out.println(Display.CYAN + "  [1] CHARACTERS" + Display.RESET);
+            System.out.println(Display.CYAN + "  [2] MOBS" + Display.RESET);
+            System.out.println(Display.CYAN + "  [3] BOSS" + Display.RESET);
+            System.out.println(Display.RED + "  [4] BACK" + Display.RESET);
             System.out.println();
-            System.out.print(BOLD + "Choose an option: " + RESET);
+            System.out.print(Display.BOLD + "Choose an option: " + Display.RESET);
             String input = scanner.nextLine().trim();
             switch (input) {
                 case "1" -> showCharactersScreen();
