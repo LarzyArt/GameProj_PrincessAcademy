@@ -5,21 +5,23 @@ import java.util.Scanner;
 
 public class JournalDisplay {
     static Scanner scanner = new Scanner(System.in);
-    public static void main(String[]args){
+
+    public static void main(String[] args) {
         showJournalDisplay();
     }
-// Helpers
+
+    // Helpers
     static void printCharacter(String name, String desc, String stats) {
         System.out.println(BOLD + GREEN + "  / " + name + RESET);
         System.out.println("    " + desc);
-        System.out.println(DIM  + "    " + stats + RESET);
+        System.out.println(DIM + "    " + stats + RESET);
         System.out.println();
     }
 
     static void printEnemy(String name, String desc, String stats) {
         System.out.println(BOLD + RED + "  X " + name + RESET);
         System.out.println("    " + desc);
-        System.out.println(DIM  + "    " + stats + RESET);
+        System.out.println(DIM + "    " + stats + RESET);
         System.out.println();
     }
 
@@ -58,16 +60,16 @@ public class JournalDisplay {
     }
 
     // MAIN JOURNAL SCREEN
-    static void showJournalDisplay(){
-        while (true){
+    static void showJournalDisplay() {
+        while (true) {
             clearScreen();
             printHeader("JOURNA;");
-            System.out.println(CYAN + " [1] CREDITS "+ RESET);
+            System.out.println(CYAN + " [1] CREDITS " + RESET);
             System.out.println(GREEN + " [2] CREDITS " + RESET);
             System.out.println(RED + " [3] CREDITS " + RESET);
             System.out.println();
             String input = scanner.nextLine().trim();
-            switch (input){
+            switch (input) {
                 case "1" -> showCreditsScreen();
                 case "2" -> showInfoScreen();
                 case "3" -> showTitleScreen();
@@ -76,14 +78,14 @@ public class JournalDisplay {
     }
 
     // CREDIT SCREEN
-    static void showCreditsScreen(){
+    static void showCreditsScreen() {
         clearScreen();
         printHeader("CREDITS");
         System.out.println(BOLD + MAGENTA + " DEVELOPER" + RESET);
         System.out.println("    Laurence Andrey Baraga");
         System.out.println();
 
-        System.out.println(BOLD + MAGENTA " DEVELOPER" + RESET);
+        System.out.println(BOLD + MAGENTA + " DEVELOPER" + RESET);
         System.out.println("    Melody Ness Ecarma");
         System.out.println();
 
@@ -106,19 +108,19 @@ public class JournalDisplay {
         System.out.println(DIM + "  CSIT228 - OBJECT-ORIENTED PROGRAMMING 2 - G11 | 2026 " + RESET);
         System.out.println();
         pressEnterToGoBack();
-       }
+    }
 
     // INFO SCREEN
-    static void showInfoScreen(){
-        while(true){
+    static void showInfoScreen() {
+        while (true) {
             clearScreen();
             printHeader("INFO");
             System.out.println(DIM + "  Learn about the world: characters, mobs & bosses." + RESET);
             System.out.println();
             System.out.println(CYAN + "  [1] CHARACTERS" + RESET);
-            System.out.println(CYAN + "  [2] MOBS"       + RESET);
-            System.out.println(CYAN + "  [3] BOSS"       + RESET);
-            System.out.println(RED  + "  [4] BACK"       + RESET);
+            System.out.println(CYAN + "  [2] MOBS" + RESET);
+            System.out.println(CYAN + "  [3] BOSS" + RESET);
+            System.out.println(RED + "  [4] BACK" + RESET);
             System.out.println();
             System.out.print(BOLD + "Choose an option: " + RESET);
             String input = scanner.nextLine().trim();
@@ -126,13 +128,16 @@ public class JournalDisplay {
                 case "1" -> showCharactersScreen();
                 case "2" -> showMobsScreen();
                 case "3" -> showBossScreen();
-                case "4" -> { return; }
-                default  -> showError("Invalid option. Press Enter to try again.");
-              }
-           }
+                case "4" -> {
+                    return;
+                }
+                default -> showError("Invalid option. Press Enter to try again.");
+            }
         }
+    }
+
     // CHARACTER INFO
-    static void showCharactersScreen(){
+    static void showCharactersScreen() {
         clearScreen();
         printHeader(" CHARACTER");
 
@@ -165,5 +170,52 @@ public class JournalDisplay {
         pressEnterToGoBack();
     }
 
-}
+    // MOBS SCREEN
+    static void showMobsScreen() {
+        clearScreen();
+        printHeader("MOBS");
+
+        printEnemy(
+                "Corrupted Skeleton",
+                "A minion that fights in melee with a Bone Sword.",
+                "Role: Minion  |  Melee  |  Bone Sword  |  HP: 120  |  MP: 2"
+        );
+        printEnemy(
+                "Water Sprite",
+                "A ranged minion that attacks with Water Magic.",
+                "Role: Minion  |  Ranged  |  Water Magic  |  HP: 130  |  MP: 1"
+        );
+        printEnemy(
+                "Echo Imp",
+                "A ranged minion that channels Sound Magic.",
+                "Role: Minion  |  Ranged  |  Sound Magic  |  HP: 130  |  MP: 4"
+        );
+        printEnemy(
+                "Princess Puppet",
+                "A melee minion wielding a wand.",
+                "Role: Minion  |  Melee  |  Wand  |  HP: 100  |  MP: 5"
+        );
+        printEnemy(
+                "Magma Skeleton",
+                "A blazing melee minion armed with a Bone Sword.",
+                "Role: Minion  |  Melee  |  Bone Sword  |  HP: 120  |  MP: 2"
+        );
+        printEnemy(
+                "Water Blob",
+                "A ranged minion that hurls Water Magic.",
+                "Role: Minion  |  Ranged  |  Water Magic  |  HP: 130  |  MP: 1"
+        );
+        printEnemy(
+                "Resonance Goblin",
+                "A ranged minion that blasts with Sound Magic.",
+                "Role: Minion  |  Ranged  |  Sound Magic  |  HP: 130  |  MP: 4"
+        );
+        printEnemy(
+                "Moon Sprite",
+                "A melee minion that strikes with Astral Magic.",
+                "Role: Minion  |  Melee  |  Astral Magic  |  HP: 110  |  MP: 3"
+        );
+
+        pressEnterToGoBack();
+    }
 }
