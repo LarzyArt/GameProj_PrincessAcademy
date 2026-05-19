@@ -218,4 +218,33 @@ public class JournalDisplay {
 
         pressEnterToGoBack();
     }
+
+    // BOSS SCREEN
+    static void showBossScreen() {
+        clearScreen();
+        printHeader("Boss");
+
+        printEnemy(
+                "Kassundre",
+                "A corrupted soul twisted by dark energy. Once a friend,\n    now driven by sorrow and rage.\n    Skills: Corrupted Tears | Corrupted Hug | Corrupted Flora",
+                "Role: Miniboss  |  Ranged  |  Dark Magic  |  HP: 300  |  MP: 5"
+        );
+        printEnemy(
+                "Siren Empress",
+                "Ruler of the deep seas, she lures enemies to their doom\n    with tidal force and crushing pressure.\n    Skills: Water Whip | Tidal Wave | Abyssal Crush",
+                "Role: Miniboss  |  Ranged  |  Water Magic  |  HP: 320  |  MP: 1"
+        );
+        printEnemy(
+                "Resonara",
+                "A being of pure sound that weaponizes harmony itself.\n    Her voice can shatter steel and shred the mind.\n    Skills: Sonic Blast | Echo Strike | Harmonic Destruction",
+                "Role: Miniboss  |  Ranged  |  Sound Magic  |  HP: 310  |  MP: 4"
+        );
+        printEnemy(
+                "Twinkle",
+                "A puppet master cloaked in starlight and corruption.\n    The final boss — her strings control everything.\n    Skills: Puppet Slash | Lazer Devastation | Corruption",
+                "Role: Boss  |  Melee  |  Puppet  |  HP: 500  |  MP: 6"
+        );
+
+        pressEnterToGoBack();
+    }
 }
