@@ -1,0 +1,871 @@
+Index: src/main/charmees/gui/BattleHUD.java
+===================================================================
+diff --git a/src/main/charmees/gui/BattleHUD.java b/src/main/charmees/gui/BattleHUD.java
+deleted file mode 100644
+--- a/src/main/charmees/gui/BattleHUD.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ /dev/null	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
+@@ -1,42 +0,0 @@
+-package charmees.gui;
+-
+-import charmees.util.*;
+-import charmees.util.Character;
+-import java.util.Scanner;
+-
+-public class BattleHUD extends BattleUIComponent {
+-
+-    public BattleHUD(Character[] characters, MobNPC[] mobs, Scanner skillInput, int currentChapter) {
+-        super(characters, mobs, skillInput, currentChapter);
+-    }
+-
+-    @Override
+-    public void execute() {
+-        System.out.println("\n===============================");
+-        System.out.println("         BATTLE STATUS");
+-        System.out.println("===============================");
+-
+-        // party stats
+-        System.out.println("\nParty:");
+-        for (Character party : characters) {
+-            if (party.isAlive())
+-                System.out.println(party.name + " | HP: " + party.healthPoints + " | MP: " + party.manaPoints);
+-            else
+-                System.out.println(party.name + " | has been Defeated!!!");
+-        }
+-
+-        // mob stats
+-        System.out.println("\nEnemies: ");
+-        for (MobNPC enemies : mobs) {
+-            // only show enemies for the active chapter
+-            if (enemies.chapter != this.currentChapter)
+-                continue;
+-            if (enemies.isAlive())
+-                System.out.println(enemies.name + " | HP: " + enemies.healthPoints);
+-            else
+-                System.out.println(enemies.name + " | has been Defeated!!!");
+-
+-        }
+-        System.out.println("===============================");
+-    }
+-}
+\ No newline at end of file
+Index: src/main/charmees/gui/BattleUIComponent.java
+===================================================================
+diff --git a/src/main/charmees/gui/BattleUIComponent.java b/src/main/charmees/gui/BattleUIComponent.java
+deleted file mode 100644
+--- a/src/main/charmees/gui/BattleUIComponent.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ /dev/null	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
+@@ -1,27 +0,0 @@
+-// Abstract base class for battle UI components
+-package charmees.gui;
+-
+-import charmees.util.*;
+-import charmees.util.Character;
+-import java.util.Scanner;
+-
+-public abstract class BattleUIComponent {
+-    protected Character[] characters;
+-    protected MobNPC[] mobs;
+-    protected Scanner skillInput;
+-    protected int currentChapter;
+-
+-    public BattleUIComponent(Character[] characters, MobNPC[] mobs, Scanner skillInput, int currentChapter) {
+-        this.characters = characters;
+-        this.mobs = mobs;
+-        this.skillInput = skillInput;
+-        this.currentChapter = currentChapter;
+-    }
+-
+-    public void setCurrentChapter(int currentChapter) {
+-        this.currentChapter = currentChapter;
+-    }
+-
+-    // Abstract method to be implemented by subclasses
+-    public abstract void execute();
+-}
+\ No newline at end of file
+Index: src/main/charmees/gui/MainMenu.java
+===================================================================
+diff --git a/src/main/charmees/gui/MainMenu.java b/src/main/charmees/gui/MainMenu.java
+deleted file mode 100644
+--- a/src/main/charmees/gui/MainMenu.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ /dev/null	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
+@@ -1,51 +0,0 @@
+-package charmees.gui;
+-
+-import java.util.Scanner;
+-
+-public class MainMenu {
+-    private GameUI gameUI;
+-    private Scanner skillInput;
+-
+-    public MainMenu(GameUI gameUI, Scanner skillInput) {
+-        this.gameUI = gameUI;
+-        this.skillInput = skillInput;
+-    }
+-
+-    public void displayMenu() {
+-        System.out.println("==== *Princess Academy: Worlds Collide* ====\n");
+-        System.out.println("What do you want to do?");
+-        System.out.println("1. Play Story Mode");
+-        System.out.println("2. Exit");
+-        System.out.println();
+-        System.out.println("====================");
+-        System.out.print("Enter next Action: ");
+-    }
+-
+-    public void prompt(int choice) {
+-        if (choice == 1) { // Starts Game
+-            gameUI.StartGame();
+-            // Wait for the user to press Enter so the menu doesn't immediately reappear
+-
+-            try {
+-                skillInput.nextLine();
+-            } catch (Exception e) {
+-
+-            }
+-        } else if (choice == 2) { // CLoses Program
+-            System.out.println("Exiting game...");
+-        } else {
+-            System.out.println("Invalid choice. Returning to main menu.");
+-        }
+-        System.out.println();
+-    }
+-
+-    public void run() {
+-        int choice = 0;
+-        while (choice != 2) {
+-            displayMenu();
+-            choice = skillInput.nextInt();
+-            System.out.println();
+-            prompt(choice);
+-        }
+-    }
+-}
+\ No newline at end of file
+Index: src/main/charmees/gui/GameUI.java
+===================================================================
+diff --git a/src/main/charmees/gui/GameUI.java b/src/main/charmees/gui/GameUI.java
+deleted file mode 100644
+--- a/src/main/charmees/gui/GameUI.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ /dev/null	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
+@@ -1,203 +0,0 @@
+-package charmees.gui;
+-
+-import charmees.util.*;
+-import charmees.util.Character;
+-import java.util.Scanner;
+-
+-public class GameUI {
+-    private Character[] characters;
+-    private MobNPC[] mobs;
+-    private Scanner skillInput;
+-    private int currentChapter = -1;
+-    private BattleHUD battleHUD;
+-    private BattlePhases battlePhases;
+-
+-    public GameUI(Character[] characters, MobNPC[] mobs, Scanner skillInput) {
+-        this.characters = characters;
+-        this.mobs = mobs;
+-        this.skillInput = skillInput;
+-        this.battleHUD = new BattleHUD(characters, mobs, skillInput, currentChapter);
+-        this.battlePhases = new BattlePhases(characters, mobs, skillInput, currentChapter);
+-    }
+-
+-    public void StartGame() {
+-        int chapter = -1;
+-        boolean tag2 = false;
+-        boolean tag3 = false;
+-        boolean tag4 = false;
+-        boolean tag5 = false;
+-        boolean tag6 = false;
+-
+-        System.out.println("==== Story Mode ====\n");
+-        System.out.println("Chapter 1: Battle of the Sea");
+-        System.out.println("Chapter 2: The Survival");
+-        System.out.println("Chapter 3: Darkness and Void");
+-        System.out.println("Chapter 4: Heart of the Living Forest");
+-        System.out.println("Chapter 5: The Castle Memoir");
+-        System.out.println("Chapter 6: The Final Show");
+-        System.out.println("====================");
+-        System.out.println("Enter Chapter Number to play (1-6), or 0 to return to the main menu.");
+-        System.out.print("Enter Action: ");
+-
+-        try {
+-            chapter = skillInput.nextInt();
+-        } catch (Exception e) {
+-            System.out.println();
+-            // invalid input, consume the token and return
+-            skillInput.next();
+-            System.out.println("Invalid input. Returning to main menu...");
+-            return;
+-        }
+-
+-        if (chapter == 0) {
+-            System.out.println("Returning to main menu...");
+-            return; // return to menu
+-        }
+-
+-        if (chapter >= 1 && chapter <= 6) {
+-            this.currentChapter = chapter;
+-            battleHUD.setCurrentChapter(currentChapter);
+-            battlePhases.setCurrentChapter(currentChapter);
+-        } else {
+-            System.out.println("Invalid chapter. Returning to main menu...");
+-        }
+-        switch (chapter) {
+-            case 1:
+-                battleHUD.execute();
+-                StartBattle(characters, mobs);// enemies take their turn and attack alive characters
+-                if (!isChapterEnemyAlive(chapter)) {
+-                    tag2 = true;
+-                } else {
+-                    System.out.println("[Error]: That can't be right... You lost...");
+-                }
+-                break;
+-            case 2:
+-                if (tag2 == true) {
+-                    System.out.println("\n====================");
+-                    System.out.println("[Error]: You have not finished chapter 1.");
+-                    System.out.println("Finish chapter 1 to unlock chapter 2.\n");
+-                } else {
+-                    battleHUD.execute();
+-                    StartBattle(characters, mobs);// enemies take their turn and attack alive characters
+-                    if (!isChapterEnemyAlive(chapter)) {
+-                        tag3 = true;
+-                    } else {
+-                        System.out.println("[Error]: That can't be right... You lost...");
+-                    }
+-                }
+-                break;
+-            case 3:
+-                if (tag3 == false) {
+-                    System.out.println("[Error]: You have not finished chapter 1.");
+-                    System.out.println("Finish chapter 2 to unlock chapter 3\n");
+-                } else {
+-                    battleHUD.execute();
+-                    StartBattle(characters, mobs);// enemies take their turn and attack alive characters
+-                    if (!isChapterEnemyAlive(chapter)) {
+-                        tag4 = true;
+-                    } else {
+-                        System.out.println("[Error]: That can't be right... You lost...");
+-                    }
+-                }
+-                break;
+-            case 4:
+-                if (tag4 == false) {
+-                    System.out.println("[Error]: You have not finished chapter 1.");
+-                    System.out.println("Finish chapter 3 to unlock chapter 4\n");
+-                } else {
+-                    battleHUD.execute();
+-                    StartBattle(characters, mobs);// enemies take their turn and attack alive characters
+-                    if (!isChapterEnemyAlive(chapter)) {
+-                        tag5 = true;
+-                    } else {
+-                        System.out.println("[Error]: That can't be right... You lost...");
+-                    }
+-                }
+-                break;
+-            case 5:
+-                if (tag5 == false) {
+-                    System.out.println("[Error]: You have not finished chapter 1.");
+-                    System.out.println("Finish chapter 4 to unlock chapter 5\n");
+-                } else {
+-                    battleHUD.execute();
+-                    StartBattle(characters, mobs);// enemies take their turn and attack alive characters
+-                    if (!isChapterEnemyAlive(chapter)) {
+-                        tag6 = true;
+-                    } else {
+-                        System.out.println("[Error]: That can't be right... You lost...");
+-                    }
+-                }
+-                break;
+-            case 6:
+-                if (tag6 == false) {
+-                    System.out.println("[Error]: You have not finished chapter 1.");
+-                    System.out.println("Finish chapter 5 to unlock chapter 6\n");
+-                } else {
+-                    battleHUD.execute();
+-                    StartBattle(characters, mobs);// enemies take their turn and attack alive characters
+-                    if (!isChapterEnemyAlive(chapter)) {
+-                        // victory message
+-                    } else {
+-                        System.out.println("[Error]: That can't be right... You lost...");
+-                    }
+-                }
+-                break;
+-        }
+-
+-        try {
+-            System.out.println("Press Enter to return to main menu...");
+-            skillInput.nextLine();
+-        } catch (Exception e) {
+-            System.out.println();
+-            System.out.println("Returning to main menu...");
+-        }
+-    }
+-
+-    // returns true if any enemy for the given chapter is alive
+-    private boolean isChapterEnemyAlive(int chapter) {
+-        for (MobNPC enemy : mobs) {
+-            if (enemy.chapter != chapter)
+-                continue;
+-            if (enemy.isAlive())
+-                return true;
+-        }
+-        return false;
+-    }
+-
+-    // check if battle is ongoing
+-    private boolean isBattleOngoing() {
+-        boolean partyAlive = false, enemiesAlive = false;
+-        for (Character party : characters)
+-            if (party.isAlive())
+-                partyAlive = true;
+-        // only count enemies that belong to the current chapter
+-        for (MobNPC enemies : mobs)
+-            if (enemies.chapter == this.currentChapter && enemies.isAlive())
+-                enemiesAlive = true;
+-        return partyAlive && enemiesAlive;
+-    }
+-
+-    // turn based battle here
+-    public void StartBattle(Character[] characters, MobNPC[] mobs) {
+-        int turnCount = 1;
+-        while (isBattleOngoing()) {
+-            System.out.println("\n========== TURN " + turnCount + " ==========");
+-            // enemy phase: each alive enemy in the current chapter attacks a random alive
+-            // character
+-            battlePhases.characterPhase();
+-            // enemy phase: each alive enemy in the current chapter attacks a random alive
+-            // character
+-            battlePhases.enemyPhase();
+-            // show status after the turn
+-            battleHUD.execute();
+-            // tick status durations for characters and mobs
+-            for (Character c : characters)
+-                c.tickStatus();
+-            for (MobNPC m : mobs)
+-                m.tickStatus();
+-            turnCount++;
+-            if (turnCount > 1000)
+-                break;
+-        }
+-    }
+-}
+\ No newline at end of file
+Index: src/main/charmees/gui/BattlePhases.java
+===================================================================
+diff --git a/src/main/charmees/gui/BattlePhases.java b/src/main/charmees/gui/BattlePhases.java
+deleted file mode 100644
+--- a/src/main/charmees/gui/BattlePhases.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ /dev/null	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
+@@ -1,250 +0,0 @@
+-// Class for handling battle phases (enemy and character turns)
+-package charmees.gui;
+-
+-import charmees.util.*;
+-import charmees.util.Character;
+-import java.util.ArrayList;
+-import java.util.Scanner;
+-import src.main.charmees.util.*;
+-import src.main.charmees.gui.*;
+-import src.main.charmees.util.Character;
+-
+-public class BattlePhases extends BattleUIComponent {
+-
+-    public BattlePhases(Character[] characters, MobNPC[] mobs, Scanner skillInput, int currentChapter) {
+-        super(characters, mobs, skillInput, currentChapter);
+-    }
+-
+-    @Override
+-    public void execute() {
+-        // Not used, as phases are called separately
+-    }
+-
+-    // enemies attack: each alive enemy in the active chapter uses a random skill on
+-    // a random alive character
+-    public void enemyPhase() {
+-        ArrayList<Integer> aliveCharacterIndexes = new ArrayList<>();
+-        for (int i = 0; i < characters.length; i++) {
+-            if (characters[i].isAlive())
+-                aliveCharacterIndexes.add(i);
+-        }
+-        if (aliveCharacterIndexes.isEmpty())
+-            return; // no targets
+-
+-        for (MobNPC enemy : mobs) {
+-            if (enemy.chapter != this.currentChapter)
+-                continue;
+-            if (!enemy.isAlive())
+-                continue;
+-
+-            // if monster is stunned, they skip their action
+-            if (enemy.isStunned()) {
+-                System.out.println(enemy.getName() + " is stunned and cannot act this turn.");
+-                continue;
+-            }
+-
+-            // prefer taunted party members if any
+-            ArrayList<Integer> tauntedTargets = new ArrayList<>();
+-            for (int i = 0; i < characters.length; i++) {
+-                if (characters[i].isAlive() && characters[i].tauntTurns > 0)
+-                    tauntedTargets.add(i);
+-            }
+-
+-            int randIndex = -1;
+-            if (!tauntedTargets.isEmpty()) {
+-                int pick = (int) (Math.random() * tauntedTargets.size());
+-                randIndex = tauntedTargets.get(pick);
+-            } else {
+-                int randomListIndex = (int) (Math.random() * aliveCharacterIndexes.size());
+-                randIndex = aliveCharacterIndexes.get(randomListIndex);
+-            }
+-            Character target = characters[randIndex];
+-
+-            // pick a random skill between 1 and 3 (most mobs define 1-3)
+-            int skill = (int) (Math.random() * 3) + 1;
+-
+-            System.out.println();
+-            // handle lava beast AoE case explicitly
+-            if (enemy.getName().equalsIgnoreCase("lava beast") && skill == 3) {
+-                int damage = (int) (Math.random() * 31) + 20;
+-                System.out.println(enemy.getName() + " used Corrupted Eruption! Deals " + damage
+-                        + " damage to all party members!");
+-                for (Character c : characters) {
+-                    if (c.isAlive())
+-                        c.takedamage(damage);
+-                }
+-            } else {
+-                enemy.useSkill(skill, target);
+-            }
+-
+-            // remove target from list if they died
+-            if (!target.isAlive()) {
+-                // rebuild aliveCharacterIndexes to avoid duplicates and removed dead targets
+-                aliveCharacterIndexes.clear();
+-                for (int i = 0; i < characters.length; i++) {
+-                    if (characters[i].isAlive())
+-                        aliveCharacterIndexes.add(i);
+-                }
+-                if (aliveCharacterIndexes.isEmpty())
+-                    return; // all characters dead
+-            }
+-        }
+-    }
+-
+-    // character attack: character attacks via user input and heals via user input
+-    public void characterPhase() {
+-        ArrayList<Integer> aliveEnemyIndexes = new ArrayList<>();
+-        // collect indices of mobs that belong to the current chapter and are alive
+-        for (int i = 0; i < mobs.length; i++) {
+-            if (mobs[i].chapter == this.currentChapter && mobs[i].isAlive()) {
+-                aliveEnemyIndexes.add(i);
+-            }
+-        }
+-        if (aliveEnemyIndexes.isEmpty())
+-            return; // no targets
+-
+-        for (Character party : characters) {
+-            if (!party.isAlive())
+-                continue;
+-            // if the character is stunned, they skip their action this turn
+-            if (party.isStunned()) {
+-                System.out.println(party.getName() + " is stunned and cannot act this turn.");
+-                continue;
+-            }
+-            // if the character is stunned, they skip their action this turn
+-
+-            // displayss character info
+-            System.out.println("\n" + party.name + " | HP: " + party.healthPoints + " | MP: " + party.manaPoints);
+-            System.out.println("===============================");
+-
+-            // choose skill first
+-            // show skill list for this character
+-            int skill = -1;
+-            String[] skills = party.getSkillList();
+-            if (skills.length == 0) {
+-                System.out
+-                        .println("\n" + party.getName() + " has no usable skills. Skipping action for this character.");
+-                continue; // skip to next character
+-            }
+-            System.out.println("\n" + party.getName() + " Skill list:");
+-            for (String s : skills)
+-                System.out.println(s);
+-            System.out.println("===============================");
+-            while (true) {
+-                System.out.print("Choose skill for " + party.getName() + " (1-" + skills.length + "): ");
+-                String tok = skillInput.next();
+-                try {
+-                    int pick = Integer.parseInt(tok);
+-                    if (pick >= 1 && pick <= skills.length) {
+-                        skill = pick;
+-                        break;
+-                    }
+-                } catch (NumberFormatException ex) {
+-                }
+-                System.out.println("Invalid skill. Try again.");
+-            }
+-
+-            String targetType = party.getSkillTargetType(skill);
+-            MobNPC target = null;
+-            Character ally = null;
+-
+-            if (targetType.equals("ENEMY")) {
+-                // display enemy targets and choose one
+-                System.out.println("\nChoose target for " + party.getName() + ":");
+-                System.out.println("===============================");
+-                for (int i = 0; i < aliveEnemyIndexes.size(); i++) {
+-                    MobNPC m = mobs[aliveEnemyIndexes.get(i)];
+-                    System.out.println((i + 1) + ". " + m.getName() + " | HP: " + m.healthPoints);
+-                }
+-                System.out.println("===============================");
+-                int chosenEnemyIndex = -1;
+-                while (true) {
+-                    System.out.print("Choose target (1-" + aliveEnemyIndexes.size() + "): ");
+-                    String tok = skillInput.next();
+-                    try {
+-                        int pick = Integer.parseInt(tok);
+-                        if (pick >= 1 && pick <= aliveEnemyIndexes.size()) {
+-                            chosenEnemyIndex = aliveEnemyIndexes.get(pick - 1);
+-                            break;
+-                        }
+-                    } catch (NumberFormatException ex) {
+-                    }
+-                    System.out.println("Invalid choice. Try again.");
+-                }
+-                target = mobs[chosenEnemyIndex];
+-                System.out.println("\n" + party.getName() + " uses skill " + skill + " on " + target.getName() + "...");
+-                party.useSkill(skill, target, party, characters);
+-            } else if (targetType.equals("ALLY")) {
+-                // choose an alive ally (including self)
+-                ArrayList<Integer> aliveAllyIndexes = new ArrayList<>();
+-                for (int i = 0; i < characters.length; i++) {
+-                    if (characters[i].isAlive())
+-                        aliveAllyIndexes.add(i);
+-                }
+-                if (aliveAllyIndexes.isEmpty()) {
+-                    System.out.println("No alive allies to target. Skill canceled.");
+-                } else {
+-                    System.out.println("\nChoose ally target for " + party.getName() + ":");
+-                    for (int i = 0; i < aliveAllyIndexes.size(); i++) {
+-                        Character c = characters[aliveAllyIndexes.get(i)];
+-                        System.out.println(
+-                                (i + 1) + ". " + c.getName() + " | HP: " + c.healthPoints + " | MP: " + c.manaPoints);
+-                    }
+-                    int chosenAllyIndex = -1;
+-                    while (true) {
+-                        System.out.print("Choose ally (1-" + aliveAllyIndexes.size() + "): ");
+-                        String tok = skillInput.next();
+-                        try {
+-                            int pick = Integer.parseInt(tok);
+-                            if (pick >= 1 && pick <= aliveAllyIndexes.size()) {
+-                                chosenAllyIndex = aliveAllyIndexes.get(pick - 1);
+-                                break;
+-                            }
+-                        } catch (NumberFormatException ex) {
+-                        }
+-                        System.out.println("Invalid choice. Try again.");
+-                    }
+-                    ally = characters[chosenAllyIndex];
+-                    System.out.println(party.getName() + " uses skill " + skill + " on ally " + ally.getName() + "...");
+-                    party.useSkill(skill, null, ally, characters);
+-                }
+-            } else if (targetType.equals("ALL") || targetType.equals("SELF")) {
+-                // 'ALL' affects all allies; 'SELF' affects self (pass party as ally)
+-                System.out.println(party.getName() + " uses skill " + skill + "...");
+-                party.useSkill(skill, null, party, characters);
+-            } else {
+-                // default fallback treat as enemy-target
+-                int chosenEnemyIndex = -1;
+-                while (true) {
+-                    System.out.print("Choose Enemy (1-" + aliveEnemyIndexes.size() + "): ");
+-                    String tok = skillInput.next();
+-                    try {
+-                        int pick = Integer.parseInt(tok);
+-                        if (pick >= 1 && pick <= aliveEnemyIndexes.size()) {
+-                            chosenEnemyIndex = aliveEnemyIndexes.get(pick - 1);
+-                            break;
+-                        }
+-                    } catch (NumberFormatException ex) {
+-                    }
+-                    System.out.println("Invalid choice. Try again.");
+-                }
+-                target = mobs[chosenEnemyIndex];
+-                System.out.println(party.getName() + " uses skill " + skill + " on " + target.getName() + "...");
+-                party.useSkill(skill, target, party, characters);
+-            }
+-
+-            // if the target exists and died, rebuild the list of alive enemies for the
+-            // chapter
+-            if (target != null && !target.isAlive()) {
+-                aliveEnemyIndexes.clear();
+-                for (int i = 0; i < mobs.length; i++) {
+-                    if (mobs[i].chapter == this.currentChapter && mobs[i].isAlive()) {
+-                        aliveEnemyIndexes.add(i);
+-                    }
+-                }
+-                if (aliveEnemyIndexes.isEmpty())
+-                    return; // all enemies dead
+-            }
+-        }
+-    }
+-}
+\ No newline at end of file
+Index: src/main/charmees/gui/BattleUI.java
+===================================================================
+diff --git a/src/main/charmees/gui/BattleUI.java b/src/main/charmees/gui/BattleUI.java
+deleted file mode 100644
+--- a/src/main/charmees/gui/BattleUI.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ /dev/null	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
+@@ -1,75 +0,0 @@
+-package charmees.gui;
+-
+-import charmees.util.*;
+-import charmees.util.Character;
+-import javax.swing.*;
+-import javax.swing.border.*;
+-import java.awt.*;
+-import java.awt.image.BufferedImage;
+-import java.io.File;
+-import java.lang.reflect.Array;
+-import java.util.ArrayList;
+-import javax.imageio.ImageIO;
+-
+-public class BattleUI extends JFrame{
+-    private final Character[] characters; //full party(index 0-4)
+-    private final MobNPC[] mobs;
+-    private final int chapter;
+-
+-    //Actuve fighter - character in battle
+-    private int activeIdx = 0;  // starts at active character index 0(Audry)
+-    private int targetIdx = 0; // which enemy is currenyly being targeted
+-    private int turnCount = 1;
+-    private boolean playerTurn = true; // true if it's the player's turn, false for mobs    
+-
+-    private int[] charMaxHP;
+-    private int[] mobMaxHP;
+-
+-    //UI Components
+-    private ScenePanel scenePanel; //Sprite Area
+-    private Jpanel allEnemyBars; //show all enemy HP bars
+-    private Jpanel activeCharCard; //top-left stat card for active character
+-    private Jpanel targetCard; // top-right stat card for targeted enemy
+-    private JTextArea logArea; // battle log
+-    private JPanel benchPanel; // bottom row of character portraits for switching
+-    private JButton skillBtn; // skill button - opens skill menu for active character
+-    private JButton sigBtn; // signature move button - only open when condition is met
+-    private JButton switchBtn; // switch active character
+-    private JButton HealBtn; //Heal characters - always open
+-    private JLabel turnLabel;
+-
+-    //Constructors
+-    public BattleUI(Character[] characters, MobNPC[] mobs, int chapter) {
+-        this.characters = characters;
+-        this.mobs = mobs;
+-        this.chapter = chapter;
+-
+-        // initialize max HP arrays for characters and mobs(before any battle damage)
+-        charMaxHP = new int[characters.length];
+-        for (int i = 0; i < characters.length; i++)
+-            charMaxHP[i] = characters[i].healthPoints;
+-
+-        //counts only mobs for the current chapter being in the battle, so we can have a smaller array for mob HP bars
+-        ArrayList<MobNPC> chMobs = new ArrayList<>();
+-        for (MobNPC m : mobs)
+-            if (m.chapter == chapter)
+-                chMobs.add(m);
+-        mobMaxHP = new int[mobs.length];
+-        for (int i = 0; i < chMobs.size(); i++)
+-            mobMaxHP[i] = chMobs.get(i).healthPoints;
+-
+-        //activeIdx 2 is not used for character 
+-        if (activeIdx == 2) activeIdx = 0;
+-
+-        // find the first alive enemy in the current chapter to target at the start of battle
+-        //targetIdx = firstAliveEnemyIdx();
+-
+-        //loadSprites();
+-
+-        //build and show window
+-        //buildUI();
+-        setVisible(true);        
+-
+-    }
+-
+-}
+\ No newline at end of file
+Index: src/main/charmees/Core/GameSystem.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\r\npackage src.main.charmees.core;\r\n\r\nimport src.main.charmees.gui.MainMenu;\r\n\r\npublic class GameSystem {\r\n    protected MainMenu mainMenu;\r\n\r\n    public GameSystem(MainMenu mainMenu) {\r\n        this.mainMenu = mainMenu;\r\n    }\r\n    public void MainMenu(){\r\n        mainMenu.run();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Core/GameSystem.java b/src/main/charmees/Core/GameSystem.java
+--- a/src/main/charmees/Core/GameSystem.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Core/GameSystem.java	(date 1778898937581)
+@@ -1,7 +1,7 @@
+ 
+-package src.main.charmees.core;
++package charmees.Core;
+ 
+-import src.main.charmees.gui.MainMenu;
++import charmees.Display.MainMenu;
+ 
+ public class GameSystem {
+     protected MainMenu mainMenu;
+Index: src/main/charmees/Core/Game.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.core;\r\n\r\nimport java.util.Scanner;\r\nimport src.main.charmees.util.Character;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.Entity.*;\r\n\r\npublic class Game {\r\n    public static void main(String[] args) {\r\n        Scanner skillinput = new Scanner(System.in);\r\n        Character[] characters = {\r\n            new Audry(\"Audry\", \"Assassin\", \"Melee\", \"Acidic Slime\", 100, 25),\r\n            new Giantha(\"Giantha\", \"Tank\", \"Melee\", \"World Tree Branch\", 250, 20),\r\n            new Lazuli(\"Lazuli\", \"Healer\", \"Ranged\", \"Staff\", 150, 30),\r\n            new Lynzi(\"Lynzi\", \"Dealer\", \"Melee\", \"Star Magic\", 170, 30),\r\n            new Shiera(\"Shiera\", \"Support\", \"Ranged\", \"Earth Magic\", 120, 25)\r\n        };\r\n        MobNPC[] mobs = {\r\n            //Boss\r\n            new Twinkle(\"Twinkle\", \"Boss\", \"Melee\", \"Puppet\", 500,6),\r\n            //Minibosses\r\n            new Kassundre(\"Kassundre\", \"Miniboss\", \"Ranged\", \"Dark Magic\", 300,5),\r\n            new LavaBeast(\"Lava Beast\", \"Miniboss\", \"Melee\", \"Fire Magic\", 350,2),\r\n            new SirenEmpress(\"Siren Empress\", \"Miniboss\", \"Ranged\", \"Water Magic\", 320,1),\r\n            new Resonara(\"Resonara\", \"Miniboss\", \"Ranged\", \"Sound Magic\", 310,4),\r\n            new EclipseCore(\"Eclipse Core\", \"Miniboss\", \"Melee\", \"Astral Magic\", 350, 3),\r\n            //Mobs\r\n            new StudentPuppet(\"Student Puppet\", \"Minion\", \"Melee\", \"Wooden Sword\", 100,5),\r\n            new CorruptedSkeleton(\"Corrupted Skeleton\", \"Minion\", \"Melee\", \"Bone Sword\", 120,2),\r\n            new WaterSprite(\"Water Sprite\", \"Minion\", \"Ranged\", \"Water Magic\", 130,1),\r\n            new EchoImp(\"Echo Imp\", \"Minion\", \"Ranged\", \"Sound Magic\", 130, 4),\r\n            new AstralGlob(\"Astral Glob\", \"Minion\", \"Melee\", \"Astral Slime\", 110, 3),\r\n            new PrincessPuppet(\"Princess Puppet\", \"Minion\", \"Melee\", \"wand\", 100,5),\r\n            new MagmaSkeleton(\"Magma Skeleton\", \"Minion\", \"Melee\", \"Bone Sword\", 120,2),\r\n            new WaterBlob(\"Water Blob\", \"Minion\", \"Ranged\", \"Water Magic\", 130,1),\r\n            new ResonanceGoblin(\"Resonance Goblin\", \"Minion\", \"Ranged\", \"Sound Magic\", 130, 4),\r\n            new MoonSprite(\"Moon Sprite\", \"Minion\", \"Melee\", \"Astral magic\", 110, 3),\r\n        };\r\n\r\n        GameUI gameUI = new GameUI(characters, mobs, skillinput);\r\n        MainMenu mainMenu = new MainMenu(gameUI, skillinput);\r\n\r\n        GameSystem gameSystem = new GameSystem(mainMenu);\r\n        gameSystem.MainMenu();\r\n\r\n    skillinput.close();\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Core/Game.java b/src/main/charmees/Core/Game.java
+--- a/src/main/charmees/Core/Game.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Core/Game.java	(date 1778899141302)
+@@ -1,13 +1,15 @@
+-package src.main.charmees.core;
++package charmees.Core;
+ 
+ import java.util.Scanner;
+-import src.main.charmees.util.Character;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.Entity.*;
++import charmees.Screen.MainMenuScreen;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
++import charmees.Entity.*;
+ 
+ public class Game {
+     public static void main(String[] args) {
+         Scanner skillinput = new Scanner(System.in);
++
+         Character[] characters = {
+             new Audry("Audry", "Assassin", "Melee", "Acidic Slime", 100, 25),
+             new Giantha("Giantha", "Tank", "Melee", "World Tree Branch", 250, 20),
+@@ -20,12 +22,9 @@
+             new Twinkle("Twinkle", "Boss", "Melee", "Puppet", 500,6),
+             //Minibosses
+             new Kassundre("Kassundre", "Miniboss", "Ranged", "Dark Magic", 300,5),
+-            new LavaBeast("Lava Beast", "Miniboss", "Melee", "Fire Magic", 350,2),
+             new SirenEmpress("Siren Empress", "Miniboss", "Ranged", "Water Magic", 320,1),
+             new Resonara("Resonara", "Miniboss", "Ranged", "Sound Magic", 310,4),
+-            new EclipseCore("Eclipse Core", "Miniboss", "Melee", "Astral Magic", 350, 3),
+             //Mobs
+-            new StudentPuppet("Student Puppet", "Minion", "Melee", "Wooden Sword", 100,5),
+             new CorruptedSkeleton("Corrupted Skeleton", "Minion", "Melee", "Bone Sword", 120,2),
+             new WaterSprite("Water Sprite", "Minion", "Ranged", "Water Magic", 130,1),
+             new EchoImp("Echo Imp", "Minion", "Ranged", "Sound Magic", 130, 4),
+@@ -36,14 +35,11 @@
+             new ResonanceGoblin("Resonance Goblin", "Minion", "Ranged", "Sound Magic", 130, 4),
+             new MoonSprite("Moon Sprite", "Minion", "Melee", "Astral magic", 110, 3),
+         };
+-
+-        GameUI gameUI = new GameUI(characters, mobs, skillinput);
+-        MainMenu mainMenu = new MainMenu(gameUI, skillinput);
+-
+-        GameSystem gameSystem = new GameSystem(mainMenu);
+-        gameSystem.MainMenu();
++        // Launch the Screen-based main menu with the party and mobs
++        MainMenuScreen mainMenu = new MainMenuScreen(skillinput, characters, mobs);
++        mainMenu.show();
+ 
+-    skillinput.close();
++        skillinput.close();
+     }
+ 
+ }
+Index: src/main/charmees/util/Entity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.util;\r\npublic abstract class Entity implements StatusEffectable {\r\n    public String name;\r\n    public String charClass;\r\n    public String type;\r\n    public String weapon;\r\n    public int healthPoints;\r\n\r\n    // status effect counters\r\n    public int tauntTurns = 0;\r\n    public int damageReductionTurns = 0;\r\n    public double damageReductionPercent = 0.0;\r\n    public int stunnedTurns = 0;\r\n\r\n    public Entity(String name, String charClass, String type, String weapon, int healthPoints) {\r\n        this.name = name;\r\n        this.charClass = charClass;\r\n        this.type = type;\r\n        this.weapon = weapon;\r\n        this.healthPoints = healthPoints;\r\n    }\r\n\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n    public void takedamage(int damage){\r\n        // apply damage reduction if active\r\n        if (damageReductionTurns > 0 && damageReductionPercent > 0.0) {\r\n            int reduced = (int) Math.round(damage * (1.0 - damageReductionPercent));\r\n            damage = Math.max(0, reduced);\r\n        }\r\n        healthPoints -= damage;\r\n        if (healthPoints <= 0) {\r\n            healthPoints = 0;\r\n            System.out.println(name + \" took \" + damage + \" damage! Remaining HP: \" + healthPoints);\r\n            // character vs mob messages may be handled by subclasses\r\n        } else {\r\n            System.out.println(name + \" took \" + damage + \" damage! Remaining HP: \" + healthPoints);\r\n        }\r\n    }\r\n\r\n    public boolean isAlive(){\r\n        return healthPoints > 0;\r\n    }\r\n\r\n    // generic stats display\r\n    public void showStats() {\r\n        System.out.println(\"---- \" + name + \" ----\");\r\n        System.out.println(\"Class: \" + charClass);\r\n        System.out.println(\"Type: \" + type);\r\n        System.out.println(\"Weapon: \" + weapon);\r\n        System.out.println(\"HP: \" + healthPoints);\r\n        System.out.println(\"------------------\");\r\n        System.out.println();\r\n    }\r\n\r\n    // StatusEffectable implementations\r\n    public boolean isStunned() { return stunnedTurns > 0; }\r\n    public void applyStun(int turns) { stunnedTurns = Math.max(stunnedTurns, turns); System.out.println(name + \" is stunned for \" + stunnedTurns + \" turn(s).\"); }\r\n    public void applyTaunt(int turns) { tauntTurns = Math.max(tauntTurns, turns); System.out.println(name + \" is taunted for \" + tauntTurns + \" turn(s).\"); }\r\n    public void applyDamageReduction(double percent, int turns) { damageReductionPercent = percent; damageReductionTurns = Math.max(damageReductionTurns, turns); System.out.println(name + \" has damage reduction for \" + damageReductionTurns + \" turn(s).\"); }\r\n\r\n    public void tickStatus() {\r\n        if (tauntTurns > 0) tauntTurns--;\r\n        if (stunnedTurns > 0) stunnedTurns--;\r\n        if (damageReductionTurns > 0) {\r\n            damageReductionTurns--;\r\n            if (damageReductionTurns == 0) damageReductionPercent = 0.0;\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/util/Entity.java b/src/main/charmees/util/Entity.java
+--- a/src/main/charmees/util/Entity.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/util/Entity.java	(date 1778899141730)
+@@ -1,4 +1,4 @@
+-package charmees.util;
++package charmees.Util;
+ public abstract class Entity implements StatusEffectable {
+     public String name;
+     public String charClass;
+Index: src/main/charmees/util/Healable.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.util;\r\n// Interface for entities that can be healed or have MP restored\r\npublic interface Healable {\r\n    void healAlly(int heal);\r\n    void restoreMP(int mp);\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/util/Healable.java b/src/main/charmees/util/Healable.java
+--- a/src/main/charmees/util/Healable.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/util/Healable.java	(date 1778899141730)
+@@ -1,4 +1,4 @@
+-package charmees.util;
++package charmees.Util;
+ // Interface for entities that can be healed or have MP restored
+ public interface Healable {
+     void healAlly(int heal);
+Index: src/main/charmees/util/MobNPC.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.util;\r\npublic class MobNPC extends Entity {\r\n    public int chapter;\r\n\r\n    public MobNPC(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints);\r\n        this.chapter = chapter;\r\n    }\r\n\r\n\r\n    //=================== Skill System ==================\r\n    //To use skills \r\n\r\n    public void useSkill(int skill, Character target) {\r\n        // Default: no skills for generic mobs\r\n        System.out.println(name + \" has no skills defined!\");\r\n    }\r\n\r\n    //----------------- Show Stats -----------------\r\n\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/util/MobNPC.java b/src/main/charmees/util/MobNPC.java
+--- a/src/main/charmees/util/MobNPC.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/util/MobNPC.java	(date 1778899141302)
+@@ -1,4 +1,4 @@
+-package charmees.util;
++package charmees.Util;
+ public class MobNPC extends Entity {
+     public int chapter;
+ 
+@@ -16,6 +16,12 @@
+         System.out.println(name + " has no skills defined!");
+     }
+ 
++
++    public int getSkillCount() {
++        // Default: no skills for generic mobs
++        if(charClass.equals("Boss") || charClass.equals("Miniboss")) return 3; // Bosses and minibosses have 3 skills
++            return 2; // Regular mobs have 2 skills
++    }
+     //----------------- Show Stats -----------------
+ 
+ 
+Index: src/main/charmees/util/StatusEffectable.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.util;\r\n// Interface for entities that can have status effects applied\r\npublic interface StatusEffectable {\r\n    boolean isStunned();\r\n    void applyStun(int turns);\r\n    void applyTaunt(int turns);\r\n    void applyDamageReduction(double percent, int turns);\r\n    void tickStatus();\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/util/StatusEffectable.java b/src/main/charmees/util/StatusEffectable.java
+--- a/src/main/charmees/util/StatusEffectable.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/util/StatusEffectable.java	(date 1778899141730)
+@@ -1,4 +1,4 @@
+-package charmees.util;
++package charmees.Util;
+ // Interface for entities that can have status effects applied
+ public interface StatusEffectable {
+     boolean isStunned();
+Index: src/main/charmees/util/Character.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.util;\r\npublic abstract class Character extends Entity implements Healable {\r\n    public int manaPoints;\r\n\r\n    public Character(String name, String charClass, String type, String weapon, int healthPoints, int manaPoints) {\r\n        super(name, charClass, type, weapon, healthPoints);\r\n        this.manaPoints = manaPoints;\r\n    }\r\n    \r\n    // heal and MP methods are still required by Healable\r\n    @Override\r\n    public void healAlly(int heal){\r\n        healthPoints += heal;\r\n        System.out.println(name + \" healed for \" + heal + \" HP. Current HP: \" + healthPoints);\r\n    }\r\n\r\n    @Override\r\n    public void restoreMP(int mp){\r\n        manaPoints += mp;\r\n        System.out.println(name + \" restored \" + mp + \" MP. Current MP: \" + manaPoints);\r\n    }\r\n\r\n    // ================== Skill System ==================\r\n    //To use skills\r\n    public abstract void useSkill(int skill, MobNPC target, Character ally, Character[] party);\r\n\r\n    // ----------------- Show Stats -----------------\r\n    public void showStats() {\r\n        System.out.println(\"---- \" + name + \" ----\");\r\n        System.out.println(\"Class: \" + charClass);\r\n        System.out.println(\"Type: \" + type);\r\n        System.out.println(\"Weapon: \" + weapon);\r\n        System.out.println(\"HP: \" + healthPoints + \", MP: \" + manaPoints);\r\n        System.out.println(\"------------------\");\r\n        System.out.println();\r\n    }\r\n\r\n    // Return the skill list for this character as an array of strings\r\n    // Each entry should describe the skill name and any MP cost or requirement\r\n    public abstract String[] getSkillList();\r\n\r\n    // Return a string indicating the target type for a given skill index.\r\n    // Possible return values: \"ENEMY\", \"ALLY\", \"ALL\", \"SELF\".\r\n    public abstract String getSkillTargetType(int skill);\r\n\r\n    // Decrement status durations each turn (delegated to Entity)\r\n    @Override\r\n    public void tickStatus() {\r\n        super.tickStatus();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/util/Character.java b/src/main/charmees/util/Character.java
+--- a/src/main/charmees/util/Character.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/util/Character.java	(date 1778899141730)
+@@ -1,4 +1,4 @@
+-package charmees.util;
++package charmees.Util;
+ public abstract class Character extends Entity implements Healable {
+     public int manaPoints;
+ 

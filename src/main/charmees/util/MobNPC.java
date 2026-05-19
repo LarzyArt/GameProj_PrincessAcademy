@@ -16,7 +16,13 @@ public class MobNPC extends Entity {
         System.out.println(name + " has no skills defined!");
     }
 
-    //----------------- Show Stats -----------------
+    public int getSkillCount() {
+        if (charClass.equals("Boss") 
+                || charClass.equals("Mini-Boss")) 
+            return 3; // Bosses and mini-bosses have 3 skills
+        return 2;// Regular mobs have 2 skills
+        
+    }
 
 
 

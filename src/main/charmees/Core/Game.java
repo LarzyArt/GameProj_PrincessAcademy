@@ -1,8 +1,10 @@
-package charmees.core;
+package charmees.Core;
 
 import java.util.Scanner;
 import charmees.util.Character;
 import charmees.util.MobNPC;
+import charmees.util.Character.*;
+import charmees.util.Character.characters;
 import charmees.Entity.*;
 
 public class Game {

@@ -1,0 +1,813 @@
+Index: src/main/charmees/Display/BattleDIsplay.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Display;\r\n\r\nimport charmees.Util.Character;\r\nimport charmees.Util.MobNPC;\r\nimport charmees.Util.Display;\r\nimport java.util.Scanner;\r\n\r\npublic class BattleDisplay {\r\n\r\n    //TODO: implement battle display\r\n\r\n    //MAINLY: show the battlefield, show the active character and mob, \r\n    // show the HP of all characters and mobs, show the turn count, show the chapter, \r\n    // show the actions available to the active character, \r\n    // show the actions available to the active mob \r\n\r\n    public static void showBattleField(\r\n        Character[] characters,\r\n        MobNPC[] mobs,\r\n        int chapter,\r\n        int activeIdx,\r\n        int targetIdx,\r\n        int[] charMaxHP,\r\n        int[] mobMaxHP,\r\n        int turncount)\r\n        {\r\n            // clear screen\r\n            Display.gap();\r\n            Display.header(\"CHAPTER \" + chapter + \" - TURN \" + turncount);\r\n            \r\n            // enemy field section\r\n            Display.gap();\r\n            showEnemyField(mobs, chapter, targetIdx, mobMaxHP);\r\n\r\n            // active character section\r\n            Display.gap();\r\n            showActiveChar(characters[activeIdx], charMaxHP[activeIdx]);\r\n             \r\n            // bench section\r\n            Display.gap();\r\n            showBench(characters, activeIdx, charMaxHP);\r\n            \r\n            // thin line separator\r\n            Display.thin();\r\n        }\r\n\r\n        // enemy Section\r\n        public static void showEnemyField(MobNPC[] mobs, int chapter, int targetIdx, int[] mobMaxHP){\r\n                System.out.println(\"ENEMIES: \");\r\n                for (int i = 0; i < mobs.length; i++){\r\n                    MobNPC m = mobs[i];\r\n                    if (m.chapter != chapter) continue;\r\n\r\n                    Display.gap();\r\n\r\n                    if(!m.isAlive()){\r\n                        System.out.println(\" \" + m.getName() + \" [\" + m.charClass + \"] - DEFEATED\");\r\n                        continue;\r\n                    }\r\n\r\n                    String target = (i == targetIdx) ? \" <-- TARGET\" : \"\";\r\n                    System.out.println(\" \" + m.getName() + \" [\" + m.charClass + \"]\"\r\n                    + \" HP: \" + m.healthPoints + \"/\" + mobMaxHP[i] + target);\r\n                    System.out.println(\" \" + hpBar(m.healthPoints, mobMaxHP[i], 30)\r\n                    + \" \" + percent(m.healthPoints,mobMaxHP[i]) + \"%\");\r\n                }\r\n            }\r\n\r\n            // active character Section\r\n            public static void showActiveChar(Character c, int maxHP){\r\n                System.out.println(\"ACTIVE CHARACTER: \");\r\n                Display.thin();\r\n                System.out.println(\" \" + c.getName() + \" \" \r\n                + \"   HP: \" + c.healthPoints + \"/\" + maxHP\r\n                + \"   MP: \" + c.manaPoints + \"/\" + c.manaPoints);\r\n\r\n                System.out.println(\" \" + hpBar(c.healthPoints, maxHP, 30)\r\n                + \" \" + percent(c.healthPoints, maxHP) + \"%\");\r\n            }\r\n\r\n        // Bench Section\r\n        private static void showBench(Character[] characters, int activeIdx, int[] charMaxHP){\r\n            System.out.print(\"   PARTY: \");\r\n            for(int i = 0; i < characters.length; i++){\r\n                Character c = characters[i];\r\n                String label;\r\n\r\n                if(!c.isAlive()){\r\n                    label = c.getName() + \" [DEFEATED]\";\r\n                } else if (i == activeIdx){\r\n                    label = c.getName() + \" [IN BATTLE]\";\r\n                } else if (i == 2) {\r\n                    label = c.getName() + \"[HEALER]\";\r\n                } else {\r\n                    label = c.getName() + \" [BENCH] [\" + percent(c.healthPoints, charMaxHP[i]) + \"%]\";\r\n                }\r\n\r\n                System.out.print(label);\r\n                if(i < characters.length - 1) System.out.print(\" \");\r\n            }\r\n            System.out.println();\r\n        }\r\n\r\n        // ================================================\r\n        // ACTION DISPLAY\r\n        // ================================================\r\n        public static void showActionDisplay(Character actor ){\r\n            Display.gap();\r\n            Display.thin();\r\n            System.out.println(\"What will \" + actor.getName() + \"do?\");\r\n            Display.gap();\r\n\r\n            System.out.println(\"  [1] SKILL\"); // skill option(skill 1 or skill 2) will be handled in BattleLogic based on the character\r\n            System.out.println(\"  [2] ULTIMATE\"); // uses signature move (skill 3) will be handled in BattleLogic based on the character\r\n            System.out.println(\"  [3] SWITCH\"); // switch to another character in the bench\r\n            System.out.println(\"  [4] LAZULI'S BLESSING\"); // heals characters based on lazuli's skills, will be handled in BattleLogic based on the character \r\n\r\n            Display.thin();\r\n            System.out.println(\"  > \");\r\n        }\r\n\r\n        // ================================================\r\n        //SKILL MENU\r\n        // ================================================\r\n        \r\n        // shows the skill menu for the active character,\r\n        //  with options to select skill 1 or skill 2,\r\n        //  or cancel and return to the action display\r\n        public static void showSkillMenu(Character actor){\r\n            String[] skills = actor.getSkillList();\r\n            Display.gap();\r\n            System.out.println(\" \" + actor.getName() + \" -- Skills:\");\r\n            for (int i = 0; i < Math.min(2, skills.length); i++){\r\n                System.out.println(\"  [\" + (i + 1) + \"] \" + skills[i]);\r\n            }\r\n            System.out.println(\"  [3] Cancel\");\r\n            Display.thin();\r\n            System.out.println(\"  > \");\r\n        }\r\n\r\n        // shows the ultimate confirmation menu for the active character,\r\n        //  with the option to confirm using the ultimate, or cancel and return to the action\r\n        public static void showUltimateConfirm(Character actor) {\r\n            String[] skills = actor.getSkillList();\r\n            Display.gap();\r\n            System.out.println(\" \" + actor.getName() + \" -- Ultimate:\");\r\n            Display.thin();\r\n            System.out.println(\" \" + skills[2]);\r\n            Display.thin();\r\n            System.out.println(\" Risk it all? [Y/N]\");\r\n            System.out.println(\" [1] Use it!\");\r\n            System.out.println(\" [0] Cancel\");\r\n            Display.thin();\r\n            System.out.println(\" > \");\r\n        }\r\n\r\n        // shows the switch menu to switch active character, with options to select any alive bench character,\r\n        //  or cancel and return to the action display\r\n        public static void showSwitchMenu(Character[] characters, int activeIdx, int[] charMaxHP){\r\n                Display.gap();\r\n                System.out.println(\" SWITCH: Tag who's in?\");\r\n                Display.thin();\r\n\r\n                int opt = 1; // option number for switching, starts at 1 \r\n                for (int i = 0; i < characters.length; i++){\r\n                    if (i == 2) continue; // skips lazuli\r\n                    if (i == activeIdx) continue; // skip active character\r\n                    if(!characters[i].isAlive()) continue; // skip defeated characters\r\n\r\n                    System.out.println(\" [\" + opt + \"] \" + characters[i].getName()\r\n                    + \"   HP: \" + characters[i].healthPoints + \"/\" + charMaxHP[i]\r\n                    + \"   MP: \" + characters[i].manaPoints);\r\n                    opt++;\r\n                }\r\n\r\n                System.out.println(\"   [0]Cancel\");\r\n                Display.thin();\r\n                System.out.println(\"   > \");\r\n        }\r\n\r\n        // shows the heal menu for lazuli's blessing, with options to select any character to heal,\r\n        //  or cancel and return to the action display\r\n        public static void showHealMenu(Character lazuli){\r\n            String[] skills = lazuli.getSkillList();\r\n            Display.gap();\r\n            System.out.println(\" LAZULI BLESSING (MP: \" + lazuli.manaPoints + \")\");\r\n            Display.thin();\r\n            for (int i = 0; i < skills.length; i++){\r\n                System.out.println(\"  [\" + (i + 1) + \"] \" + skills[i]);\r\n            }\r\n            System.out.println(\"  [0] Cancel\");\r\n            Display.thin();\r\n            System.out.println(\"  > \");\r\n        }\r\n\r\n        // shows the ally picker menu to select a target for healing, with options to select any alive character,\r\n        //  or cancel and return to the action display \r\n        public static void showAllyPicker(Character[] characters, int[] charMaxHP){\r\n            Display.gap();\r\n            System.out.println(\"  Eeny.. Meeny.. Miney.. Mo:\");\r\n            Display.thin();\r\n\r\n            int opt = 1;\r\n            for (int i = 0; i < characters.length; i++) {\r\n                if (!characters[i].isAlive()) continue;\r\n                System.out.println(\"  [\" + opt + \"] \" + characters[i].getName()\r\n                + \"   HP: \" + characters[i].healthPoints + \"/\" + charMaxHP[i]\r\n                + \"   MP:\"+ characters[i].manaPoints);\r\n                opt++;\r\n                \r\n            }\r\n            Display.thin();\r\n            System.out.println(\"  > \");\r\n        }\r\n\r\n        // shows the enemy picker menu to select a target for an attack, with options to select any alive enemy,\r\n        //  or cancel and return to the action display\r\n        public static void showEnemyPicker(MobNPC[] mobs, int chapter, int[] mobMaxHP){\r\n            Display.gap();\r\n            System.out.println(\"  Choose a target:\");\r\n            Display.thin();\r\n\r\n            int opt = 1;\r\n            for (int i = 0; i < mobs.length; i++) {\r\n                if (mobs[i].chapter != chapter || !mobs[i].isAlive()) continue;\r\n                System.out.println(\"  [\" + opt + \"] \" + mobs[i].getName()\r\n                + \" HP: \" + mobs[i].healthPoints + \"/\" + mobMaxHP[i]\r\n                + \" [\" +mobs[i].charClass + \"]\");\r\n                opt++;\r\n            }\r\n            Display.thin();\r\n            System.out.println(\"  > \");\r\n        }\r\n\r\n        //=================================================\r\n        // RESULTS DISPLAYS\r\n        //=================================================\r\n        public static void showVictoryDisplay(int chapter){\r\n            Display.gap();\r\n            pause(500);\r\n            Display.line();\r\n            pause(300);\r\n            Display.centered(\"L████: VICTORY!\");\r\n            pause(300);\r\n            Display.centered(\"L████: Chapter \" + chapter + \" Cleared!\");\r\n            pause(500);\r\n            if (chapter == 1){\r\n                Display.centered(\"L█z̴̧̜͈̓̈́̃́̕██: Ohhh... are you new?\");\r\n            } else if (chapter == 2){\r\n                Display.centered(\"L█z̴̧̜͈̓̈́̃́̕l̵̨̨̡̗͓̲͓͂͜ͅ█: This looks fun... I wanna play with you!\");\r\n            } else if (chapter == 3){\r\n                Display.centered(\"Ļ̶͕̝̖͚̟͇̙͇̀e̴̥̖̠̭̻̣̰͒̓́̅̓͑́͆͠z̴̧̜͈̓̈́̃́̕l̵̨̨̡̗͓̲͓͂͜ͅì̵̧̧̦̫̮̦̻̈́̈̑͑̍̚͘: huh... y̷̨̛̼̟̞͍̘͈̟̬͇̝͊̐̔̕ọ̵̻̭͈̥̅̏̾̆̑̀̐̓͆̕͠u̸͇͛̾̃̄̾̆ ̵̶̡̨̫̠̺̬̜͕̖̰͙̻̆͌̎́̈́̇̍̚̚w̷̬̓̾͋̆̐͊̿̑͌͆̕ǫ̸̡̯̜͕̮̻̖̯͚̠̻̬̎̀͂͠ņ̸̜̝͓͕̥̼̈́́̑͒̒̆͐͆̃̀̋̃͐̚?\");\r\n            }\r\n            Display.thin();\r\n            Display.gap();\r\n        }\r\n        \r\n        public static void showDefeatDisplay(){\r\n            Display.gap();\r\n            pause(500);\r\n            Display.line();\r\n            pause(300);\r\n            Display.centered(\"L████: DEFEAT...\");\r\n            pause(500);\r\n            int rng =(int)(Math.random() * 3);\r\n                if(rng == 0){\r\n                    Display.centered(\"L████: Not quite what I expected...\");\r\n                } else if (rng == 1){\r\n                    Display.centered(\"L█z̴̧̜͈̓̈́̃́̕██: Ohh... I'm Disappointed :'<\");\r\n                }  else if (rng == 2){\r\n                    Display.centered(\"L█z̴̧̜͈̓̈́̃́̕l̵̨̨̡̗͓̲͓͂͜ͅ█: REWIND TIME! b̴̨̛̮͚̜̝̠̭͐̄̊̊͋̿̋̚̕̕͜͝r̴̰̅r̶̹̩̝̣͇̖̰̎ŗ̵̼̫̠̈̌̿̔̉̅̈́̑͒̍̅r̸̨̥̠͉̠͓͛̚a̷̡̰̼͖̠̗̖͉̜͔͇͑̍̀̀̉̅͒͘͠͝͝͠b̷̨̢̲̟̻̣̠̫̞̫̗̟͑́̾̏̿̓̐̉̄͐͐e̶̙͈̪̣̫̺̲̓͛̇̂̕j̵̣̭͈̘̻̀͆͒́̀̓̆̊̈́̒̅d̵̢̡̧̺̟̻̠̜͋̿͒̂̓̎̀̈́͜͝q̶͙̩̞̝͙͔̫̹̳͋́͆͆̀̍̅͛́̚͜͠͝w̴̪͈̫̿̽̏́̒͛k̴̥͆̑́͑̏̽̕̕ͅē̶̼͙̈́̈́͛̌͠ͅq̵̧̪̭͕͚̮͍̜̞̜̇̿̃̽͐͋̕͜\");\r\n                }\r\n            Display.thin();\r\n            Display.gap();\r\n        }\r\n        public static void showEnemyPhaseHeader(){\r\n            Display.gap();\r\n            Display.thin();\r\n            System.out.println(\"-- ENEMY PHASE --\");\r\n            Display.thin();\r\n        }\r\n        public static void showPlayerPhaseHeader(Character actor){\r\n            Display.gap();\r\n            Display.thin();\r\n            System.out.println(\"  -- \" + actor.getName() + \"'s Turn --\");\r\n            Display.thin();\r\n        }\r\n\r\n\r\n        // =================================================\r\n        // DIALOGUE -prints each line, waits for enter between them\r\n        // =================================================\r\n        // tentative not final\r\n\r\n        // ================================================\r\n        //HELPERS\r\n        // ================================================\r\n        public static String hpBar(int hp, int max, int width){\r\n            if (max <= 0) return \"░\".repeat(width);\r\n            int filled = (int)((double) hp / max * width); // calculate filled portion\r\n            filled = Math.max(0, Math.min(width, filled)); // ensure within bounds\r\n            return \"█\".repeat(filled) + \"░\".repeat(width - filled); // create bar string\r\n        }\r\n\r\n        public static void log(String msg){\r\n            System.out.println(\" \" + msg);\r\n        }\r\n\r\n        private static int percent(int hp, int max){\r\n            if (max <= 0) return 0;\r\n            return (int)((double) hp / max * 100);\r\n        }\r\n\r\n        public static void pause(int milliseconds){\r\n            try {\r\n                Thread.sleep(milliseconds);\r\n            } catch (InterruptedException e) {\r\n                Thread.currentThread().interrupt();\r\n            }\r\n        }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Display/BattleDIsplay.java b/src/main/charmees/Display/BattleDIsplay.java
+--- a/src/main/charmees/Display/BattleDIsplay.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Display/BattleDIsplay.java	(date 1779181894504)
+@@ -3,7 +3,6 @@
+ import charmees.Util.Character;
+ import charmees.Util.MobNPC;
+ import charmees.Util.Display;
+-import java.util.Scanner;
+ 
+ public class BattleDisplay {
+ 
+@@ -46,7 +45,8 @@
+ 
+         // enemy Section
+         public static void showEnemyField(MobNPC[] mobs, int chapter, int targetIdx, int[] mobMaxHP){
+-                System.out.println("ENEMIES: ");
++            Display.thin();    
++            System.out.println("ENEMIES: ");
+                 for (int i = 0; i < mobs.length; i++){
+                     MobNPC m = mobs[i];
+                     if (m.chapter != chapter) continue;
+@@ -61,38 +61,40 @@
+                     String target = (i == targetIdx) ? " <-- TARGET" : "";
+                     System.out.println(" " + m.getName() + " [" + m.charClass + "]"
+                     + " HP: " + m.healthPoints + "/" + mobMaxHP[i] + target);
+-                    System.out.println(" " + hpBar(m.healthPoints, mobMaxHP[i], 30)
++                    System.out.println("  " + hpBar(m.healthPoints, mobMaxHP[i], 30)
+                     + " " + percent(m.healthPoints,mobMaxHP[i]) + "%");
+                 }
+             }
+ 
+             // active character Section
+             public static void showActiveChar(Character c, int maxHP){
++                Display.thin();
+                 System.out.println("ACTIVE CHARACTER: ");
+                 Display.thin();
+                 System.out.println(" " + c.getName() + " " 
+                 + "   HP: " + c.healthPoints + "/" + maxHP
+-                + "   MP: " + c.manaPoints + "/" + c.manaPoints);
++                + "   MP: " + c.manaPoints);
+ 
+-                System.out.println(" " + hpBar(c.healthPoints, maxHP, 30)
++                System.out.println("  " + hpBar(c.healthPoints, maxHP, 30)
+                 + " " + percent(c.healthPoints, maxHP) + "%");
+             }
+ 
+         // Bench Section
+         private static void showBench(Character[] characters, int activeIdx, int[] charMaxHP){
+-            System.out.print("   PARTY: ");
++            Display.thin();
++            System.out.print(" PARTY: ");
+             for(int i = 0; i < characters.length; i++){
+                 Character c = characters[i];
+                 String label;
+ 
+                 if(!c.isAlive()){
+-                    label = c.getName() + " [DEFEATED]";
++                    label = c.getName() + "[KO]";
+                 } else if (i == activeIdx){
+-                    label = c.getName() + " [IN BATTLE]";
++                    label = c.getName() + "[IN]";
+                 } else if (i == 2) {
+                     label = c.getName() + "[HEALER]";
+                 } else {
+-                    label = c.getName() + " [BENCH] [" + percent(c.healthPoints, charMaxHP[i]) + "%]";
++                    label = c.getName() + "[" + percent(c.healthPoints, charMaxHP[i]) + "%]";
+                 }
+ 
+                 System.out.print(label);
+@@ -107,7 +109,7 @@
+         public static void showActionDisplay(Character actor ){
+             Display.gap();
+             Display.thin();
+-            System.out.println("What will " + actor.getName() + "do?");
++            System.out.println("What will " + actor.getName() + " do?");
+             Display.gap();
+ 
+             System.out.println("  [1] SKILL"); // skill option(skill 1 or skill 2) will be handled in BattleLogic based on the character
+@@ -116,7 +118,6 @@
+             System.out.println("  [4] LAZULI'S BLESSING"); // heals characters based on lazuli's skills, will be handled in BattleLogic based on the character 
+ 
+             Display.thin();
+-            System.out.println("  > ");
+         }
+ 
+         // ================================================
+@@ -129,13 +130,14 @@
+         public static void showSkillMenu(Character actor){
+             String[] skills = actor.getSkillList();
+             Display.gap();
++            Display.thin();
+             System.out.println(" " + actor.getName() + " -- Skills:");
++            Display.thin();
+             for (int i = 0; i < Math.min(2, skills.length); i++){
+                 System.out.println("  [" + (i + 1) + "] " + skills[i]);
+             }
+-            System.out.println("  [3] Cancel");
++            System.out.println(" [0] Cancel");
+             Display.thin();
+-            System.out.println("  > ");
+         }
+ 
+         // shows the ultimate confirmation menu for the active character,
+@@ -151,7 +153,6 @@
+             System.out.println(" [1] Use it!");
+             System.out.println(" [0] Cancel");
+             Display.thin();
+-            System.out.println(" > ");
+         }
+ 
+         // shows the switch menu to switch active character, with options to select any alive bench character,
+@@ -175,7 +176,6 @@
+ 
+                 System.out.println("   [0]Cancel");
+                 Display.thin();
+-                System.out.println("   > ");
+         }
+ 
+         // shows the heal menu for lazuli's blessing, with options to select any character to heal,
+@@ -190,7 +190,6 @@
+             }
+             System.out.println("  [0] Cancel");
+             Display.thin();
+-            System.out.println("  > ");
+         }
+ 
+         // shows the ally picker menu to select a target for healing, with options to select any alive character,
+@@ -210,7 +209,6 @@
+                 
+             }
+             Display.thin();
+-            System.out.println("  > ");
+         }
+ 
+         // shows the enemy picker menu to select a target for an attack, with options to select any alive enemy,
+@@ -229,7 +227,6 @@
+                 opt++;
+             }
+             Display.thin();
+-            System.out.println("  > ");
+         }
+ 
+         //=================================================
+Index: src/main/charmees/util/Healable.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.util;\r\n// Interface for entities that can be healed or have MP restored\r\npublic interface Healable {\r\n    void healAlly(int heal);\r\n    void restoreMP(int mp);\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/util/Healable.java b/src/main/charmees/util/Healable.java
+--- a/src/main/charmees/util/Healable.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/util/Healable.java	(date 1779181894520)
+@@ -1,4 +1,4 @@
+-package charmees.util;
++package charmees.Util;
+ // Interface for entities that can be healed or have MP restored
+ public interface Healable {
+     void healAlly(int heal);
+Index: src/main/charmees/util/StatusEffectable.java
+===================================================================
+diff --git a/src/main/charmees/util/StatusEffectable.java b/src/main/charmees/util/StatusEffectable.java
+deleted file mode 100644
+--- a/src/main/charmees/util/StatusEffectable.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ /dev/null	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
+@@ -1,9 +0,0 @@
+-package charmees.util;
+-// Interface for entities that can have status effects applied
+-public interface StatusEffectable {
+-    boolean isStunned();
+-    void applyStun(int turns);
+-    void applyTaunt(int turns);
+-    void applyDamageReduction(double percent, int turns);
+-    void tickStatus();
+-}
+\ No newline at end of file
+Index: src/main/charmees/Entity/boss/SirenEmpress.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.boss;\r\nimport charmees.util.Character;\r\nimport charmees.util.MobNPC;\r\n\r\npublic class SirenEmpress extends MobNPC {\r\n\r\n    public SirenEmpress(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        sirenEmpressSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Siren Empress's Skills -----------------\r\n    private void sirenEmpressSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Water Whip\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Water Whip! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Tidal Wave\r\n                damage = (int)(Math.random() * 21) + 10;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Tidal Wave! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 3: // Abyssal Crush\r\n                damage = (int)(Math.random() * 41) + 20;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Abyssal Crush! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/boss/SirenEmpress.java b/src/main/charmees/Entity/boss/SirenEmpress.java
+--- a/src/main/charmees/Entity/boss/SirenEmpress.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/boss/SirenEmpress.java	(date 1779181894509)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.boss;
+-import charmees.util.Character;
+-import charmees.util.MobNPC;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class SirenEmpress extends MobNPC {
+ 
+Index: src/main/charmees/Entity/boss/Resonara.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.boss;\r\nimport charmees.util.Character;\r\nimport charmees.util.MobNPC;\r\n\r\npublic class Resonara extends MobNPC {\r\n\r\n    public Resonara(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        resonaraSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Resonara's Skills -----------------\r\n    private void resonaraSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Sonic Blast\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Sonic Blast! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Echo Strike\r\n                damage = (int)(Math.random() * 21) + 10;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Echo Strike! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 3: // Harmonic Destruction\r\n                damage = (int)(Math.random() * 41) + 20;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Harmonic Destruction! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/boss/Resonara.java b/src/main/charmees/Entity/boss/Resonara.java
+--- a/src/main/charmees/Entity/boss/Resonara.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/boss/Resonara.java	(date 1779181894509)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.boss;
+-import charmees.util.Character;
+-import charmees.util.MobNPC;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Resonara extends MobNPC {
+ 
+Index: src/main/charmees/Entity/mobs/CorruptedSkeleton.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.mobs;\r\nimport charmees.util.MobNPC;\r\nimport charmees.util.Character;\r\n\r\npublic class CorruptedSkeleton extends MobNPC {\r\n\r\n    public CorruptedSkeleton(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        corruptedSkeletonSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Corrupted Skeleton's Skills -----------------\r\n    private void corruptedSkeletonSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Bone Strike\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Bone Strike! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Skull Bash\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Skull Bash! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/mobs/CorruptedSkeleton.java b/src/main/charmees/Entity/mobs/CorruptedSkeleton.java
+--- a/src/main/charmees/Entity/mobs/CorruptedSkeleton.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/mobs/CorruptedSkeleton.java	(date 1779181894514)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.mobs;
+-import charmees.util.MobNPC;
+-import charmees.util.Character;
++import charmees.Util.MobNPC;
++import charmees.Util.Character;
+ 
+ public class CorruptedSkeleton extends MobNPC {
+ 
+Index: src/main/charmees/Entity/boss/Twinkle.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.boss;\r\nimport charmees.util.Character;\r\nimport charmees.util.MobNPC;\r\n\r\npublic class Twinkle extends MobNPC {\r\n\r\n    public Twinkle(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        twinkleSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Twinkle's Skills -----------------\r\n    private void twinkleSkills(int skill, Character target) {\r\n        //Boss fight skills\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Puppet Slash\r\n                    damage = (int)(Math.random() * 26) + 5;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Puppet Slash! Deals \" + damage + \" damage.\");\r\n                    break;\r\n            case 2: // Lazer Devastation\r\n                    int hits = (int)(Math.random() * 2) + 1;\r\n                    damage = 0;\r\n                    for (int i = 0; i < hits; i++) {\r\n                        damage += 20;\r\n                    }\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Lazer Devastation! Hits \" + hits + \" times for \" + damage + \" damage.\");\r\n                break;\r\n            case 3: // Corruption\r\n                    damage = 60;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Corruption! Deals \" + damage + \" fixed damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/boss/Twinkle.java b/src/main/charmees/Entity/boss/Twinkle.java
+--- a/src/main/charmees/Entity/boss/Twinkle.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/boss/Twinkle.java	(date 1779181894509)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.boss;
+-import charmees.util.Character;
+-import charmees.util.MobNPC;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Twinkle extends MobNPC {
+ 
+Index: src/main/charmees/Entity/mobs/MagmaSkeleton.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.mobs;\r\nimport charmees.util.MobNPC;\r\nimport charmees.util.Character;\r\n\r\npublic class MagmaSkeleton extends MobNPC {\r\n\r\n    public MagmaSkeleton(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        magmaSkeletonSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Magma Skeleton's Skills -----------------\r\n    private void magmaSkeletonSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Fire Bone\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Fire Bone! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Lava Strike\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Lava Strike! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/mobs/MagmaSkeleton.java b/src/main/charmees/Entity/mobs/MagmaSkeleton.java
+--- a/src/main/charmees/Entity/mobs/MagmaSkeleton.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/mobs/MagmaSkeleton.java	(date 1779181894516)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.mobs;
+-import charmees.util.MobNPC;
+-import charmees.util.Character;
++import charmees.Util.MobNPC;
++import charmees.Util.Character;
+ 
+ public class MagmaSkeleton extends MobNPC {
+ 
+Index: src/main/charmees/Entity/mobs/EchoImp.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.mobs;\r\nimport charmees.util.MobNPC;\r\nimport charmees.util.Character;\r\n\r\npublic class EchoImp extends MobNPC {\r\n\r\n    public EchoImp(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        echoImpSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Echo Imp's Skills -----------------\r\n    private void echoImpSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Echo Scream\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Echo Scream! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Sonic Wave\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Sonic Wave! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/mobs/EchoImp.java b/src/main/charmees/Entity/mobs/EchoImp.java
+--- a/src/main/charmees/Entity/mobs/EchoImp.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/mobs/EchoImp.java	(date 1779181894514)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.mobs;
+-import charmees.util.MobNPC;
+-import charmees.util.Character;
++import charmees.Util.MobNPC;
++import charmees.Util.Character;
+ 
+ public class EchoImp extends MobNPC {
+ 
+Index: src/main/charmees/Entity/mobs/PrincessPuppet.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.mobs;\r\nimport charmees.util.MobNPC;\r\nimport charmees.util.Character;\r\n\r\npublic class PrincessPuppet extends MobNPC {\r\n\r\n    public PrincessPuppet(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        princessPuppetSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Princess Puppet's Skills -----------------\r\n    private void princessPuppetSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Puppet Slap\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Puppet Slap! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Royal Lash\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Royal Lash! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/mobs/PrincessPuppet.java b/src/main/charmees/Entity/mobs/PrincessPuppet.java
+--- a/src/main/charmees/Entity/mobs/PrincessPuppet.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/mobs/PrincessPuppet.java	(date 1779181894516)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.mobs;
+-import charmees.util.MobNPC;
+-import charmees.util.Character;
++import charmees.Util.MobNPC;
++import charmees.Util.Character;
+ 
+ public class PrincessPuppet extends MobNPC {
+ 
+Index: src/main/charmees/Entity/mobs/MoonSprite.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.mobs;\r\nimport charmees.util.MobNPC;\r\nimport charmees.util.Character;\r\n\r\npublic class MoonSprite extends MobNPC {\r\n\r\n    public MoonSprite(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        moonSpriteSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Moon Sprite's Skills -----------------\r\n    private void moonSpriteSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Lunar Beam\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Lunar Beam! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Moonlight Burst\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Moonlight Burst! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/mobs/MoonSprite.java b/src/main/charmees/Entity/mobs/MoonSprite.java
+--- a/src/main/charmees/Entity/mobs/MoonSprite.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/mobs/MoonSprite.java	(date 1779181894516)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.mobs;
+-import charmees.util.MobNPC;
+-import charmees.util.Character;
++import charmees.Util.MobNPC;
++import charmees.Util.Character;
+ 
+ public class MoonSprite extends MobNPC {
+ 
+Index: src/main/charmees/Display/BattleLogic.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Display;\r\n\r\nimport charmees.Util.*;\r\nimport charmees.util.MobNPC;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Scanner;\r\n\r\npublic class BattleLogic {\r\n    // This class will handle the battle logic for both Story Mode\r\n    // It will be called by the BattleDisplay class\r\n\r\n    private final Character[] characters; // index 2 is always Lazuli\r\n    private final MobNPC[] mobs;\r\n    private final int chapter;\r\n    private final Scanner sc;\r\n\r\n    private int activeIdx = 0; // current character (never index 2 / Lazuli)\r\n    private int targetIdx = 0; // current enemy target\r\n    private int turnCount = 1; // counts the number of turns in the battle\r\n\r\n    private final int[] charMaxHP;\r\n    private final int[] mobMaxHP;\r\n\r\n    // dialogue triggers for certain HP Boss thresholds\r\n    private boolean boss50Trigger = false;\r\n    private boolean boss10Trigger = false;\r\n\r\n    // constructors\r\n    public BattleLogic(Character[] characters, MobNPC[] mobs, int chapter, Scanner sc) {\r\n        this.characters = characters;\r\n        this.mobs = mobs;\r\n        this.chapter = chapter;\r\n        this.sc = sc;\r\n\r\n        // initialize max HP arrays\r\n        charMaxHP = new int[characters.length];\r\n        for (int i = 0; i < characters.length; i++) {\r\n            charMaxHP[i] = characters[i].healthPoints;\r\n        }\r\n\r\n        mobMaxHP = new int[mobs.length];\r\n        for (int i = 0; i < mobs.length; i++) {\r\n            mobMaxHP[i] = mobs[i].healthPoints;\r\n        }\r\n\r\n        // constructor for lazuli\r\n    }\r\n\r\n    // =================================================\r\n    // ENTRY POINT for battle logic\r\n    // =================================================\r\n\r\n    public void run() {\r\n        // lore (tentative)\r\n\r\n        // Main battle loop\r\n\r\n    }\r\n\r\n    // =================================================\r\n    // PLAYER ACTIONS\r\n    // =================================================\r\n\r\n    // SWITCH — swap active fighter (Lazuli never an option)\r\n    private void onSwitch() {\r\n        BattleDisplay.showSwitchMenu(characters, activeIdx, charMaxHP);\r\n        int pick = Display.readInt(sc);\r\n\r\n        if (pick == 0) { BattleDisplay.log(\"Cancelled.\"); return; }\r\n\r\n        // walk through valid options and find the one the player picked\r\n        int count = 0;\r\n        for (int i = 0; i < characters.length; i++) {\r\n            if (i == 2) continue;\r\n            if (i == activeIdx) continue;\r\n            if (!characters[i].isAlive()) continue;\r\n\r\n            count++;\r\n            if (count == pick) {\r\n                String oldName = characters[activeIdx].getName();\r\n                activeIdx = i;\r\n                BattleDisplay.log(oldName + \" switched out!  \"\r\n                        + characters[activeIdx].getName() + \" enters the battle!\");\r\n                endPlayerTurn();\r\n                return;\r\n            }\r\n        }\r\n\r\n        BattleDisplay.log(\"Invalid choice.\");\r\n    }\r\n\r\n    // =================================================\r\n    // TURN FLOW\r\n    // =================================================\r\n    private void endPlayerTurn() {\r\n        // dialogue trigger tenattive\r\n\r\n        if (!isBattleOngoing())\r\n            return;\r\n\r\n        battleDisplay.showEnemyPhaseHeader();\r\n\r\n        for (MobNPC mob : mobs)\r\n            if (mob.chapter != chapter || !mob.isAlive())\r\n                continue;\r\n\r\n        Character target = characters[activeIdx];\r\n        int skill = (int) (Math.random() * mob.getSkillCount()) + 1;\r\n        mob.useSkill(skill, target);\r\n\r\n        if (!Characters[activeTdx].isAlive()) {\r\n            for (int i = 0; i < characters.length; i++) {\r\n                if (i != 2 && characters[i].isAlive()) {\r\n                    BattleDisplay.log(characters[activeIdx].getName() + \" fell!  \"\r\n                            + characters[i].getName() + \" steps in!\");\r\n                    activeIdx = i;\r\n                    break;\r\n                }\r\n            }\r\n        }\r\n\r\n        if (!isBattleOngoing())\r\n            break;\r\n    }\r\n\r\n    // =================================================\r\n    // BATTLE STATE\r\n    // =================================================\r\n    private boolean isBattleOngoing() {\r\n        boolean anyFighter = false;\r\n        for (int i = 0; i < characters.length; i++)\r\n            if (i != 2 && characters[i].isAlive())\r\n                anyFighter = true;\r\n\r\n        boolean anyEnemy = false;\r\n        for (MobNPC m : mobs)\r\n            if (m.chapter == chapter && m.isAlive())\r\n                anyEnemy = true;\r\n\r\n        return anyFighter && anyEnemy;\r\n    }\r\n\r\n    private void checkBattleEnd() {\r\n        boolean anyFighter = false;\r\n        for (int i = 0; i < characters.length; i++)\r\n            if (i != 2 && characters[i].isAlive())\r\n                anyFighter = true;\r\n\r\n        boolean anyEnemy = false;\r\n        for (MobNPC m : mobs)\r\n            if (m.chapter == chapter && m.isAlive())\r\n                anyEnemy = true;\r\n\r\n        if (!anyEnemy) {\r\n            BattleDisplay.showVictory(chapter);\r\n            BattleDisplay.showDialogue(BattleDialogue.getPostBattleLines(chapter), sc);\r\n        } else if (!anyFighter) {\r\n            BattleDisplay.showDefeat();\r\n        }\r\n    }\r\n\r\n    // =================================================\r\n    // TARGET PICKERS\r\n    // =================================================\r\n\r\n    private MobNPC pickEnemy() {\r\n        int aliveCount = 0;\r\n        // count alive enemies for the current chapter\r\n        for (MobNPC m : mobs)\r\n            if (m.chapter == this.chapter && m.isAlive())\r\n                aliveCount++;\r\n\r\n        if (aliveCount == 0)\r\n            return null;\r\n\r\n        // if only 1 enemy alive, skip picker and return that enemy\r\n        if (aliveCount == 1) {\r\n            for (int i = 0; i < mobs.length; i++) {\r\n                if (mobs[i].chapter == chapter && mobs[i].isAlive()) {\r\n                    targetIdx = i;\r\n                    return mobs[i];\r\n                }\r\n            }\r\n        }\r\n\r\n        // show enemy picker if more than 1 enemy alive\r\n        BattleDisplay.showEnemyPicker(mobs, chapter, mobMaxHP);\r\n        int pick = Display.readInt(sc);\r\n\r\n        // if player picks invalid number, return null to indicate cancelled action\r\n        if (pick < 1 || pick > aliveCount) {\r\n            BattleDisplay.log(\"Cancelled.\");\r\n            return null;\r\n        }\r\n\r\n        int count = 0;\r\n        // walk through enemies and return the one that corresponds\r\n        // to the player's pick (skip dead enemies and enemies from other chapters)\r\n        for (int i = 0; i < mobs.length; i++) {\r\n            if (mobs[i].chapter != chapter || !mobs[i].isAlive())\r\n                continue;\r\n            count++;\r\n            if (count == pick) {\r\n                targetIdx = i;\r\n                return mobs[i];\r\n            }\r\n        }\r\n\r\n        return null; // should never reach here\r\n    }\r\n\r\n    private Character pickAlly() {\r\n        // similar logic to pickEnemy but for allies\r\n        // exclude the active character and any dead characters\r\n        int aliveCount = 0;\r\n        for (Character c : characters)\r\n            if (c.isAlive())\r\n                aliveCount++;\r\n\r\n        if (aliveCount == 0)\r\n            return null;\r\n\r\n        // if only 1 ally alive, skip picker and return that ally\r\n        if (aliveCount == 1) {\r\n            for (Character c : characters)\r\n                if (c.isAlive())\r\n                    return c;\r\n        }\r\n\r\n        BattleDisplay.showAllyPicker(characters, charMaxHP);\r\n        int pick = Display.readInt(sc);\r\n\r\n        if (pick < 1 || pick > aliveCount) {\r\n            BattleDisplay.log(\"Cancelled.\");\r\n            return null;\r\n        }\r\n\r\n        int count = 0;\r\n        for (Character c : characters) {\r\n            if (!c.isAlive())\r\n                continue;\r\n            count++;\r\n            if (count == pick)\r\n                return c;\r\n        }\r\n\r\n        return null; // should never reach here\r\n    }\r\n\r\n    // =================================================\r\n    // HELPERS\r\n    // =================================================\r\n\r\n    // returns the index of the first alive enemy for the current chapter,\r\n    // or -1 if none are alive\r\n    private int firstAliveEnemy() {\r\n        for (int i = 0; i < mobs.length; i++) {\r\n            if (mobs[i].chapter == this.chapter && mobs[i].isAlive())\r\n                return i;\r\n        }\r\n\r\n        return -1; // no alive enemies\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Display/BattleLogic.java b/src/main/charmees/Display/BattleLogic.java
+--- a/src/main/charmees/Display/BattleLogic.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Display/BattleLogic.java	(date 1779181894504)
+@@ -1,9 +1,8 @@
+ package charmees.Display;
+ 
+ import charmees.Util.*;
+-import charmees.util.MobNPC;
+-
+-import java.util.ArrayList;
++import charmees.Util.MobNPC;
++import charmees.Util.Character;
+ import java.util.Scanner;
+ 
+ public class BattleLogic {
+@@ -44,7 +43,8 @@
+             mobMaxHP[i] = mobs[i].healthPoints;
+         }
+ 
+-        // constructor for lazuli
++        if(activeIdx == 2) activeIdx = 0; // ensure Lazuli is not active character at start of battle
++        targetIdx = firstAliveEnemy(); // set initial target to first alive enemy for the chapter
+     }
+ 
+     // =================================================
+@@ -54,14 +54,110 @@
+     public void run() {
+         // lore (tentative)
+ 
+-        // Main battle loop
++        //  main battle loop
++        while(isBattleOngoing()){
++            // show battlefield and action menu
++            BattleDisplay.showBattleField(characters, mobs, chapter, 
++                activeIdx, targetIdx, charMaxHP, 
++                mobMaxHP, turnCount);
++            // show different action menu if active character is Lazuli
++            BattleDisplay.showPlayerPhaseHeader(characters[activeIdx]);
++            BattleDisplay.showActionDisplay(characters[activeIdx]);
++            
++            // read player input for action choice
++            int action = Display.readInt(sc);
++            
++            // execute the chosen action
++            switch (action) {
++                case 1: onSkill(); break;
++                case 2: onUlt(); break;
++                case 3: onSwitch(); break;
++                case 4: onLazuliHeal(); break;
++                default:
++                    BattleDisplay.log("Invalid choice. Enter 1-4");
++            }
++        }
+ 
++        // battle has ended, show 
++        // victory/defeat screen and post battle dialogue if applicable
++        checkBattleEnd();
+     }
+ 
+     // =================================================
+     // PLAYER ACTIONS
+     // =================================================
+ 
++
++    // attack logic
++    private void onSkill() {
++        Character actor = characters[activeIdx];
++        
++        // if the active character has no skills, show message and return
++        BattleDisplay.showSkillMenu(actor);
++        int pick = Display.readInt(sc);
++
++        // if player picks invalid number, return to main menu
++        if(pick < 1 || pick > Math.min(2, actor.getSkillList().length)){
++            BattleDisplay.log("Cancelled.");
++            return;
++        }
++
++        // execute the picked skill
++        executeCharacterSkill(actor, pick);
++    }
++
++    // ultimate move logic
++    private void onUlt(){
++        Character actor = characters[activeIdx];
++        
++        // if the active character has no sig, show message and return
++        String[] skills = actor.getSkillList();
++        if(skills.length < 3){
++            BattleDisplay.log(actor.getName() + "has no Ultimate Move available.");
++            return;
++        }
++        
++        BattleDisplay.showUltimateConfirm(actor);
++        int confirm = Display.readInt(sc);
++
++        if(confirm != 1){ BattleDisplay.log("Cancelled."); return; }
++        
++        // execute ultimate move (assumed to be skill 3)
++        executeCharacterSkill(actor, 3);
++    }
++
++    // helper method to execute a character skill after picking the skill and target
++    private void executeCharacterSkill(Character actor, int skillNum){
++        String targetType = actor.getSkillTargetType(skillNum);
++
++        // if the skill targets an enemy, open enemy picker and pass the picked target to the useSkill method
++        if(targetType.equals("ENEMY")){
++            MobNPC target = pickEnemy();
++            if(target == null) return; //return if player cancelled target pick
++            BattleDisplay.log(actor.getName() + " uses "
++                +actor .getSkillList()[skillNum - 1] + " on " + target.getName() + "!");
++            actor.useSkill(skillNum, target, null, characters);
++        } 
++        // if the skill targets an ally, open ally picker instead and pass the picked ally to the useSkill method
++        else if(targetType.equals("ALLY")){
++            Character ally = pickAlly();
++            if(ally == null) return; //return if player cancelled target pick
++            BattleDisplay.log(actor.getName() + " uses "
++                +actor .getSkillList()[skillNum - 1] + " on " + ally.getName() + "!");
++            actor.useSkill(skillNum, null, ally, characters);
++        }
++        // if the skill targets self, just pass null for the target and let the useSkill method handle it
++        else {
++            BattleDisplay.log(actor.getName() + " uses "
++                +actor .getSkillList()[skillNum - 1] + "!");
++            actor.useSkill(skillNum, null, null, characters);
++        }
++
++        endPlayerTurn();
++    }
++
++
++
+     // SWITCH — swap active fighter (Lazuli never an option)
+     private void onSwitch() {
+         BattleDisplay.showSwitchMenu(characters, activeIdx, charMaxHP);
+@@ -99,31 +195,40 @@
+         if (!isBattleOngoing())
+             return;
+ 
+-        battleDisplay.showEnemyPhaseHeader();
++        BattleDisplay.showEnemyPhaseHeader();
+ 
+-        for (MobNPC mob : mobs)
++        for (MobNPC mob : mobs){
+             if (mob.chapter != chapter || !mob.isAlive())
+                 continue;
+ 
+-        Character target = characters[activeIdx];
+-        int skill = (int) (Math.random() * mob.getSkillCount()) + 1;
+-        mob.useSkill(skill, target);
++            Character target = characters[activeIdx];
++            int skill = (int) (Math.random() * mob.getSkillCount()) + 1;
++            mob.useSkill(skill, target);
++            
+ 
+-        if (!Characters[activeTdx].isAlive()) {
+-            for (int i = 0; i < characters.length; i++) {
+-                if (i != 2 && characters[i].isAlive()) {
+-                    BattleDisplay.log(characters[activeIdx].getName() + " fell!  "
+-                            + characters[i].getName() + " steps in!");
+-                    activeIdx = i;
+-                    break;
+-                }
+-            }
+-        }
++            if (!characters[activeIdx].isAlive()) {
++                for (int i = 0; i < characters.length; i++) {
++                    if (i != 2 && characters[i].isAlive()) {
++                        BattleDisplay.log(characters[activeIdx].getName() + " fell!  "
++                                + characters[i].getName() + " steps in!");
++                        activeIdx = i;
++                        break;
++                    }
++                }
++            }
+ 
+         if (!isBattleOngoing())
+             break;
+-    }
++        }
+ 
++        // if the current target is dead after the enemy's turn, switch to the first alive enemy (if any alive)
++        if(targetIdx < 0 || targetIdx >= mobs.length
++                || !mobs[targetIdx].isAlive())
++            targetIdx = firstAliveEnemy();
++
++        turnCount++;
++    }
++
+     // =================================================
+     // BATTLE STATE
+     // =================================================
+@@ -153,10 +258,10 @@
+                 anyEnemy = true;
+ 
+         if (!anyEnemy) {
+-            BattleDisplay.showVictory(chapter);
+-            BattleDisplay.showDialogue(BattleDialogue.getPostBattleLines(chapter), sc);
++            BattleDisplay.showVictoryDisplay(chapter);
++            // BattleDisplay.showDialogue(BattleDialogue.getPostBattleLines(chapter), sc);
+         } else if (!anyFighter) {
+-            BattleDisplay.showDefeat();
++            BattleDisplay.showDefeatDisplay();
+         }
+     }
+ 
+Index: src/main/charmees/Entity/mobs/WaterBlob.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.mobs;\r\nimport charmees.util.MobNPC;\r\nimport charmees.util.Character;\r\n\r\npublic class WaterBlob extends MobNPC {\r\n\r\n    public WaterBlob(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        waterBlobSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Water Blob's Skills -----------------\r\n    private void waterBlobSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Water Splash\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Water Splash! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Aqua Burst\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Aqua Burst! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/mobs/WaterBlob.java b/src/main/charmees/Entity/mobs/WaterBlob.java
+--- a/src/main/charmees/Entity/mobs/WaterBlob.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/mobs/WaterBlob.java	(date 1779181894518)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.mobs;
+-import charmees.util.MobNPC;
+-import charmees.util.Character;
++import charmees.Util.MobNPC;
++import charmees.Util.Character;
+ 
+ public class WaterBlob extends MobNPC {
+ 
+Index: src/main/charmees/Entity/mobs/ResonanceGoblin.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.mobs;\r\nimport charmees.util.MobNPC;\r\nimport charmees.util.Character;\r\n\r\npublic class ResonanceGoblin extends MobNPC {\r\n\r\n    public ResonanceGoblin(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        resonanceGoblinSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Resonance Goblin's Skills -----------------\r\n    private void resonanceGoblinSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Echo Strike\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Echo Strike! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Sonic Boom\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Sonic Boom! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/mobs/ResonanceGoblin.java b/src/main/charmees/Entity/mobs/ResonanceGoblin.java
+--- a/src/main/charmees/Entity/mobs/ResonanceGoblin.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/mobs/ResonanceGoblin.java	(date 1779181894516)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.mobs;
+-import charmees.util.MobNPC;
+-import charmees.util.Character;
++import charmees.Util.MobNPC;
++import charmees.Util.Character;
+ 
+ public class ResonanceGoblin extends MobNPC {
+ 
+Index: src/main/charmees/Entity/characters/Audry.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.characters;\r\nimport charmees.util.Character;\r\nimport charmees.util.MobNPC;\r\n\r\npublic class Audry extends Character {\r\n\r\n    public Audry(String name, String charClass, String type, String weapon, int healthPoints, int manaPoints) {\r\n        super(name, charClass, type, weapon, healthPoints, manaPoints);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, MobNPC target, Character ally, Character[] party) {\r\n        audrySkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Audry's Skills -----------------\r\n    private void audrySkills(int skill, MobNPC target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Slime Bounce\r\n                if (manaPoints >= 3) {\r\n                    manaPoints -= 3;\r\n                    damage = (int)(Math.random() * 21) + 20;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Slime Bounce! Deals \" + damage + \" damage.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 2: // Acid Shot\r\n                if (manaPoints >= 7) {\r\n                    manaPoints -= 7;\r\n                    int hits = (int)(Math.random() * 3) + 1;\r\n                    damage = 0;\r\n                    for (int i = 0; i < hits; i++) {\r\n                        damage += (int)(Math.random() * 11) + 5;\r\n                    }\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Acid Shot! Hits \" + hits + \" times for \" + damage + \" damage.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 3: // Beyond the Abyss\r\n                if (manaPoints >= 15) {\r\n                    manaPoints -= 15;\r\n                    damage = 150;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Ultimate, Beyond the Abyss! Deals \" + damage + \" fixed damage.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public String[] getSkillList() {\r\n        return new String[]{\"[1] Slime Bounce - Cost: 3 MP\",\r\n        \"[2] Acid Shot - Cost: 7 MP\",\r\n        \"[3] Beyond the Abyss - Cost: 15 MP\"};\r\n    }\r\n\r\n    @Override\r\n    public String getSkillTargetType(int skill) {\r\n        return \"ENEMY\";\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/characters/Audry.java b/src/main/charmees/Entity/characters/Audry.java
+--- a/src/main/charmees/Entity/characters/Audry.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/characters/Audry.java	(date 1779181894512)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.characters;
+-import charmees.util.Character;
+-import charmees.util.MobNPC;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Audry extends Character {
+ 
+Index: src/main/charmees/Entity/mobs/WaterSprite.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.mobs;\r\nimport charmees.util.MobNPC;\r\nimport charmees.util.Character;\r\n\r\npublic class WaterSprite extends MobNPC {\r\n\r\n    public WaterSprite(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        waterSpriteSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Water Sprite's Skills -----------------\r\n    private void waterSpriteSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Water Jet\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Water Jet! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Bubble Burst\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Bubble Burst! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/mobs/WaterSprite.java b/src/main/charmees/Entity/mobs/WaterSprite.java
+--- a/src/main/charmees/Entity/mobs/WaterSprite.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/mobs/WaterSprite.java	(date 1779181894518)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.mobs;
+-import charmees.util.MobNPC;
+-import charmees.util.Character;
++import charmees.Util.MobNPC;
++import charmees.Util.Character;
+ 
+ public class WaterSprite extends MobNPC {
+ 
+Index: src/main/charmees/Entity/characters/Lazuli.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.characters;\r\nimport charmees.util.Character;\r\nimport charmees.util.MobNPC;\r\n\r\npublic class Lazuli extends Character {\r\n\r\n    public Lazuli(String name, String charClass, String type, String weapon, int healthPoints, int manaPoints) {\r\n        super(name, charClass, type, weapon, healthPoints, manaPoints);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, MobNPC target, Character ally, Character[] party) {\r\n        lazuliSkills(skill, ally, party);\r\n    }\r\n\r\n    // ----------------- Lazuli's Skills -----------------\r\n    private void lazuliSkills(int skill, Character ally, Character[] party) {\r\n        int heal = 0;\r\n        switch (skill) {\r\n            case 1: // Basic Heal\r\n                if (manaPoints >= 10) {\r\n                    manaPoints -= 10;\r\n                    // restore ~25% of current HP (best-effort since no max HP stored) and some MP\r\n                    heal = Math.max(15, ally.healthPoints / 4);\r\n                    ally.healAlly(heal);\r\n                    ally.restoreMP(10);\r\n                    System.out.println(name + \" used Basic Heal! Restores \" + heal + \" HP and 10 MP to \" + ally.getName() + \".\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 2: // Ocean's Blessing\r\n                if (manaPoints >= 20) {\r\n                    manaPoints -= 20;\r\n                    // heal and restore MP to all allies\r\n                    for (Character c : party) {\r\n                        if (c != null && c.isAlive()) {\r\n                            int h = Math.max(10, c.healthPoints / 7); // ~15% of current\r\n                            c.healAlly(h);\r\n                            c.restoreMP(10);\r\n                        }\r\n                    }\r\n                    System.out.println(name + \" used Ocean's Blessing! Heals allies and restores MP to all allies.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 3: // Harmonic Wave\r\n                if (manaPoints == 0) {\r\n                    for (Character c : party) {\r\n                        if (c != null && c.isAlive()) {\r\n                            int h = Math.max(20, c.healthPoints / 2);\r\n                            c.healAlly(h);\r\n                            c.restoreMP(100);\r\n                        }\r\n                    }\r\n                    System.out.println(name + \" used Ultimate, Harmonic Wave! Restores large MP and HP to all allies.\");\r\n                } else System.out.println(name + \" must have 0 mana to use Harmonic Wave!\");\r\n                break;\r\n            }\r\n        }\r\n\r\n    @Override\r\n    public String[] getSkillList() {\r\n        return new String[]{\"[1] Basic Heal - Cost: 10 MP\",\r\n        \"[2] Ocean's Blessing - Cost: 20 MP\",\r\n        \"[3] Harmonic Wave - Requires 0 MP\"};\r\n    }\r\n\r\n    @Override\r\n    public String getSkillTargetType(int skill) {\r\n        switch (skill) {\r\n            case 1: return \"ALLY\"; // Basic Heal\r\n            case 2: return \"ALL\";  // Ocean's Blessing\r\n            case 3: return \"ALL\";  // Harmonic Wave\r\n            default: return \"ALLY\";\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/characters/Lazuli.java b/src/main/charmees/Entity/characters/Lazuli.java
+--- a/src/main/charmees/Entity/characters/Lazuli.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/characters/Lazuli.java	(date 1779181894513)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.characters;
+-import charmees.util.Character;
+-import charmees.util.MobNPC;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Lazuli extends Character {
+ 
+Index: src/main/charmees/Entity/characters/Giantha.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.characters;\r\nimport charmees.util.Character;\r\nimport charmees.util.MobNPC;\r\n\r\npublic class Giantha extends Character {\r\n\r\n    public Giantha(String name, String charClass, String type, String weapon, int healthPoints, int manaPoints) {\r\n        super(name, charClass, type, weapon, healthPoints, manaPoints);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, MobNPC target, Character ally, Character[] party) {\r\n        gianthaSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Giantha's Skills -----------------\r\n    private void gianthaSkills(int skill, MobNPC target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Giant Punch\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Giant Punch! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Giant's Roar\r\n                if (manaPoints >= 1) {\r\n                    manaPoints -= 1;\r\n                    damage = (int)(Math.random() * 6) + 10;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Giant Roar! Deals \" + damage + \" damage.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 3: // Club Smash\r\n                if (manaPoints >= 9) {\r\n                    manaPoints -= 9;\r\n                    damage = (int)(Math.random() * 21) + 20;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Ultimate, Club Smash! Deals \" + damage + \" damage\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public String[] getSkillList() {\r\n        return new String[]{\"[1] Giant Punch - Cost: 0 MP\",\r\n        \"[2] Giant's Roar - Cost: 1 MP\",\r\n        \"[3] Club Smash - Cost: 9 MP\"};\r\n    }\r\n\r\n    @Override\r\n    public String getSkillTargetType(int skill) {\r\n        return \"ENEMY\";\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/characters/Giantha.java b/src/main/charmees/Entity/characters/Giantha.java
+--- a/src/main/charmees/Entity/characters/Giantha.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/characters/Giantha.java	(date 1779181894512)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.characters;
+-import charmees.util.Character;
+-import charmees.util.MobNPC;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Giantha extends Character {
+ 
+Index: src/main/charmees/Entity/characters/Shiera.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.characters;\r\nimport charmees.util.Character;\r\nimport charmees.util.MobNPC;\r\n\r\npublic class Shiera extends Character {\r\n\r\n    public Shiera(String name, String charClass, String type, String weapon, int healthPoints, int manaPoints) {\r\n        super(name, charClass, type, weapon, healthPoints, manaPoints);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, MobNPC target, Character ally, Character[] party) {\r\n        shieraSkills(skill, target, ally);\r\n    }\r\n\r\n    // ----------------- Shiera's Skills -----------------\r\n    private void shieraSkills(int skill, MobNPC target, Character ally) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Stone Spikes\r\n                if (manaPoints >= 4) {\r\n                    manaPoints -= 4;\r\n                    int hits = (int)(Math.random() * 4) + 1;\r\n                    for (int i = 0; i < hits; i++) {\r\n                        damage += (int)(Math.random() * 10) + 1;\r\n                    }\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Stone Spikes! Hits \" + hits + \" times for \" + damage + \" damage.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 2: // Earth Wall\r\n                if (manaPoints >= 6) {\r\n                    manaPoints -= 6;\r\n                    int hits = (int)(Math.random() * 4) + 1;\r\n                    damage = 0;\r\n                    for (int i = 0; i < hits; i++) {\r\n                        damage += (int)(Math.random() * 10) + 1;\r\n                    }\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Earth Wall! Hits \" + hits + \" times for \" + damage + \" damage.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 3: // Iron Maiden\r\n                if (manaPoints >= 10) {\r\n                    manaPoints -= 10;\r\n                    damage = 50;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Ultimate, Iron Maiden! Deals \" + damage + \" damage.\");\r\n                    } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public String[] getSkillList() {\r\n        return new String[]{\"[1] Stone Spikes - Cost: 4 MP\",\r\n        \"[2] Earth Wall - Cost: 6 MP\",\r\n        \"[3] Iron Maiden - Cost: 10 MP\"};\r\n    }\r\n\r\n    @Override\r\n    public String getSkillTargetType(int skill) {\r\n        switch (skill) {\r\n            case 2: return \"SELF\"; // Earth Wall\r\n            default: return \"ENEMY\";\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/characters/Shiera.java b/src/main/charmees/Entity/characters/Shiera.java
+--- a/src/main/charmees/Entity/characters/Shiera.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/characters/Shiera.java	(date 1779181894514)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.characters;
+-import charmees.util.Character;
+-import charmees.util.MobNPC;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Shiera extends Character {
+ 
+Index: src/main/charmees/Entity/characters/Lynzi.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.characters;\r\nimport charmees.util.Character;\r\nimport charmees.util.MobNPC;\r\n\r\npublic class Lynzi extends Character {\r\n\r\n    public Lynzi(String name, String charClass, String type, String weapon, int healthPoints, int manaPoints) {\r\n        super(name, charClass, type, weapon, healthPoints, manaPoints);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, MobNPC target, Character ally, Character[] party) {\r\n        lynziSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Lynzi's Skills -----------------\r\n    private void lynziSkills(int skill, MobNPC target) {\r\n        int damage = 0;\r\n        \r\n        switch (skill) {\r\n            case 1: // Majestic Kick\r\n                damage = (int)(Math.random() * 21) + 20;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Majestic Kick! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Galactic Fist\r\n                if (manaPoints >= 2) {\r\n                    manaPoints -= 2;\r\n                    damage = (int)(Math.random() * 36) + 20;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Galactic Fist! Deals \" + damage + \" damage.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 3: // Meteoric Smash\r\n                if (manaPoints >= 10) {\r\n                    manaPoints -= 10;\r\n                    damage = (int)(Math.random() * 151) + 100;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Ultimate, Meteoric Smash! Deals \" + damage + \" damage and is exhausted for 2 turns.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public String[] getSkillList() {\r\n        return new String[]{\"[1] Majestic Kick - Cost: 0 MP\",\r\n        \"[2] Galactic Fist - Cost: 2 MP\",\r\n        \"[3] Meteoric Smash - Cost: 10 MP\"};\r\n    }\r\n\r\n    @Override\r\n    public String getSkillTargetType(int skill) {\r\n        return \"ENEMY\";\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/characters/Lynzi.java b/src/main/charmees/Entity/characters/Lynzi.java
+--- a/src/main/charmees/Entity/characters/Lynzi.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/characters/Lynzi.java	(date 1779181894513)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.characters;
+-import charmees.util.Character;
+-import charmees.util.MobNPC;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Lynzi extends Character {
+ 
+Index: src/main/charmees/util/MobNPC.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.util;\r\npublic class MobNPC extends Entity {\r\n    public int chapter;\r\n\r\n    public MobNPC(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints);\r\n        this.chapter = chapter;\r\n    }\r\n\r\n\r\n    //=================== Skill System ==================\r\n    //To use skills \r\n\r\n    public void useSkill(int skill, Character target) {\r\n        // Default: no skills for generic mobs\r\n        System.out.println(name + \" has no skills defined!\");\r\n    }\r\n\r\n    //----------------- Show Stats -----------------\r\n\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/util/MobNPC.java b/src/main/charmees/util/MobNPC.java
+--- a/src/main/charmees/util/MobNPC.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/util/MobNPC.java	(date 1779181894520)
+@@ -1,4 +1,4 @@
+-package charmees.util;
++package charmees.Util;
+ public class MobNPC extends Entity {
+     public int chapter;
+ 
+@@ -16,7 +16,13 @@
+         System.out.println(name + " has no skills defined!");
+     }
+ 
+-    //----------------- Show Stats -----------------
++    public int getSkillCount() {
++        if (charClass.equals("Boss") 
++                || charClass.equals("Mini-Boss")) 
++            return 3; // Bosses and mini-bosses have 3 skills
++        return 2;// Regular mobs have 2 skills
++        
++    }
+ 
+ 
+ 
+Index: src/main/charmees/util/Entity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.util;\r\npublic abstract class Entity implements StatusEffectable {\r\n    public String name;\r\n    public String charClass;\r\n    public String type;\r\n    public String weapon;\r\n    public int healthPoints;\r\n\r\n\r\n    public Entity(String name, String charClass, String type, String weapon, int healthPoints) {\r\n        this.name = name;\r\n        this.charClass = charClass;\r\n        this.type = type;\r\n        this.weapon = weapon;\r\n        this.healthPoints = healthPoints;\r\n    }\r\n\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n    public void takedamage(int damage){\r\n        healthPoints -= damage;\r\n        if (healthPoints <= 0) {\r\n            healthPoints = 0;\r\n            System.out.println(name + \" took \" + damage + \" damage! Remaining HP: \" + healthPoints);\r\n            // character vs mob messages may be handled by subclasses\r\n        } else {\r\n            System.out.println(name + \" took \" + damage + \" damage! Remaining HP: \" + healthPoints);\r\n        }\r\n    }\r\n\r\n    public boolean isAlive(){\r\n        return healthPoints > 0;\r\n    }\r\n\r\n    // generic stats display\r\n    public void showStats() {\r\n        System.out.println(\"---- \" + name + \" ----\");\r\n        System.out.println(\"Class: \" + charClass);\r\n        System.out.println(\"Type: \" + type);\r\n        System.out.println(\"Weapon: \" + weapon);\r\n        System.out.println(\"HP: \" + healthPoints);\r\n        System.out.println(\"------------------\");\r\n        System.out.println();\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/util/Entity.java b/src/main/charmees/util/Entity.java
+--- a/src/main/charmees/util/Entity.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/util/Entity.java	(date 1779181894520)
+@@ -1,5 +1,5 @@
+-package charmees.util;
+-public abstract class Entity implements StatusEffectable {
++package charmees.Util;
++public abstract class Entity{
+     public String name;
+     public String charClass;
+     public String type;
+@@ -33,16 +33,4 @@
+     public boolean isAlive(){
+         return healthPoints > 0;
+     }
+-
+-    // generic stats display
+-    public void showStats() {
+-        System.out.println("---- " + name + " ----");
+-        System.out.println("Class: " + charClass);
+-        System.out.println("Type: " + type);
+-        System.out.println("Weapon: " + weapon);
+-        System.out.println("HP: " + healthPoints);
+-        System.out.println("------------------");
+-        System.out.println();
+-    }
+-
+ }
+Index: src/main/charmees/util/Character.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.util;\r\npublic abstract class Character extends Entity implements Healable {\r\n    public int manaPoints;\r\n\r\n    public Character(String name, String charClass, String type, String weapon, int healthPoints, int manaPoints) {\r\n        super(name, charClass, type, weapon, healthPoints);\r\n        this.manaPoints = manaPoints;\r\n    }\r\n    \r\n    // heal and MP methods are still required by Healable\r\n    @Override\r\n    public void healAlly(int heal){\r\n        healthPoints += heal;\r\n        System.out.println(name + \" healed for \" + heal + \" HP. Current HP: \" + healthPoints);\r\n    }\r\n\r\n    @Override\r\n    public void restoreMP(int mp){\r\n        manaPoints += mp;\r\n        System.out.println(name + \" restored \" + mp + \" MP. Current MP: \" + manaPoints);\r\n    }\r\n\r\n    // ================== Skill System ==================\r\n    //To use skills\r\n    public abstract void useSkill(int skill, MobNPC target, Character ally, Character[] party);\r\n\r\n    // ----------------- Show Stats -----------------\r\n    public void showStats() {\r\n        System.out.println(\"---- \" + name + \" ----\");\r\n        System.out.println(\"Class: \" + charClass);\r\n        System.out.println(\"Type: \" + type);\r\n        System.out.println(\"Weapon: \" + weapon);\r\n        System.out.println(\"HP: \" + healthPoints + \", MP: \" + manaPoints);\r\n        System.out.println(\"------------------\");\r\n        System.out.println();\r\n    }\r\n\r\n    // Return the skill list for this character as an array of strings\r\n    // Each entry should describe the skill name and any MP cost or requirement\r\n    public abstract String[] getSkillList();\r\n\r\n    // Return a string indicating the target type for a given skill index.\r\n    // Possible return values: \"ENEMY\", \"ALLY\", \"ALL\", \"SELF\".\r\n    public abstract String getSkillTargetType(int skill);\r\n\r\n    // Decrement status durations each turn (delegated to Entity)\r\n    @Override\r\n    public void tickStatus() {\r\n        super.tickStatus();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/util/Character.java b/src/main/charmees/util/Character.java
+--- a/src/main/charmees/util/Character.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/util/Character.java	(date 1779181894520)
+@@ -1,4 +1,4 @@
+-package charmees.util;
++package charmees.Util;
+ public abstract class Character extends Entity implements Healable {
+     public int manaPoints;
+ 
+@@ -44,8 +44,5 @@
+     public abstract String getSkillTargetType(int skill);
+ 
+     // Decrement status durations each turn (delegated to Entity)
+-    @Override
+-    public void tickStatus() {
+-        super.tickStatus();
+-    }
++
+ }
+Index: src/main/charmees/Entity/boss/Kassundre.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package charmees.Entity.boss;\r\nimport charmees.util.Character;\r\nimport charmees.util.MobNPC;\r\n\r\npublic class Kassundre extends MobNPC {\r\n\r\n    public Kassundre(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        kassundreSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Kassundre's Skills -----------------\r\n    private void kassundreSkills(int skill, Character target) {\r\n        //Miniboss fight skills\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Corrupted tears\r\n                    int hits = (int)(Math.random() * 4) + 1;\r\n                    damage = 0;\r\n                    for (int i = 0; i < hits; i++) {\r\n                        damage += (int)(Math.random() * 6) + 5;\r\n                    }\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Corrupted Tears! Hits \" + hits + \" times for \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Corrupted Hug\r\n                    damage = (int)(Math.random() * 26) + 10;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Corrupted Hug! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 3: // Corrupted Flora\r\n                    damage = (int)(Math.random() * 21) + 20;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Corrupted Flora! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/charmees/Entity/boss/Kassundre.java b/src/main/charmees/Entity/boss/Kassundre.java
+--- a/src/main/charmees/Entity/boss/Kassundre.java	(revision b2cbd4fba571d18ddd9af247e168c9eed6a19ec6)
++++ b/src/main/charmees/Entity/boss/Kassundre.java	(date 1779181894509)
+@@ -1,6 +1,6 @@
+ package charmees.Entity.boss;
+-import charmees.util.Character;
+-import charmees.util.MobNPC;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Kassundre extends MobNPC {
+ 

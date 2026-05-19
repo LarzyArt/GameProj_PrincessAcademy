@@ -1,9 +1,8 @@
 package charmees.Display;
 
-import charmees.Util.*;
+import charmees.util.*;
 import charmees.util.MobNPC;
-
-import java.util.ArrayList;
+import charmees.util.Character;
 import java.util.Scanner;
 
 public class BattleLogic {
@@ -44,7 +43,8 @@ public class BattleLogic {
             mobMaxHP[i] = mobs[i].healthPoints;
         }
 
-        // constructor for lazuli
+        if(activeIdx == 2) activeIdx = 0; // ensure Lazuli is not active character at start of battle
+        targetIdx = firstAliveEnemy(); // set initial target to first alive enemy for the chapter
     }
 
     // =================================================
@@ -54,20 +54,78 @@ public class BattleLogic {
     public void run() {
         // lore (tentative)
 
-        // Main battle loop
+        //  main battle loop
+        while(isBattleOngoing()){
+            // show battlefield and action menu
+            BattleDIsplay.showBattleField(characters, mobs, chapter, 
+                activeIdx, targetIdx, charMaxHP, 
+                mobMaxHP, turnCount);
+            // show different action menu if active character is Lazuli
+            BattleDIsplay.showPlayerPhaseHeader(characters[activeIdx]);
+            BattleDIsplay.showActionDisplay(characters[activeIdx]);
+            
+            // read player input for action choice
+            int action = Display.readInt(sc);
+            
+            // execute the chosen action
+            switch (action) {
+                case 1: onSkill(); break;
+                case 2: onUlt(); break;
+                case 3: onSwitch(); break;
+                case 4: onLazuliHeal(); break;
+                default:
+                    BattleDIsplay.log("Invalid choice. Enter 1-4");
+            }
+        }
 
+        // battle has ended, show 
+        // victory/defeat screen and post battle dialogue if applicable
+        checkBattleEnd();
     }
 
     // =================================================
     // PLAYER ACTIONS
     // =================================================
 
+
+    // helper method to execute a character skill after picking the skill and target
+    private void executeCharacterSkill(Character actor, int skillNum){
+        String targetType = actor.getSkillTargetType(skillNum);
+
+        // if the skill targets an enemy, open enemy picker and pass the picked target to the useSkill method
+        if(targetType.equals("ENEMY")){
+            MobNPC target = pickEnemy();
+            if(target == null) return; //return if player cancelled target pick
+            BattleDIsplay.log(actor.getName() + " uses "
+                +actor .getSkillList()[skillNum - 1] + " on " + target.getName() + "!");
+            actor.useSkill(skillNum, target, null, characters);
+        } 
+        // if the skill targets an ally, open ally picker instead and pass the picked ally to the useSkill method
+        else if(targetType.equals("ALLY")){
+            Character ally = pickAlly();
+            if(ally == null) return; //return if player cancelled target pick
+            BattleDIsplay.log(actor.getName() + " uses "
+                +actor .getSkillList()[skillNum - 1] + " on " + ally.getName() + "!");
+            actor.useSkill(skillNum, null, ally, characters);
+        }
+        // if the skill targets self, just pass null for the target and let the useSkill method handle it
+        else {
+            BattleDIsplay.log(actor.getName() + " uses "
+                +actor .getSkillList()[skillNum - 1] + "!");
+            actor.useSkill(skillNum, null, null, characters);
+        }
+
+        endPlayerTurn();
+    }
+
+
+
     // SWITCH — swap active fighter (Lazuli never an option)
     private void onSwitch() {
-        BattleDisplay.showSwitchMenu(characters, activeIdx, charMaxHP);
+        BattleDIsplay.showSwitchMenu(characters, activeIdx, charMaxHP);
         int pick = Display.readInt(sc);
 
-        if (pick == 0) { BattleDisplay.log("Cancelled."); return; }
+        if (pick == 0) { BattleDIsplay.log("Cancelled."); return; }
 
         // walk through valid options and find the one the player picked
         int count = 0;
@@ -80,29 +138,29 @@ public class BattleLogic {
             if (count == pick) {
                 String oldName = characters[activeIdx].getName();
                 activeIdx = i;
-                BattleDisplay.log(oldName + " switched out!  "
+                BattleDIsplay.log(oldName + " switched out!  "
                         + characters[activeIdx].getName() + " enters the battle!");
                 endPlayerTurn();
                 return;
             }
         }
 
-        BattleDisplay.log("Invalid choice.");
+        BattleDIsplay.log("Invalid choice.");
     }
     // LAZULI HEAL — if Lazuli is in the party, player can choose to heal with her instead of attacking
     private void onLazuliHeal() {
         Character lazuli = characters[2];
         if (!lazuli.isAlive()) {
-            BattleDisplay.log("Lazuli has fallen and cannot heal.");
+            BattleDIsplay.log("Lazuli has fallen and cannot heal.");
             return;
         }
 
-        BattleDisplay.showHealMenu(lazuli);
+        BattleDIsplay.showHealMenu(lazuli);
         int pick = Display.readInt(sc);
 
         String[] skills = lazuli.getSkillList();
         if (pick < 1 || pick > skills.length) {
-            BattleDisplay.log("Cancelled.");
+            BattleDIsplay.log("Cancelled.");
             return;
         }
 
@@ -111,10 +169,10 @@ public class BattleLogic {
         if (tType.equals("ALLY")) {
             Character ally = pickAlly();
             if (ally == null) return;
-            BattleDisplay.log("Lazuli heals " + ally.getName() + "!");
+            BattleDIsplay.log("Lazuli heals " + ally.getName() + "!");
             lazuli.useSkill(pick, null, ally, characters);
         } else { // ALL
-            BattleDisplay.log("Lazuli uses " + skills[pick - 1] + "!");
+            BattleDIsplay.log("Lazuli uses " + skills[pick - 1] + "!");
             lazuli.useSkill(pick, null, lazuli, characters);
         }
 
@@ -136,29 +194,38 @@ public class BattleLogic {
         if (!isBattleOngoing())
             return;
 
-        battleDisplay.showEnemyPhaseHeader();
+        BattleDIsplay.showEnemyPhaseHeader();
 
-        for (MobNPC mob : mobs)
+        for (MobNPC mob : mobs){
             if (mob.chapter != chapter || !mob.isAlive())
                 continue;
 
-        Character target = characters[activeIdx];
-        int skill = (int) (Math.random() * mob.getSkillCount()) + 1;
-        mob.useSkill(skill, target);
+            Character target = characters[activeIdx];
+            int skill = (int) (Math.random() * mob.getSkillCount()) + 1;
+            mob.useSkill(skill, target);
+            
 
-        if (!Characters[activeTdx].isAlive()) {
-            for (int i = 0; i < characters.length; i++) {
-                if (i != 2 && characters[i].isAlive()) {
-                    BattleDisplay.log(characters[activeIdx].getName() + " fell!  "
-                            + characters[i].getName() + " steps in!");
-                    activeIdx = i;
-                    break;
+            if (!characters[activeIdx].isAlive()) {
+                for (int i = 0; i < characters.length; i++) {
+                    if (i != 2 && characters[i].isAlive()) {
+                        BattleDIsplay.log(characters[activeIdx].getName() + " fell!  "
+                                + characters[i].getName() + " steps in!");
+                        activeIdx = i;
+                        break;
+                    }
                 }
             }
-        }
 
         if (!isBattleOngoing())
             break;
+        }
+
+        // if the current target is dead after the enemy's turn, switch to the first alive enemy (if any alive)
+        if(targetIdx < 0 || targetIdx >= mobs.length
+                || !mobs[targetIdx].isAlive())
+            targetIdx = firstAliveEnemy();
+
+        turnCount++;
     }
 
     // =================================================
@@ -190,10 +257,10 @@ public class BattleLogic {
                 anyEnemy = true;
 
         if (!anyEnemy) {
-            BattleDisplay.showVictory(chapter);
-            BattleDisplay.showDialogue(BattleDialogue.getPostBattleLines(chapter), sc);
+            BattleDIsplay.showVictoryDisplay(chapter);
+            // BattleDIsplay.showDialogue(BattleDialogue.getPostBattleLines(chapter), sc);
         } else if (!anyFighter) {
-            BattleDisplay.showDefeat();
+            BattleDIsplay.showDefeatDisplay();
         }
     }
 
@@ -222,12 +289,12 @@ public class BattleLogic {
         }
 
         // show enemy picker if more than 1 enemy alive
-        BattleDisplay.showEnemyPicker(mobs, chapter, mobMaxHP);
+        BattleDIsplay.showEnemyPicker(mobs, chapter, mobMaxHP);
         int pick = Display.readInt(sc);
 
         // if player picks invalid number, return null to indicate cancelled action
         if (pick < 1 || pick > aliveCount) {
-            BattleDisplay.log("Cancelled.");
+            BattleDIsplay.log("Cancelled.");
             return null;
         }
 
@@ -265,11 +332,11 @@ public class BattleLogic {
                     return c;
         }
 
-        BattleDisplay.showAllyPicker(characters, charMaxHP);
+        BattleDIsplay.showAllyPicker(characters, charMaxHP);
         int pick = Display.readInt(sc);
 
         if (pick < 1 || pick > aliveCount) {
-            BattleDisplay.log("Cancelled.");
+            BattleDIsplay.log("Cancelled.");
             return null;
         }
 

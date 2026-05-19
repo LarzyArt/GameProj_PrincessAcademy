@@ -44,8 +44,5 @@ public abstract class Character extends Entity implements Healable {
     public abstract String getSkillTargetType(int skill);
 
     // Decrement status durations each turn (delegated to Entity)
-    @Override
-    public void tickStatus() {
-        super.tickStatus();
-    }
+
 }

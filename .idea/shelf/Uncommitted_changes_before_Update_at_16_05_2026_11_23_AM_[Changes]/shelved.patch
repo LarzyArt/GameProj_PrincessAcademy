@@ -1,0 +1,378 @@
+Index: src/main/charmees/Entity/Lynzi.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class Lynzi extends Character {\r\n\r\n    public Lynzi(String name, String charClass, String type, String weapon, int healthPoints, int manaPoints) {\r\n        super(name, charClass, type, weapon, healthPoints, manaPoints);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, MobNPC target, Character ally, Character[] party) {\r\n        // if this character is stunned, they cannot use skills\r\n        if (this.isStunned()) {\r\n            System.out.println(this.getName() + \" is stunned and cannot use skills.\");\r\n            return;\r\n        }\r\n        lynziSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Lynzi's Skills -----------------\r\n    private void lynziSkills(int skill, MobNPC target) {\r\n        int damage = 0;\r\n        \r\n        switch (skill) {\r\n            case 1: // Majestic Kick\r\n                damage = (int)(Math.random() * 21) + 20;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Majestic Kick! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Galactic Fist\r\n                if (manaPoints >= 2) {\r\n                    manaPoints -= 2;\r\n                    damage = (int)(Math.random() * 36) + 20;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Galactic Fist! Deals \" + damage + \" damage.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 3: // Meteoric Smash\r\n                if (manaPoints >= 10) {\r\n                    manaPoints -= 10;\r\n                    damage = (int)(Math.random() * 151) + 100;\r\n                    target.takedamage(damage);\r\n                    // Lynzi becomes unable to act for 2 turns after using Meteoric Smash\r\n                    this.stunnedTurns = Math.max(this.stunnedTurns, 2);\r\n                    System.out.println(name + \" used Ultimate, Meteoric Smash! Deals \" + damage + \" damage and is exhausted for 2 turns.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public String[] getSkillList() {\r\n        return new String[]{\"1) Majestic Kick - Cost: 0 MP\",\"2) Galactic Fist - Cost: 2 MP\",\"3) Meteoric Smash - Cost: 10 MP\"};\r\n    }\r\n\r\n    @Override\r\n    public String getSkillTargetType(int skill) {\r\n        return \"ENEMY\";\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/Lynzi.java b/src/main/charmees/Entity/Lynzi.java
+--- a/src/main/charmees/Entity/Lynzi.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/Lynzi.java	(date 1778899141728)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Lynzi extends Character {
+ 
+Index: src/main/charmees/Entity/Audry.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class Audry extends Character {\r\n\r\n    public Audry(String name, String charClass, String type, String weapon, int healthPoints, int manaPoints) {\r\n        super(name, charClass, type, weapon, healthPoints, manaPoints);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, MobNPC target, Character ally, Character[] party) {\r\n        // if this character is stunned, they cannot use skills\r\n        if (this.isStunned()) {\r\n            System.out.println(this.getName() + \" is stunned and cannot use skills.\");\r\n            return;\r\n        }\r\n        audrySkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Audry's Skills -----------------\r\n    private void audrySkills(int skill, MobNPC target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Slime Bounce\r\n                if (manaPoints >= 3) {\r\n                    manaPoints -= 3;\r\n                    damage = (int)(Math.random() * 21) + 20;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Slime Bounce! Deals \" + damage + \" damage.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 2: // Acid Shot\r\n                if (manaPoints >= 7) {\r\n                    manaPoints -= 7;\r\n                    int hits = (int)(Math.random() * 3) + 1;\r\n                    damage = 0;\r\n                    for (int i = 0; i < hits; i++) {\r\n                        damage += (int)(Math.random() * 11) + 5;\r\n                    }\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Acid Shot! Hits \" + hits + \" times for \" + damage + \" damage.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 3: // Beyond the Abyss\r\n                if (manaPoints >= 15) {\r\n                    manaPoints -= 15;\r\n                    damage = 150;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Ultimate, Beyond the Abyss! Deals \" + damage + \" fixed damage.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public String[] getSkillList() {\r\n        return new String[]{\"1) Slime Bounce - Cost: 3 MP\",\"2) Acid Shot - Cost: 7 MP\",\"3) Beyond the Abyss - Cost: 15 MP\"};\r\n    }\r\n\r\n    @Override\r\n    public String getSkillTargetType(int skill) {\r\n        return \"ENEMY\";\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/Audry.java b/src/main/charmees/Entity/Audry.java
+--- a/src/main/charmees/Entity/Audry.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/Audry.java	(date 1778899141728)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Audry extends Character {
+ 
+Index: src/main/charmees/Entity/MagmaSkeleton.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class MagmaSkeleton extends MobNPC {\r\n\r\n    public MagmaSkeleton(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        magmaSkeletonSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Magma Skeleton's Skills -----------------\r\n    private void magmaSkeletonSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Fire Bone\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Fire Bone! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Lava Strike\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Lava Strike! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/MagmaSkeleton.java b/src/main/charmees/Entity/MagmaSkeleton.java
+--- a/src/main/charmees/Entity/MagmaSkeleton.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/MagmaSkeleton.java	(date 1778899141728)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class MagmaSkeleton extends MobNPC {
+ 
+Index: src/main/charmees/Entity/StudentPuppet.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class StudentPuppet extends MobNPC {\r\n\r\n    public StudentPuppet(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        studentPuppetSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Student Puppet's Skills -----------------\r\n    private void studentPuppetSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Puppet Punch\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Puppet Punch! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // String Lash\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used String Lash! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/StudentPuppet.java b/src/main/charmees/Entity/StudentPuppet.java
+--- a/src/main/charmees/Entity/StudentPuppet.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/StudentPuppet.java	(date 1778899141729)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class StudentPuppet extends MobNPC {
+ 
+Index: src/main/charmees/Entity/Lazuli.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class Lazuli extends Character {\r\n\r\n    public Lazuli(String name, String charClass, String type, String weapon, int healthPoints, int manaPoints) {\r\n        super(name, charClass, type, weapon, healthPoints, manaPoints);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, MobNPC target, Character ally, Character[] party) {\r\n        // if this character is stunned, they cannot use skills\r\n        if (this.isStunned()) {\r\n            System.out.println(this.getName() + \" is stunned and cannot use skills.\");\r\n            return;\r\n        }\r\n        lazuliSkills(skill, ally, party);\r\n    }\r\n\r\n    // ----------------- Lazuli's Skills -----------------\r\n    private void lazuliSkills(int skill, Character ally, Character[] party) {\r\n        int heal = 0;\r\n        switch (skill) {\r\n            case 1: // Basic Heal\r\n                if (manaPoints >= 10) {\r\n                    manaPoints -= 10;\r\n                    // restore ~25% of current HP (best-effort since no max HP stored) and some MP\r\n                    heal = Math.max(15, ally.healthPoints / 4);\r\n                    ally.healAlly(heal);\r\n                    ally.restoreMP(10);\r\n                    System.out.println(name + \" used Basic Heal! Restores \" + heal + \" HP and 10 MP to \" + ally.getName() + \".\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 2: // Ocean's Blessing\r\n                if (manaPoints >= 20) {\r\n                    manaPoints -= 20;\r\n                    // heal and restore MP to all allies\r\n                    for (Character c : party) {\r\n                        if (c != null && c.isAlive()) {\r\n                            int h = Math.max(10, c.healthPoints / 7); // ~15% of current\r\n                            c.healAlly(h);\r\n                            c.restoreMP(10);\r\n                        }\r\n                    }\r\n                    System.out.println(name + \" used Ocean's Blessing! Heals allies and restores MP to all allies.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 3: // Harmonic Wave\r\n                if (manaPoints == 0) {\r\n                    for (Character c : party) {\r\n                        if (c != null && c.isAlive()) {\r\n                            int h = Math.max(20, c.healthPoints / 2);\r\n                            c.healAlly(h);\r\n                            c.restoreMP(100);\r\n                        }\r\n                    }\r\n                    System.out.println(name + \" used Ultimate, Harmonic Wave! Restores large MP and HP to all allies.\");\r\n                } else System.out.println(name + \" must have 0 mana to use Harmonic Wave!\");\r\n                break;\r\n            }\r\n        }\r\n\r\n    @Override\r\n    public String[] getSkillList() {\r\n        return new String[]{\"1) Basic Heal - Cost: 10 MP\",\"2) Ocean's Blessing - Cost: 20 MP\",\"3) Harmonic Wave - Requires 0 MP\"};\r\n    }\r\n\r\n    @Override\r\n    public String getSkillTargetType(int skill) {\r\n        switch (skill) {\r\n            case 1: return \"ALLY\"; // Basic Heal\r\n            case 2: return \"ALL\";  // Ocean's Blessing\r\n            case 3: return \"ALL\";  // Harmonic Wave\r\n            default: return \"ALLY\";\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/Lazuli.java b/src/main/charmees/Entity/Lazuli.java
+--- a/src/main/charmees/Entity/Lazuli.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/Lazuli.java	(date 1778899141728)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Lazuli extends Character {
+ 
+Index: src/main/charmees/Entity/Kassundre.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class Kassundre extends MobNPC {\r\n\r\n    public Kassundre(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        kassundreSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Kassundre's Skills -----------------\r\n    private void kassundreSkills(int skill, Character target) {\r\n        //Miniboss fight skills\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Corrupted tears\r\n                    int hits = (int)(Math.random() * 4) + 1;\r\n                    damage = 0;\r\n                    for (int i = 0; i < hits; i++) {\r\n                        damage += (int)(Math.random() * 6) + 5;\r\n                    }\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Corrupted Tears! Hits \" + hits + \" times for \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Corrupted Hug\r\n                    damage = (int)(Math.random() * 26) + 10;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Corrupted Hug! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 3: // Corrupted Flora\r\n                    damage = (int)(Math.random() * 21) + 20;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Corrupted Flora! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/Kassundre.java b/src/main/charmees/Entity/Kassundre.java
+--- a/src/main/charmees/Entity/Kassundre.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/Kassundre.java	(date 1778899141728)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Kassundre extends MobNPC {
+ 
+Index: src/main/charmees/Entity/CorruptedSkeleton.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class CorruptedSkeleton extends MobNPC {\r\n\r\n    public CorruptedSkeleton(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        corruptedSkeletonSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Corrupted Skeleton's Skills -----------------\r\n    private void corruptedSkeletonSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Bone Strike\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Bone Strike! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Skull Bash\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Skull Bash! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/CorruptedSkeleton.java b/src/main/charmees/Entity/CorruptedSkeleton.java
+--- a/src/main/charmees/Entity/CorruptedSkeleton.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/CorruptedSkeleton.java	(date 1778899141728)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class CorruptedSkeleton extends MobNPC {
+ 
+Index: src/main/charmees/Entity/Shiera.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class Shiera extends Character {\r\n\r\n    public Shiera(String name, String charClass, String type, String weapon, int healthPoints, int manaPoints) {\r\n        super(name, charClass, type, weapon, healthPoints, manaPoints);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, MobNPC target, Character ally, Character[] party) {\r\n        // if this character is stunned, they cannot use skills\r\n        if (this.isStunned()) {\r\n            System.out.println(this.getName() + \" is stunned and cannot use skills.\");\r\n            return;\r\n        }\r\n        shieraSkills(skill, target, ally);\r\n    }\r\n\r\n    // ----------------- Shiera's Skills -----------------\r\n    private void shieraSkills(int skill, MobNPC target, Character ally) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Stone Spikes\r\n                if (manaPoints >= 4) {\r\n                    manaPoints -= 4;\r\n                    int hits = (int)(Math.random() * 4) + 1;\r\n                    damage = 0;\r\n                    for (int i = 0; i < hits; i++) {\r\n                        damage += (int)(Math.random() * 10) + 1;\r\n                    }\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Stone Spikes! Hits \" + hits + \" times for \" + damage + \" damage.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 2: // Earth Wall\r\n                if (manaPoints >= 6) {\r\n                    manaPoints -= 6;\r\n                    // apply damage reduction to self\r\n                    this.damageReductionPercent = 0.20;\r\n                    this.damageReductionTurns = Math.max(this.damageReductionTurns, 4);\r\n                    System.out.println(name + \" used Earth Wall! Reduces incoming damage by 20% for 4 turns.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 3: // Iron Maiden\r\n                if (manaPoints >= 10) {\r\n                    manaPoints -= 10;\r\n                    damage = 50;\r\n                    target.takedamage(damage);\r\n                    // stun the enemy for 1 turn\r\n                    target.applyStun(1);\r\n                    System.out.println(name + \" used Ultimate, Iron Maiden! Deals \" + damage + \" fixed damage and stuns enemy for 1 turn.\");\r\n                    } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public String[] getSkillList() {\r\n        return new String[]{\"1) Stone Spikes - Cost: 4 MP\",\"2) Earth Wall - Cost: 6 MP\",\"3) Iron Maiden - Cost: 10 MP\"};\r\n    }\r\n\r\n    @Override\r\n    public String getSkillTargetType(int skill) {\r\n        switch (skill) {\r\n            case 2: return \"SELF\"; // Earth Wall\r\n            default: return \"ENEMY\";\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/Shiera.java b/src/main/charmees/Entity/Shiera.java
+--- a/src/main/charmees/Entity/Shiera.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/Shiera.java	(date 1778899141729)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Shiera extends Character {
+ 
+Index: src/main/charmees/Entity/EchoImp.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class EchoImp extends MobNPC {\r\n\r\n    public EchoImp(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        echoImpSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Echo Imp's Skills -----------------\r\n    private void echoImpSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Echo Scream\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Echo Scream! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Sonic Wave\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Sonic Wave! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/EchoImp.java b/src/main/charmees/Entity/EchoImp.java
+--- a/src/main/charmees/Entity/EchoImp.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/EchoImp.java	(date 1778899141728)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class EchoImp extends MobNPC {
+ 
+Index: src/main/charmees/Entity/Twinkle.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class Twinkle extends MobNPC {\r\n\r\n    public Twinkle(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        twinkleSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Twinkle's Skills -----------------\r\n    private void twinkleSkills(int skill, Character target) {\r\n        //Boss fight skills\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Puppet Slash\r\n                    damage = (int)(Math.random() * 26) + 5;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Puppet Slash! Deals \" + damage + \" damage.\");\r\n                    break;\r\n            case 2: // Lazer Devastation\r\n                    int hits = (int)(Math.random() * 2) + 1;\r\n                    damage = 0;\r\n                    for (int i = 0; i < hits; i++) {\r\n                        damage += 20;\r\n                    }\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Lazer Devastation! Hits \" + hits + \" times for \" + damage + \" damage.\");\r\n                break;\r\n            case 3: // Corruption\r\n                    damage = 60;\r\n                    target.takedamage(damage);\r\n                    System.out.println(name + \" used Corruption! Deals \" + damage + \" fixed damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/Twinkle.java b/src/main/charmees/Entity/Twinkle.java
+--- a/src/main/charmees/Entity/Twinkle.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/Twinkle.java	(date 1778899141729)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Twinkle extends MobNPC {
+ 
+Index: src/main/charmees/Entity/SirenEmpress.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class SirenEmpress extends MobNPC {\r\n\r\n    public SirenEmpress(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        sirenEmpressSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Siren Empress's Skills -----------------\r\n    private void sirenEmpressSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Water Whip\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Water Whip! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Tidal Wave\r\n                damage = (int)(Math.random() * 21) + 10;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Tidal Wave! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 3: // Abyssal Crush\r\n                damage = (int)(Math.random() * 41) + 20;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Abyssal Crush! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/SirenEmpress.java b/src/main/charmees/Entity/SirenEmpress.java
+--- a/src/main/charmees/Entity/SirenEmpress.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/SirenEmpress.java	(date 1778899141729)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class SirenEmpress extends MobNPC {
+ 
+Index: src/main/charmees/Entity/PrincessPuppet.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class PrincessPuppet extends MobNPC {\r\n\r\n    public PrincessPuppet(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        princessPuppetSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Princess Puppet's Skills -----------------\r\n    private void princessPuppetSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Puppet Slap\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Puppet Slap! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Royal Lash\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Royal Lash! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/PrincessPuppet.java b/src/main/charmees/Entity/PrincessPuppet.java
+--- a/src/main/charmees/Entity/PrincessPuppet.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/PrincessPuppet.java	(date 1778899141729)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class PrincessPuppet extends MobNPC {
+ 
+Index: src/main/charmees/Entity/MoonSprite.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class MoonSprite extends MobNPC {\r\n\r\n    public MoonSprite(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        moonSpriteSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Moon Sprite's Skills -----------------\r\n    private void moonSpriteSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Lunar Beam\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Lunar Beam! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Moonlight Burst\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Moonlight Burst! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/MoonSprite.java b/src/main/charmees/Entity/MoonSprite.java
+--- a/src/main/charmees/Entity/MoonSprite.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/MoonSprite.java	(date 1778899141729)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class MoonSprite extends MobNPC {
+ 
+Index: src/main/charmees/Entity/Resonara.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class Resonara extends MobNPC {\r\n\r\n    public Resonara(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        resonaraSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Resonara's Skills -----------------\r\n    private void resonaraSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Sonic Blast\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Sonic Blast! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Echo Strike\r\n                damage = (int)(Math.random() * 21) + 10;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Echo Strike! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 3: // Harmonic Destruction\r\n                damage = (int)(Math.random() * 41) + 20;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Harmonic Destruction! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/Resonara.java b/src/main/charmees/Entity/Resonara.java
+--- a/src/main/charmees/Entity/Resonara.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/Resonara.java	(date 1778899141729)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Resonara extends MobNPC {
+ 
+Index: src/main/charmees/Entity/LavaBeast.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class LavaBeast extends MobNPC {\r\n\r\n    public LavaBeast(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        lavaBeastSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Lava Beast's Skills -----------------\r\n    private void lavaBeastSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Fire Breath\r\n                damage = (int)(Math.random() * 16) + 10;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Fire Breath! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Lava Eruption\r\n                damage = (int)(Math.random() * 26) + 15;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Lava Eruption! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 3: // Volcanic Fury\r\n                damage = (int)(Math.random() * 51) + 30;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Volcanic Fury! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/LavaBeast.java b/src/main/charmees/Entity/LavaBeast.java
+--- a/src/main/charmees/Entity/LavaBeast.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/LavaBeast.java	(date 1778899141728)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class LavaBeast extends MobNPC {
+ 
+Index: src/main/charmees/Entity/AstralGlob.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class AstralGlob extends MobNPC {\r\n\r\n    public AstralGlob(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        astralGlobSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Astral Glob's Skills -----------------\r\n    private void astralGlobSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Astral Slime\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Astral Slime! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Void Ooze\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Void Ooze! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/AstralGlob.java b/src/main/charmees/Entity/AstralGlob.java
+--- a/src/main/charmees/Entity/AstralGlob.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/AstralGlob.java	(date 1778899141728)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class AstralGlob extends MobNPC {
+ 
+Index: src/main/charmees/Entity/WaterSprite.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class WaterSprite extends MobNPC {\r\n\r\n    public WaterSprite(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        waterSpriteSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Water Sprite's Skills -----------------\r\n    private void waterSpriteSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Water Jet\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Water Jet! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Bubble Burst\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Bubble Burst! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/WaterSprite.java b/src/main/charmees/Entity/WaterSprite.java
+--- a/src/main/charmees/Entity/WaterSprite.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/WaterSprite.java	(date 1778899141730)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class WaterSprite extends MobNPC {
+ 
+Index: src/main/charmees/Entity/WaterBlob.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class WaterBlob extends MobNPC {\r\n\r\n    public WaterBlob(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        waterBlobSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Water Blob's Skills -----------------\r\n    private void waterBlobSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Water Splash\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Water Splash! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Aqua Burst\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Aqua Burst! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/WaterBlob.java b/src/main/charmees/Entity/WaterBlob.java
+--- a/src/main/charmees/Entity/WaterBlob.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/WaterBlob.java	(date 1778899141729)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class WaterBlob extends MobNPC {
+ 
+Index: src/main/charmees/Entity/Giantha.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class Giantha extends Character {\r\n\r\n    public Giantha(String name, String charClass, String type, String weapon, int healthPoints, int manaPoints) {\r\n        super(name, charClass, type, weapon, healthPoints, manaPoints);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, MobNPC target, Character ally, Character[] party) {\r\n        // if this character is stunned, they cannot use skills\r\n        if (this.isStunned()) {\r\n            System.out.println(this.getName() + \" is stunned and cannot use skills.\");\r\n            return;\r\n        }\r\n        gianthaSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Giantha's Skills -----------------\r\n    private void gianthaSkills(int skill, MobNPC target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Giant Punch\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Giant Punch! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Giant's Roar\r\n                if (manaPoints >= 1) {\r\n                    manaPoints -= 1;\r\n                    // apply taunt to self so enemies prefer this character for 1 turn\r\n                    this.tauntTurns = Math.max(this.tauntTurns, 1);\r\n                    System.out.println(name + \" used Giant's Roar! Enemies will target \" + name + \" for 1 turn.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n            case 3: // Club Smash\r\n                if (manaPoints >= 9) {\r\n                    manaPoints -= 9;\r\n                    damage = (int)(Math.random() * 21) + 20;\r\n                    target.takedamage(damage);\r\n                    // stun the targeted enemy for 1 turn (they can't act)\r\n                    target.applyStun(1);\r\n                    System.out.println(name + \" used Ultimate, Club Smash! Deals \" + damage + \" damage and stuns the target for 1 turn.\");\r\n                } else System.out.println(name + \" doesn't have enough mana!\");\r\n                break;\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public String[] getSkillList() {\r\n        return new String[]{\"1) Giant Punch - Cost: 0 MP\",\"2) Giant's Roar - Cost: 1 MP\",\"3) Club Smash - Cost: 9 MP\"};\r\n    }\r\n\r\n    @Override\r\n    public String getSkillTargetType(int skill) {\r\n        return \"ENEMY\";\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/Giantha.java b/src/main/charmees/Entity/Giantha.java
+--- a/src/main/charmees/Entity/Giantha.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/Giantha.java	(date 1778899141728)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class Giantha extends Character {
+ 
+Index: src/main/charmees/Entity/EclipseCore.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class EclipseCore extends MobNPC {\r\n\r\n    public EclipseCore(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        eclipseCoreSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Eclipse Core's Skills -----------------\r\n    private void eclipseCoreSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Shadow Bolt\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Shadow Bolt! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Void Sphere\r\n                damage = (int)(Math.random() * 21) + 10;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Void Sphere! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 3: // Eclipse Burst\r\n                damage = (int)(Math.random() * 41) + 20;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Eclipse Burst! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/EclipseCore.java b/src/main/charmees/Entity/EclipseCore.java
+--- a/src/main/charmees/Entity/EclipseCore.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/EclipseCore.java	(date 1778899141728)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class EclipseCore extends MobNPC {
+ 
+Index: src/main/charmees/Entity/ResonanceGoblin.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package src.main.charmees.Entity;\r\nimport src.main.charmees.util.MobNPC;\r\nimport src.main.charmees.util.Character;\r\n\r\npublic class ResonanceGoblin extends MobNPC {\r\n\r\n    public ResonanceGoblin(String name, String charClass, String type, String weapon, int healthPoints, int chapter) {\r\n        super(name, charClass, type, weapon, healthPoints, chapter);\r\n    }\r\n\r\n    @Override\r\n    public void useSkill(int skill, Character target) {\r\n        resonanceGoblinSkills(skill, target);\r\n    }\r\n\r\n    // ----------------- Resonance Goblin's Skills -----------------\r\n    private void resonanceGoblinSkills(int skill, Character target) {\r\n        int damage = 0;\r\n        switch (skill) {\r\n            case 1: // Echo Strike\r\n                damage = (int)(Math.random() * 6) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Echo Strike! Deals \" + damage + \" damage.\");\r\n                break;\r\n            case 2: // Sonic Boom\r\n                damage = (int)(Math.random() * 11) + 5;\r\n                target.takedamage(damage);\r\n                System.out.println(name + \" used Sonic Boom! Deals \" + damage + \" damage.\");\r\n                break;\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/src/main/charmees/Entity/ResonanceGoblin.java b/src/main/charmees/Entity/ResonanceGoblin.java
+--- a/src/main/charmees/Entity/ResonanceGoblin.java	(revision c143c5accf3270705d5f6424b7accb4ac9868413)
++++ b/src/main/charmees/Entity/ResonanceGoblin.java	(date 1778899141729)
+@@ -1,6 +1,6 @@
+-package src.main.charmees.Entity;
+-import src.main.charmees.util.MobNPC;
+-import src.main.charmees.util.Character;
++package charmees.Entity;
++import charmees.Util.Character;
++import charmees.Util.MobNPC;
+ 
+ public class ResonanceGoblin extends MobNPC {
+ 

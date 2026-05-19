@@ -1,5 +1,6 @@
-package src.main.charmees.Display;
-import static src.main.charmees.util.Display.*;
+package charmees.Display;
+import charmees.util.Display.*;
+import charmees.util.Display;
 
 import java.util.Scanner;
 
@@ -12,7 +13,7 @@ public class JournalDisplay {
 
     // Helpers
     static void printCharacter(String name, String desc, String stats) {
-        System.out.println(BOLD + GREEN + "  / " + name + RESET);
+        System.out.println(Display.BOLD + Display.GREEN + "  / " + name + RESET);
         System.out.println("    " + desc);
         System.out.println(DIM + "    " + stats + RESET);
         System.out.println();
@@ -117,7 +118,7 @@ public class JournalDisplay {
             printHeader("INFO");
             System.out.println(DIM + "  Learn about the world: characters, mobs & bosses." + RESET);
             System.out.println();
-            System.out.println(CYAN + "  [1] CHARACTERS" + RESET);
+            System.out.println(Display.BOLD + "  [1] CHARACTERS" + RESET);
             System.out.println(CYAN + "  [2] MOBS" + RESET);
             System.out.println(CYAN + "  [3] BOSS" + RESET);
             System.out.println(RED + "  [4] BACK" + RESET);
