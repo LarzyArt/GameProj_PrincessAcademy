@@ -1,5 +1,5 @@
 package charmees.util;
-public abstract class Entity{
+public abstract class Entity implements StatusEffectable {
     public String name;
     public String charClass;
     public String type;
@@ -33,4 +33,16 @@ public abstract class Entity{
     public boolean isAlive(){
         return healthPoints > 0;
     }
+
+    // generic stats display
+    public void showStats() {
+        System.out.println("---- " + name + " ----");
+        System.out.println("Class: " + charClass);
+        System.out.println("Type: " + type);
+        System.out.println("Weapon: " + weapon);
+        System.out.println("HP: " + healthPoints);
+        System.out.println("------------------");
+        System.out.println();
+    }
+
 }

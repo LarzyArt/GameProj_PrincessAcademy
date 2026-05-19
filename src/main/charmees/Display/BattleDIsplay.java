@@ -1,10 +1,11 @@
 package charmees.Display;
 
-import charmees.util.Character;
-import charmees.util.MobNPC;
-import charmees.util.Display;
+import charmees.Util.Character;
+import charmees.Util.MobNPC;
+import charmees.Util.Display;
+import java.util.Scanner;
 
-public class BattleDIsplay {
+public class BattleDisplay {
 
     //TODO: implement battle display
 
@@ -45,8 +46,7 @@ public class BattleDIsplay {
 
         // enemy Section
         public static void showEnemyField(MobNPC[] mobs, int chapter, int targetIdx, int[] mobMaxHP){
-            Display.thin();    
-            System.out.println("ENEMIES: ");
+                System.out.println("ENEMIES: ");
                 for (int i = 0; i < mobs.length; i++){
                     MobNPC m = mobs[i];
                     if (m.chapter != chapter) continue;
@@ -61,40 +61,38 @@ public class BattleDIsplay {
                     String target = (i == targetIdx) ? " <-- TARGET" : "";
                     System.out.println(" " + m.getName() + " [" + m.charClass + "]"
                     + " HP: " + m.healthPoints + "/" + mobMaxHP[i] + target);
-                    System.out.println("  " + hpBar(m.healthPoints, mobMaxHP[i], 30)
+                    System.out.println(" " + hpBar(m.healthPoints, mobMaxHP[i], 30)
                     + " " + percent(m.healthPoints,mobMaxHP[i]) + "%");
                 }
             }
 
             // active character Section
             public static void showActiveChar(Character c, int maxHP){
-                Display.thin();
                 System.out.println("ACTIVE CHARACTER: ");
                 Display.thin();
                 System.out.println(" " + c.getName() + " " 
                 + "   HP: " + c.healthPoints + "/" + maxHP
-                + "   MP: " + c.manaPoints);
+                + "   MP: " + c.manaPoints + "/" + c.manaPoints);
 
-                System.out.println("  " + hpBar(c.healthPoints, maxHP, 30)
+                System.out.println(" " + hpBar(c.healthPoints, maxHP, 30)
                 + " " + percent(c.healthPoints, maxHP) + "%");
             }
 
         // Bench Section
         private static void showBench(Character[] characters, int activeIdx, int[] charMaxHP){
-            Display.thin();
-            System.out.print(" PARTY: ");
+            System.out.print("   PARTY: ");
             for(int i = 0; i < characters.length; i++){
                 Character c = characters[i];
                 String label;
 
                 if(!c.isAlive()){
-                    label = c.getName() + "[KO]";
+                    label = c.getName() + " [DEFEATED]";
                 } else if (i == activeIdx){
-                    label = c.getName() + "[IN]";
+                    label = c.getName() + " [IN BATTLE]";
                 } else if (i == 2) {
                     label = c.getName() + "[HEALER]";
                 } else {
-                    label = c.getName() + "[" + percent(c.healthPoints, charMaxHP[i]) + "%]";
+                    label = c.getName() + " [BENCH] [" + percent(c.healthPoints, charMaxHP[i]) + "%]";
                 }
 
                 System.out.print(label);
@@ -109,7 +107,7 @@ public class BattleDIsplay {
         public static void showActionDisplay(Character actor ){
             Display.gap();
             Display.thin();
-            System.out.println("What will " + actor.getName() + " do?");
+            System.out.println("What will " + actor.getName() + "do?");
             Display.gap();
 
             System.out.println("  [1] SKILL"); // skill option(skill 1 or skill 2) will be handled in BattleLogic based on the character
@@ -118,6 +116,7 @@ public class BattleDIsplay {
             System.out.println("  [4] LAZULI'S BLESSING"); // heals characters based on lazuli's skills, will be handled in BattleLogic based on the character 
 
             Display.thin();
+            System.out.println("  > ");
         }
 
         // ================================================
@@ -130,14 +129,13 @@ public class BattleDIsplay {
         public static void showSkillMenu(Character actor){
             String[] skills = actor.getSkillList();
             Display.gap();
-            Display.thin();
             System.out.println(" " + actor.getName() + " -- Skills:");
-            Display.thin();
             for (int i = 0; i < Math.min(2, skills.length); i++){
                 System.out.println("  [" + (i + 1) + "] " + skills[i]);
             }
-            System.out.println(" [0] Cancel");
+            System.out.println("  [3] Cancel");
             Display.thin();
+            System.out.println("  > ");
         }
 
         // shows the ultimate confirmation menu for the active character,
@@ -153,6 +151,7 @@ public class BattleDIsplay {
             System.out.println(" [1] Use it!");
             System.out.println(" [0] Cancel");
             Display.thin();
+            System.out.println(" > ");
         }
 
         // shows the switch menu to switch active character, with options to select any alive bench character,
@@ -176,6 +175,7 @@ public class BattleDIsplay {
 
                 System.out.println("   [0]Cancel");
                 Display.thin();
+                System.out.println("   > ");
         }
 
         // shows the heal menu for lazuli's blessing, with options to select any character to heal,
@@ -190,6 +190,7 @@ public class BattleDIsplay {
             }
             System.out.println("  [0] Cancel");
             Display.thin();
+            System.out.println("  > ");
         }
 
         // shows the ally picker menu to select a target for healing, with options to select any alive character,
@@ -209,6 +210,7 @@ public class BattleDIsplay {
                 
             }
             Display.thin();
+            System.out.println("  > ");
         }
 
         // shows the enemy picker menu to select a target for an attack, with options to select any alive enemy,
@@ -227,6 +229,7 @@ public class BattleDIsplay {
                 opt++;
             }
             Display.thin();
+            System.out.println("  > ");
         }
 
         //=================================================
