@@ -74,3 +74,53 @@ public void run() {
                 turnCount, totalDealt, totalTaken);
         Display.pressEnter(sc);
     }
+
+    private void playerTurn() {
+        ArcadeModeDisplay.showSkillMenu(hero);
+
+        String[] skills = hero.getSkillList();
+        int action = safeReadInt(1, skills.length + 1);
+        Display.gap();
+
+        int dmg;
+        String moveName;
+
+        if (action == 1) {
+            dmg = rng.nextInt(11) + 10;
+            moveName = "Basic Attack";
+        } else {
+            int skillNum = action - 1;
+            switch (skillNum) {
+                case 1:  dmg = rng.nextInt(16) + 15; break;
+                case 2:  dmg = rng.nextInt(21) + 25; break;
+                case 3:  dmg = rng.nextInt(26) + 40; break;
+                default: dmg = rng.nextInt(11) + 10;
+            }
+            moveName = skills[skillNum - 1];
+        }
+
+        opponent.takedamage(dmg);
+        totalDealt += dmg;
+        System.out.println("  " + hero.getName() + " used " + moveName + "!");
+        System.out.println("  Deals " + dmg + " damage to " + opponent.getName() + "!");
+        log(hero.getName() + " hit for " + dmg + ".");
+    }
+
+    private void opponentTurn() {
+        String[] skills = opponent.getSkillList();
+        int skillNum = rng.nextInt(skills.length) + 1;
+
+        int dmg;
+        switch (skillNum) {
+            case 1:  dmg = rng.nextInt(16) + 15; break;
+            case 2:  dmg = rng.nextInt(21) + 25; break;
+            case 3:  dmg = rng.nextInt(26) + 40; break;
+            default: dmg = rng.nextInt(11) + 10;
+        }
+
+        hero.takedamage(dmg);
+        totalTaken += dmg;
+        System.out.println("  " + opponent.getName() + " used " + skills[skillNum - 1] + "!");
+        System.out.println("  Deals " + dmg + " damage to " + hero.getName() + "!");
+        log(opponent.getName() + " hit for " + dmg + ".");
+    }
