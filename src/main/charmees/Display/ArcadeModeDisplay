@@ -110,3 +110,48 @@ public static void showCharVsCharDescription() {
             System.out.println("  !! LOW HP !!");
         Display.thin();
     }
+
+    public static void showSkillMenu(Character hero) {
+        String[] skills = hero.getSkillList();
+        Display.gap();
+        Display.option(1, "Basic Attack  [no MP cost, 10-20 dmg]");
+        for (int i = 0; i < skills.length; i++)
+            Display.option(i + 2, skills[i]);
+        Display.thin();
+    }
+
+    public static void showCharVsCharResult(
+            Character hero, int heroMaxHP,
+            Character opponent,
+            int turnCount, int totalDealt, int totalTaken) {
+
+        Display.gap();
+        BattleDisplay.pause(400);
+        Display.line();
+
+        if (hero.isAlive()) {
+            BattleDisplay.showVictoryDisplay(0);
+            System.out.println("  " + hero.getName() + " defeated " + opponent.getName() + "!");
+        } else {
+            BattleDisplay.showDefeatDisplay();
+            System.out.println("  " + hero.getName() + " was defeated by " + opponent.getName() + "...");
+        }
+
+        Display.gap();
+        System.out.println("  BATTLE SUMMARY");
+        Display.thin();
+        System.out.printf("  Turns survived  : %d%n", turnCount);
+        System.out.printf("  Damage dealt    : %d%n", totalDealt);
+        System.out.printf("  Damage taken    : %d%n", totalTaken);
+        System.out.printf("  HP remaining    : %d / %d%n", Math.max(0, hero.healthPoints), heroMaxHP);
+        Display.line();
+    }
+
+    public static void showPlayAgain() {
+        Display.gap();
+        Display.option(1, "Play again");
+        Display.option(2, "Back to Arcade Menu");
+        Display.line();
+    }
+
+    
