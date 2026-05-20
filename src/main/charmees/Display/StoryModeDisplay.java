@@ -13,10 +13,6 @@ public class StoryModeDisplay {
 
     static final String SECRET = "LEZLI.BOOK.ZIP"; // Word that will unlock chap 1 to epilogue
 
-    public static void main(String[] args) {
-        startGame();
-    }
-
     public static void startGame() {
         while (true) {
             printMenu();
