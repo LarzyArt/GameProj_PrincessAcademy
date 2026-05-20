@@ -1,5 +1,6 @@
-package charmees.Display;
+package charmees.Core.Logic;
 
+import charmees.Display.BattleDIsplay;
 import charmees.util.*;
 import charmees.util.MobNPC;
 import charmees.util.Character;
@@ -50,6 +51,8 @@ public class BattleLogic {
     // =================================================
     // ENTRY POINT for battle logic
     // =================================================
+
+
 
     public void run() {
         // lore (tentative)
@@ -411,4 +414,7 @@ public class BattleLogic {
 
         return -1; // no alive enemies
     }
+
+    
 }
+
