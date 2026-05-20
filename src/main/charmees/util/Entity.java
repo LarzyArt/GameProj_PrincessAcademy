@@ -1,5 +1,5 @@
 package charmees.util;
-public abstract class Entity implements StatusEffectable {
+public abstract class Entity {
     public String name;
     public String charClass;
     public String type;
