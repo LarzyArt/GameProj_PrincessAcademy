@@ -26,15 +26,15 @@ public class ArcadeModeBattleDisplay {
             Character hero, int heroMaxHP, int heroMaxMP,
             Character opponent, int oppMaxHP, int oppMaxMP,
             Scanner sc, Random rng) {
-        this.hero       = hero;
-        this.heroMaxHP  = heroMaxHP;
-        this.heroMaxMP  = heroMaxMP;
-        this.opponent   = opponent;
-        this.oppMaxHP   = oppMaxHP;
-        this.oppMaxMP   = oppMaxMP;
-        this.sc         = sc;
-        this.rng        = rng;
-        this.turnCount  = 1;
+        this.hero = hero;
+        this.heroMaxHP = heroMaxHP;
+        this.heroMaxMP = heroMaxMP;
+        this.opponent = opponent;
+        this.oppMaxHP = oppMaxHP;
+        this.oppMaxMP = oppMaxMP;
+        this.sc = sc;
+        this.rng = rng;
+        this.turnCount = 1;
         this.totalDealt = 0;
         this.totalTaken = 0;
         clearLog();
@@ -57,10 +57,11 @@ public class ArcadeModeBattleDisplay {
                     hero, heroMaxHP, heroMaxMP,
                     opponent, oppMaxHP, oppMaxMP);
 
-            BattleDisplay.showPlayerPhaseHeader(hero.getName().charAt(0));
+            BattleDisplay.showPlayerPhaseHeader(hero);
             playerTurn();
             hero.tickStatus();
-            if (!opponent.isAlive()) break;
+            if (!opponent.isAlive())
+                break;
 
             BattleDisplay.showEnemyPhaseHeader();
             opponentTurn();
@@ -90,10 +91,17 @@ public class ArcadeModeBattleDisplay {
         } else {
             int skillNum = action - 1;
             switch (skillNum) {
-                case 1:  dmg = rng.nextInt(16) + 15; break;
-                case 2:  dmg = rng.nextInt(21) + 25; break;
-                case 3:  dmg = rng.nextInt(26) + 40; break;
-                default: dmg = rng.nextInt(11) + 10;
+                case 1:
+                    dmg = rng.nextInt(16) + 15;
+                    break;
+                case 2:
+                    dmg = rng.nextInt(21) + 25;
+                    break;
+                case 3:
+                    dmg = rng.nextInt(26) + 40;
+                    break;
+                default:
+                    dmg = rng.nextInt(11) + 10;
             }
             moveName = skills[skillNum - 1];
         }
@@ -111,10 +119,17 @@ public class ArcadeModeBattleDisplay {
 
         int dmg;
         switch (skillNum) {
-            case 1:  dmg = rng.nextInt(16) + 15; break;
-            case 2:  dmg = rng.nextInt(21) + 25; break;
-            case 3:  dmg = rng.nextInt(26) + 40; break;
-            default: dmg = rng.nextInt(11) + 10;
+            case 1:
+                dmg = rng.nextInt(16) + 15;
+                break;
+            case 2:
+                dmg = rng.nextInt(21) + 25;
+                break;
+            case 3:
+                dmg = rng.nextInt(26) + 40;
+                break;
+            default:
+                dmg = rng.nextInt(11) + 10;
         }
 
         hero.takedamage(dmg);
@@ -138,8 +153,10 @@ public class ArcadeModeBattleDisplay {
     private int safeReadInt(int min, int max) {
         while (true) {
             int v = Display.readInt(sc);
-            if (v == 0 && min > 0) return 0;
-            if (v >= min && v <= max) return v;
+            if (v == 0 && min > 0)
+                return 0;
+            if (v >= min && v <= max)
+                return v;
             System.out.printf("  Please enter %d-%d.%n", min, max);
         }
     }
