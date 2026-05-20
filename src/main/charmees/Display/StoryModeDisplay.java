@@ -45,7 +45,7 @@ public class StoryModeDisplay {
                     }
                 }
                 case "0" -> {
-                    System.out.println(Display.CYAN"\nGoodbye!\n" + Display.RESET);
+                    System.out.println(Display.CYAN + "\nGoodbye!\n" + Display.RESET);
                     return;
                 }
                 default -> handleSecretWord(input);
@@ -76,9 +76,9 @@ public class StoryModeDisplay {
 
     public static String tag(boolean unlocked) {
         if (unlocked) {
-            return GREEN + "[OPEN]" + RESET;
+            return Display.GREEN + "[OPEN]" + Display.RESET;
         } else {
-            return RED + "[LOCKED]" + RESET;
+            return Display.RED + "[LOCKED]" + Display.RESET;
         }
     }
 
