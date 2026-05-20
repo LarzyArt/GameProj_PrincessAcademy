@@ -124,3 +124,24 @@ public void run() {
         System.out.println("  Deals " + dmg + " damage to " + hero.getName() + "!");
         log(opponent.getName() + " hit for " + dmg + ".");
     }
+
+    private void clearLog() {
+        for (int i = 0; i < combatLog.length; i++)
+            combatLog[i] = "";
+        logPointer = 0;
+    }
+
+    private void log(String msg) {
+        combatLog[logPointer % combatLog.length] = msg;
+        logPointer++;
+    }
+
+    private int safeReadInt(int min, int max) {
+        while (true) {
+            int v = Display.readInt(sc);
+            if (v == 0 && min > 0) return 0;
+            if (v >= min && v <= max) return v;
+            System.out.printf("  Please enter %d-%d.%n", min, max);
+        }
+    }
+}
