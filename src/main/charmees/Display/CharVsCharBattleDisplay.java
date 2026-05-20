@@ -7,7 +7,7 @@ import charmees.Display.BattleDIsplay;
 import java.util.Random;
 import java.util.Scanner;
 
-public class ArcadeModeBattleDisplay {
+public class CharVsCharBattleDisplay {
 
     private final Scanner sc;
     private final Random rng;
@@ -23,7 +23,7 @@ public class ArcadeModeBattleDisplay {
 
     private int totalDealt, totalTaken, turnCount;
 
-    public ArcadeModeBattleDisplay(
+    public CharVsCharBattleDisplay(
             Character hero, int heroMaxHP, int heroMaxMP,
             Character opponent, int oppMaxHP, int oppMaxMP,
             Scanner sc, Random rng) {
@@ -53,8 +53,8 @@ public class ArcadeModeBattleDisplay {
             System.out.printf("  ======  TURN %d  ======%n", turnCount);
             Display.gap();
 
-            ArcadeModeDisplay.showCombatLog(combatLog, logPointer);
-            ArcadeModeDisplay.showCharVsCharHUD(
+            CharVsCharDisplay.showCombatLog(combatLog, logPointer);
+            CharVsCharDisplay.showCharVsCharHUD(
                     hero, heroMaxHP, heroMaxMP,
                     opponent, oppMaxHP, oppMaxMP);
 
@@ -70,14 +70,14 @@ public class ArcadeModeBattleDisplay {
             turnCount++;
         }
 
-        ArcadeModeDisplay.showCharVsCharResult(
+        CharVsCharDisplay.showCharVsCharResult(
                 hero, heroMaxHP, opponent,
                 turnCount, totalDealt, totalTaken);
         Display.pressEnter(sc);
     }
 
     private void playerTurn() {
-        ArcadeModeDisplay.showSkillMenu(hero);
+        CharVsCharDisplay.showSkillMenu(hero);
 
         String[] skills = hero.getSkillList();
         int action = safeReadInt(1, skills.length + 1);

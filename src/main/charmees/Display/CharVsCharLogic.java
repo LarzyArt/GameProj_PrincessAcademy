@@ -12,7 +12,7 @@ import charmees.Entity.characters.Shiera;
 import java.util.Random;
 import java.util.Scanner;
 
-public class ArcadeModeLogic {
+public class CharVsCharLogic {
 
     private final Scanner sc;
     private final Random rng = new Random();
@@ -31,14 +31,14 @@ public class ArcadeModeLogic {
     private int oppMaxHP, oppMaxMP;
     private int heroIdx;
 
-    public ArcadeModeLogic(Scanner sc) {
+    public CharVsCharLogic(Scanner sc) {
         this.sc = sc;
     }
 
     public void show() {
         boolean running = true;
         while (running) {
-            ArcadeModeDisplay.showArcadeScreen();
+            CharVsCharDisplay.showArcadeScreen();
             int mode = safeReadInt(0, 2);
 
             if (mode == 0) break;
@@ -54,28 +54,28 @@ public class ArcadeModeLogic {
     }
 
     private void runCharVsCharFlow() {
-        ArcadeModeDisplay.showCharVsCharDescription();
+        CharVsCharDisplay.showCharVsCharDescription();
         int choice = safeReadInt(1, 2);
         if (choice == 2) return;
 
-        ArcadeModeDisplay.showHeroSelect(HERO_DEFS, "CHAR vs CHAR  -  PICK YOUR FIGHTER");
+        CharVsCharDisplay.showHeroSelect(HERO_DEFS, "CHAR vs CHAR  -  PICK YOUR FIGHTER");
         int heroPick = safeReadInt(0, HERO_DEFS.length);
         if (heroPick == 0) return;
         heroIdx = heroPick - 1;
         buildHero(heroIdx);
 
-        int[] indexMap = ArcadeModeDisplay.showOpponentSelect(HERO_DEFS, hero, heroIdx);
+        int[] indexMap = CharVsCharDisplay.showOpponentSelect(HERO_DEFS, hero, heroIdx);
         int oppPick = safeReadInt(0, HERO_DEFS.length - 1);
         if (oppPick == 0) return;
         buildOpponent(indexMap[oppPick - 1]);
 
-        ArcadeModeBattleDisplay battleDisplay = new ArcadeModeBattleDisplay(
+        CharVsCharBattleDisplay battleDisplay = new CharVsCharBattleDisplay(
                 hero, heroMaxHP, heroMaxMP,
                 opponent, oppMaxHP, oppMaxMP,
                 sc, rng);
         battleDisplay.run();
 
-        ArcadeModeDisplay.showPlayAgain();
+        CharVsCharDisplay.showPlayAgain();
         if (safeReadInt(1, 2) == 1) runCharVsCharFlow();
     }
 

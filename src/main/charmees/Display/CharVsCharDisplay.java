@@ -4,7 +4,7 @@ import charmees.util.Character;
 import charmees.util.Display;
 import charmees.Display.BattleDIsplay;
 
-public class ArcadeModeDisplay {
+public class CharVsCharDisplay {
 
     public static void showArcadeScreen() {
         Display.gap();
