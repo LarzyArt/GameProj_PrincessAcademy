@@ -23,4 +23,19 @@ public class EasterEggDisplay{
         charmees.util.Display.thin();
     }
 
+    // =========================================================================
+    // PLAYER MENU
+    // =========================================================================
+
+    public static void showPlayerMenu(String playerName) {
+        charmees.util.Display.gap();
+        charmees.util.Display.thin();
+        System.out.println("  What will " + playerName + " do?");
+        charmees.util.Display.gap();
+        System.out.println("  [1] BUTTON B     - The attack button (cost 5 MP)");
+        System.out.println("  [2] BUTTON MASH  - The click of random buttons(costs 6 MP)");
+        System.out.println("  [3] TRASH TALK   - Say something brave (costs your sanity probably)");
+        charmees.util.Display.thin();
+    }
+
 }
