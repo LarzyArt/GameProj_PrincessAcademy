@@ -21,9 +21,8 @@ public class ArcadeModeDisplay {
         Display.option(0, "Back to Main Menu");
         Display.line();
     }
-}
 
-public static void showCharVsCharDescription() {
+    public static void showCharVsCharDescription() {
         Display.gap();
         Display.header("CHARACTER vs CHARACTER (Class)");
         Display.gap();
@@ -173,6 +172,4 @@ public static void showCharVsCharDescription() {
     private static int pct(int val, int max) {
         return max <= 0 ? 0 : (int) ((double) val / max * 100);
     }
-
-
-    
+}

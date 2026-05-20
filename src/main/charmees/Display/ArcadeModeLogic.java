@@ -53,17 +53,7 @@ public class ArcadeModeLogic {
         }
     }
 
-    private int safeReadInt(int min, int max) {
-        while (true) {
-            int v = Display.readInt(sc);
-            if (v == 0 && min > 0) return 0;
-            if (v >= min && v <= max) return v;
-            System.out.printf("  Please enter %d-%d.%n", min, max);
-        }
-    }
-}
-
-private void runCharVsCharFlow() {
+    private void runCharVsCharFlow() {
         ArcadeModeDisplay.showCharVsCharDescription();
         int choice = safeReadInt(1, 2);
         if (choice == 2) return;
@@ -101,7 +91,6 @@ private void runCharVsCharFlow() {
         oppMaxMP = opponent.manaPoints;
     }
 
-
     public static Character makeCharacter(int idx) {
         Object[] h = HERO_DEFS[idx];
         String key = (String) h[1];
@@ -119,3 +108,13 @@ private void runCharVsCharFlow() {
             default:        return new Shiera(n, cl, t, w, hp, mp);
         }
     }
+
+    private int safeReadInt(int min, int max) {
+        while (true) {
+            int v = Display.readInt(sc);
+            if (v == 0 && min > 0) return 0;
+            if (v >= min && v <= max) return v;
+            System.out.printf("  Please enter %d-%d.%n", min, max);
+        }
+    }
+}

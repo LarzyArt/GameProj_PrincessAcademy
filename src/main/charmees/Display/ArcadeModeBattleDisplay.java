@@ -39,9 +39,8 @@ public class ArcadeModeBattleDisplay {
         this.totalTaken = 0;
         clearLog();
     }
-}
 
-public void run() {
+    public void run() {
         Display.gap();
         Display.header("BATTLE START!");
         Display.centered(hero.getName() + "  vs  " + opponent.getName());
