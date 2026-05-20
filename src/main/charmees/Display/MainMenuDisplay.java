@@ -13,8 +13,8 @@ public class MainMenuDisplay {
     private MobNPC[] mobs;
 
     // Track visits and last choice
-    private static int visitCount = 0;
-    private static int lastChoice = 0;
+    private static int visitCount = 0; // Tracks how many times menu was opened
+    private static int lastChoice = 0; // Remembers last menu option selected
 
     public MainMenuDisplay(Scanner sc, Characters[] characters, MobNPC[] mobs) {
         this.sc = sc;
@@ -123,7 +123,7 @@ public class MainMenuDisplay {
                     System.out.println(Display.RED + "|  [!] Invalid choice. Please enter 1-4.         |" + Display.RESET);
                     System.out.println(Display.RED + border + Display.RESET);
                     Display.gap();
-                    Display.pause(sc);
+                    Display.pause(sc); // Pause so user can read error message
             }
         }
     }
