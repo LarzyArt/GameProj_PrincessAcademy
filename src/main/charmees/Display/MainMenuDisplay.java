@@ -95,6 +95,8 @@ public class MainMenuDisplay {
                 continue;
             }
 
+
+            // Route to appropriate game mode
             switch (choice) {
                 case 1:
                     lastChoice = 1;
@@ -108,7 +110,20 @@ public class MainMenuDisplay {
                     lastChoice = 3;
                     new ArcadeModeDisplay(sc).show();
                     break;
-
+                case 4:
+                    Display.gap();
+                    System.out.println(Display.GREEN + border + Display.RESET);
+                    System.out.println(Display.GREEN + "|          L████: Thanks for playing! Goodbye~          |" + Display.RESET);
+                    System.out.println(Display.GREEN + border + Display.RESET);
+                    Display.gap();
+                    break;
+                default:
+                    Display.gap();
+                    System.out.println(Display.RED + border + Display.RESET);
+                    System.out.println(Display.RED + "|  [!] Invalid choice. Please enter 1-4.         |" + Display.RESET);
+                    System.out.println(Display.RED + border + Display.RESET);
+                    Display.gap();
+                    Display.pause(sc);
             }
         }
     }
