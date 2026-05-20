@@ -38,10 +38,9 @@ public class EasterEggDisplay{
         charmees.util.Display.thin();
     }
 
-
     // =========================================================================
-// LEZLI TURN HEADER
-// =========================================================================
+    // LEZLI TURN HEADER
+    // =========================================================================
     public static void showLezliTurnHeader() {
         charmees.util.Display.gap();
         charmees.util.Display.thin();
@@ -83,5 +82,27 @@ public class EasterEggDisplay{
         charmees.util.Display.gap();
     }
 
+    // =========================================================================
+    // RESULT SCREENS
+    // =========================================================================
+    public static void showLezliWins(String playerName) {
+        charmees.util.Display.gap();
+        BattleDIsplay.pause(500);
+        charmees.util.Display.line();
+        BattleDIsplay.pause(300);
+        charmees.util.Display.centered("Lezli: L e z l i  W i n s . . .");
+        BattleDIsplay.pause(500);
+        charmees.util.Display.centered("Lezli: Heh... "+ playerName + " has fallen.");
+        charmees.util.Display.line();
+        charmees.util.Display.gap();
+    }
+
+    // =========================================================================
+    // HELPERS
+    // =========================================================================
+    private static int percent(int hp, int max){
+        if(max <= 0) return 0;
+        return (int)((double) hp / max * 100);
+    }
 
 }
