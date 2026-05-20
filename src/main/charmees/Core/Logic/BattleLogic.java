@@ -23,8 +23,9 @@ public class BattleLogic {
     private final int[] mobMaxHP;
 
     // dialogue triggers for certain HP Boss thresholds
-    private boolean boss50Trigger = false;
-    private boolean boss10Trigger = false;
+    // private boolean boss50Trigger = false;
+    // private boolean boss10Trigger = false;
+    private boolean bossWakeUpShown = false;
 
     // constructors
     public BattleLogic(Character[] characters, MobNPC[] mobs, int chapter, Scanner sc) {
@@ -62,7 +63,7 @@ public class BattleLogic {
             // show battlefield and action menu
             BattleDIsplay.showBattleField(characters, mobs, chapter, 
                 activeIdx, targetIdx, charMaxHP, 
-                mobMaxHP, turnCount);
+                mobMaxHP, turnCount, isBossLocked());
             // show different action menu if active character is Lazuli
             BattleDIsplay.showPlayerPhaseHeader(characters[activeIdx]);
             BattleDIsplay.showActionDisplay(characters[activeIdx]);
@@ -247,6 +248,14 @@ public class BattleLogic {
             if (mob.chapter != chapter || !mob.isAlive())
                 continue;
 
+            // boss doesn't attack while minions/miniboss are still alive
+            if (mob.charClass.equals("Boss") && isBossLocked()) {
+                        BattleDIsplay.log(mob.getName() + " watches silently...");
+                        BattleDIsplay.pause(900);
+                        continue;
+                    }
+            
+            // boss doesn't attack while minions/miniboss are still alive
             Character target = characters[activeIdx];
             int skill = (int) (Math.random() * mob.getSkillCount()) + 1;
             mob.useSkill(skill, target);
@@ -257,7 +266,7 @@ public class BattleLogic {
                 for (int i = 0; i < characters.length; i++) {
                     if (i != 2 && characters[i].isAlive()) {
                         BattleDIsplay.log(characters[activeIdx].getName() + " fell!  "
-                                + characters[i].getName() + " steps in!");
+                                + characters[i].getName() + " tags in!");
                         activeIdx = i;
                         break;
                     }
@@ -266,6 +275,19 @@ public class BattleLogic {
 
         if (!isBattleOngoing())
             break;
+        }
+
+        // check if boss just woke up after all others died
+        if (!bossWakeUpShown && !isBossLocked()) {
+            boolean bossExists = false;
+            for(MobNPC m : mobs)
+                if(m.chapter == chapter && m.charClass.equals("Boss") && m.isAlive())
+                    bossExists = true;
+            
+            if(bossExists){
+                bossWakeUpShown = true;
+                //tentative dialogue
+            }
         }
 
         // if the current target is dead after the enemy's turn, switch to the first alive enemy (if any alive)
@@ -317,27 +339,30 @@ public class BattleLogic {
     // =================================================
 
     private MobNPC pickEnemy() {
+        boolean locked = isBossLocked();
+
         int aliveCount = 0;
         // count alive enemies for the current chapter
-        for (MobNPC m : mobs)
-            if (m.chapter == this.chapter && m.isAlive())
+        for (MobNPC m : mobs){
+            if(m.chapter != chapter || !m.isAlive()) continue;
+            if(locked && m.charClass.equals("Boss")) continue; //skip locked boss
                 aliveCount++;
+        }
 
-        if (aliveCount == 0)
-            return null;
+        if (aliveCount == 0) return null;
 
         // if only 1 enemy alive, skip picker and return that enemy
         if (aliveCount == 1) {
             for (int i = 0; i < mobs.length; i++) {
-                if (mobs[i].chapter == chapter && mobs[i].isAlive()) {
+                if(mobs[i].chapter != chapter || !mobs[i].isAlive()) continue;
+                if(locked && mobs[i].charClass.equals("Boss")) continue;
                     targetIdx = i;
                     return mobs[i];
                 }
             }
-        }
 
         // show enemy picker if more than 1 enemy alive
-        BattleDIsplay.showEnemyPicker(mobs, chapter, mobMaxHP);
+        BattleDIsplay.showEnemyPicker(mobs, chapter, mobMaxHP, locked);
         int pick = Display.readInt(sc);
 
         // if player picks invalid number, return null to indicate cancelled action
@@ -350,8 +375,8 @@ public class BattleLogic {
         // walk through enemies and return the one that corresponds
         // to the player's pick (skip dead enemies and enemies from other chapters)
         for (int i = 0; i < mobs.length; i++) {
-            if (mobs[i].chapter != chapter || !mobs[i].isAlive())
-                continue;
+            if (mobs[i].chapter != chapter || !mobs[i].isAlive()) continue;
+            if(locked && mobs[i].charClass.equals("Boss")) continue;
             count++;
             if (count == pick) {
                 targetIdx = i;
@@ -415,6 +440,16 @@ public class BattleLogic {
         return -1; // no alive enemies
     }
 
+    // boss is locked if any non=boss enemy in this chapter is still alive
+    private boolean isBossLocked() {
+        for(MobNPC m : mobs){
+            if(m.chapter != chapter) continue;
+            if(m.charClass.equals("Boss")) continue; // skip the boss itself
+            if(m.isAlive()) return true; // minion or miniboss still alive
+        }
+
+        return false; // all cleared boss unlocked 
+    }
     
 }
 

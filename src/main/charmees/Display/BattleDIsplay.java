@@ -20,15 +20,16 @@ public class BattleDIsplay {
         int targetIdx,
         int[] charMaxHP,
         int[] mobMaxHP,
-        int turncount)
-        {
+        int turncount,
+        boolean bossLocked){
+
             // clear screen
             Display.gap();
             Display.header("CHAPTER " + chapter + " - TURN " + turncount);
             
             // enemy field section
             Display.gap();
-            showEnemyField(mobs, chapter, targetIdx, mobMaxHP);
+            showEnemyField(mobs, chapter, targetIdx, mobMaxHP, bossLocked);
 
             // active character section
             Display.gap();
@@ -45,13 +46,22 @@ public class BattleDIsplay {
       
 
         // enemy Section
-        public static void showEnemyField(MobNPC[] mobs, int chapter, int targetIdx, int[] mobMaxHP){
+        public static void showEnemyField(MobNPC[] mobs, int chapter, int targetIdx, int[] mobMaxHP, boolean bossLocked){
                 System.out.println("ENEMIES: ");
+
                 for (int i = 0; i < mobs.length; i++){
                     MobNPC m = mobs[i];
                     if (m.chapter != chapter) continue;
 
                     Display.gap();
+
+                    //show boss as dormant if still locked 
+                    if(m.charClass.equals("Boss") && bossLocked){
+                        System.out.println("  " + m.getName()
+                        + " [BOSS] -- Reach me if you can...");
+                        System.out.println("  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ???");
+                        continue;
+                    }
 
                     if(!m.isAlive()){
                         System.out.println(" " + m.getName() + " [" + m.charClass + "] - DEFEATED");
@@ -214,7 +224,7 @@ public class BattleDIsplay {
 
         // shows the enemy picker menu to select a target for an attack, with options to select any alive enemy,
         //  or cancel and return to the action display
-        public static void showEnemyPicker(MobNPC[] mobs, int chapter, int[] mobMaxHP){
+        public static void showEnemyPicker(MobNPC[] mobs, int chapter, int[] mobMaxHP,boolean bossLocked){
             Display.gap();
             System.out.println("  Choose a target:");
             Display.thin();
@@ -222,6 +232,8 @@ public class BattleDIsplay {
             int opt = 1;
             for (int i = 0; i < mobs.length; i++) {
                 if (mobs[i].chapter != chapter || !mobs[i].isAlive()) continue;
+                if(bossLocked && mobs[i].charClass.equals("Boss")) continue;
+                
                 System.out.println("  [" + opt + "] " + mobs[i].getName()
                 + " HP: " + mobs[i].healthPoints + "/" + mobMaxHP[i]
                 + " [" +mobs[i].charClass + "]");
