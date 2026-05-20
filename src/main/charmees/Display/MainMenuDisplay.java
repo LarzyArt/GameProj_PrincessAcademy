@@ -42,18 +42,14 @@ public class MainMenuDisplay {
             } else if (visitCount >= 6) {
                 System.out.println(Display.MAGENTA + "~ Legend! You're family here. ~" + Display.RESET);
             }
-        }
-    }
 
-
-    // Display game subtitle
-    Display.centered("A story-driven turn-based RPG");
+            // Display game subtitle
+            Display.centered("A story-driven turn-based RPG");
             Display.gap();
 
 
-    String border = Display.CYAN + "+" + "-".repeat(Display.WIDTH - 2) + "+" + Display.RESET;
+            String border = Display.CYAN + "+" + "-".repeat(Display.WIDTH - 2) + "+" + Display.RESET;
             System.out.println(border);
-
 
             System.out.println(Display.YELLOW + Display.BOLD + "|" + centerText("M E N U", Display.WIDTH - 2) + "|" + Display.RESET);
             System.out.println(border);
@@ -78,4 +74,42 @@ public class MainMenuDisplay {
             System.out.println("|       > L████: Bye Bye!" + padRight("", Display.WIDTH - 24) + "|");
             System.out.println(border);
 
+
+            // Show reminder tip if user has visited more than 3 times
+            if (visitCount > 3 && lastChoice != 0) {
+                String tip = "Tip: Last time you chose option " + lastChoice;
+                System.out.println(Display.DIM + "| " + tip + padRight("", Display.WIDTH - tip.length() - 3) + "|" + Display.RESET);
+                System.out.println(border);
+            }
+
+            System.out.print(Display.CYAN + "  >> Choose an option [1-4]: " + Display.RESET);
+            choice = Display.readInt(sc);
+
+            if (choice == -1) {
+                Display.gap();
+                System.out.println(Display.RED + border + Display.RESET);
+                System.out.println(Display.RED + "|  [!] Please enter a number [1-4]                 |" + Display.RESET);
+                System.out.println(Display.RED + border + Display.RESET);
+                Display.gap();
+                Display.pause(sc);
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    lastChoice = 1;
+                    new StoryMenuDisplay(sc, characters, mobs).show();
+                    break;
+                case 2:
+                    lastChoice = 2;
+                    new JournalDisplay.showJournalDisplay();
+                    break;
+                case 3:
+                    lastChoice = 3;
+                    new ArcadeModeDisplay(sc).show();
+                    break;
+
+            }
+        }
+    }
 }
