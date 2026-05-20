@@ -57,7 +57,7 @@ public class ArcadeModeBattleDisplay {
                     hero, heroMaxHP, heroMaxMP,
                     opponent, oppMaxHP, oppMaxMP);
 
-            BattleDisplay.showPlayerPhaseHeader(hero);
+            BattleDisplay.showPlayerPhaseHeader(hero.getName().charAt(0));
             playerTurn();
             hero.tickStatus();
             if (!opponent.isAlive()) break;
