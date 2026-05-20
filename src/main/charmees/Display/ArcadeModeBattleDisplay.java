@@ -2,6 +2,7 @@ package charmees.Display;
 
 import charmees.util.Character;
 import charmees.util.Display;
+import charmees.Display.BattleDIsplay;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -57,13 +58,13 @@ public class ArcadeModeBattleDisplay {
                     hero, heroMaxHP, heroMaxMP,
                     opponent, oppMaxHP, oppMaxMP);
 
-            BattleDisplay.showPlayerPhaseHeader(hero);
+            BattleDIsplay.showPlayerPhaseHeader(hero);
             playerTurn();
             hero.tickStatus();
             if (!opponent.isAlive())
                 break;
 
-            BattleDisplay.showEnemyPhaseHeader();
+            BattleDIsplay.showEnemyPhaseHeader();
             opponentTurn();
             opponent.tickStatus();
             turnCount++;

@@ -2,6 +2,7 @@ package charmees.Display;
 
 import charmees.util.Character;
 import charmees.util.Display;
+import charmees.Display.BattleDIsplay;
 
 public class ArcadeModeDisplay {
 
@@ -67,7 +68,8 @@ public class ArcadeModeDisplay {
         int displayNum = 1;
 
         for (int i = 0; i < heroDefs.length; i++) {
-            if (i == heroIdx) continue;
+            if (i == heroIdx)
+                continue;
             Object[] h = heroDefs[i];
             indexMap[mapCount++] = i;
             System.out.printf("  [%d] %-12s %-10s %-7s %-20s  %-5s %-4s%n",
@@ -90,9 +92,9 @@ public class ArcadeModeDisplay {
         System.out.println("  YOUR HERO");
         System.out.printf("  %-14s  HP: %3d/%-3d  MP: %2d/%-2d%n",
                 hero.getName(), hero.healthPoints, heroMaxHP, hero.manaPoints, heroMaxMP);
-        System.out.println("  HP [" + BattleDisplay.hpBar(hero.healthPoints, heroMaxHP, BAR)
+        System.out.println("  HP [" + BattleDIsplay.hpBar(hero.healthPoints, heroMaxHP, BAR)
                 + "] " + pct(hero.healthPoints, heroMaxHP) + "%");
-        System.out.println("  MP [" + BattleDisplay.hpBar(hero.manaPoints, heroMaxMP, BAR)
+        System.out.println("  MP [" + BattleDIsplay.hpBar(hero.manaPoints, heroMaxMP, BAR)
                 + "] " + pct(hero.manaPoints, heroMaxMP) + "%");
         if (hero.healthPoints <= heroMaxHP / 4)
             System.out.println("  !! LOW HP !!");
@@ -101,9 +103,9 @@ public class ArcadeModeDisplay {
         System.out.println("  OPPONENT");
         System.out.printf("  %-14s  HP: %3d/%-3d  MP: %2d/%-2d%n",
                 opponent.getName(), opponent.healthPoints, oppMaxHP, opponent.manaPoints, oppMaxMP);
-        System.out.println("  HP [" + BattleDisplay.hpBar(opponent.healthPoints, oppMaxHP, BAR)
+        System.out.println("  HP [" + BattleDIsplay.hpBar(opponent.healthPoints, oppMaxHP, BAR)
                 + "] " + pct(opponent.healthPoints, oppMaxHP) + "%");
-        System.out.println("  MP [" + BattleDisplay.hpBar(opponent.manaPoints, oppMaxMP, BAR)
+        System.out.println("  MP [" + BattleDIsplay.hpBar(opponent.manaPoints, oppMaxMP, BAR)
                 + "] " + pct(opponent.manaPoints, oppMaxMP) + "%");
         if (opponent.healthPoints <= oppMaxHP / 4)
             System.out.println("  !! LOW HP !!");
@@ -125,14 +127,14 @@ public class ArcadeModeDisplay {
             int turnCount, int totalDealt, int totalTaken) {
 
         Display.gap();
-        BattleDisplay.pause(400);
+        BattleDIsplay.pause(400);
         Display.line();
 
         if (hero.isAlive()) {
-            BattleDisplay.showVictoryDisplay(0);
+            BattleDIsplay.showVictoryDisplay(0);
             System.out.println("  " + hero.getName() + " defeated " + opponent.getName() + "!");
         } else {
-            BattleDisplay.showDefeatDisplay();
+            BattleDIsplay.showDefeatDisplay();
             System.out.println("  " + hero.getName() + " was defeated by " + opponent.getName() + "...");
         }
 
@@ -156,8 +158,12 @@ public class ArcadeModeDisplay {
     public static void showCombatLog(String[] combatLog, int logPointer) {
         boolean hasContent = false;
         for (String s : combatLog)
-            if (s != null && !s.isEmpty()) { hasContent = true; break; }
-        if (!hasContent) return;
+            if (s != null && !s.isEmpty()) {
+                hasContent = true;
+                break;
+            }
+        if (!hasContent)
+            return;
 
         System.out.println("  Recent Events:");
         for (int i = 0; i < combatLog.length; i++) {
