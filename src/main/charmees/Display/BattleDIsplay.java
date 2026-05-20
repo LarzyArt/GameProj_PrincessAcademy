@@ -1,13 +1,11 @@
 package charmees.Display;
 
-import charmees.Util.Character;
-import charmees.Util.MobNPC;
-import charmees.Util.Display;
-import java.util.Scanner;
+import charmees.util.Character;
+import charmees.util.MobNPC;
+import charmees.util.Display;
 
-public class BattleDisplay {
+public class BattleDIsplay {
 
-    //TODO: implement battle display
 
     //MAINLY: show the battlefield, show the active character and mob, 
     // show the HP of all characters and mobs, show the turn count, show the chapter, 
@@ -44,6 +42,8 @@ public class BattleDisplay {
             Display.thin();
         }
 
+      
+
         // enemy Section
         public static void showEnemyField(MobNPC[] mobs, int chapter, int targetIdx, int[] mobMaxHP){
                 System.out.println("ENEMIES: ");
@@ -58,9 +58,12 @@ public class BattleDisplay {
                         continue;
                     }
 
-                    String target = (i == targetIdx) ? " <-- TARGET" : "";
-                    System.out.println(" " + m.getName() + " [" + m.charClass + "]"
-                    + " HP: " + m.healthPoints + "/" + mobMaxHP[i] + target);
+                    String nameColor = (m.charClass.equals("Boss") || m.charClass.equals("Miniboss")) 
+                        ? Display.RED : Display.YELLOW;
+
+                    String target = (i == targetIdx) ? " <-- TARGET" + Display.RESET : "";
+                    System.out.println(" " + nameColor + m.getName() + " [" + m.charClass + "]"
+                    + Display.RESET + " HP: " + m.healthPoints + "/" + mobMaxHP[i] + target);
                     System.out.println(" " + hpBar(m.healthPoints, mobMaxHP[i], 30)
                     + " " + percent(m.healthPoints,mobMaxHP[i]) + "%");
                 }
@@ -70,7 +73,7 @@ public class BattleDisplay {
             public static void showActiveChar(Character c, int maxHP){
                 System.out.println("ACTIVE CHARACTER: ");
                 Display.thin();
-                System.out.println(" " + c.getName() + " " 
+                System.out.println(" " + Display.CYAN + c.getName() + " " 
                 + "   HP: " + c.healthPoints + "/" + maxHP
                 + "   MP: " + c.manaPoints + "/" + c.manaPoints);
 
@@ -110,13 +113,12 @@ public class BattleDisplay {
             System.out.println("What will " + actor.getName() + "do?");
             Display.gap();
 
-            System.out.println("  [1] SKILL"); // skill option(skill 1 or skill 2) will be handled in BattleLogic based on the character
-            System.out.println("  [2] ULTIMATE"); // uses signature move (skill 3) will be handled in BattleLogic based on the character
-            System.out.println("  [3] SWITCH"); // switch to another character in the bench
-            System.out.println("  [4] LAZULI'S BLESSING"); // heals characters based on lazuli's skills, will be handled in BattleLogic based on the character 
+            System.out.println(Display.YELLOW + "  [1] SKILL"); // skill option(skill 1 or skill 2) will be handled in BattleLogic based on the character
+            System.out.println(Display.RED + "  [2] ULTIMATE"); // uses signature move (skill 3) will be handled in BattleLogic based on the character
+            System.out.println(Display.MAGENTA + "  [3] SWITCH"); // switch to another character in the bench
+            System.out.println(Display.YELLOW + "  [4] LAZULI'S BLESSING"); // heals characters based on lazuli's skills, will be handled in BattleLogic based on the character 
 
             Display.thin();
-            System.out.println("  > ");
         }
 
         // ================================================
@@ -135,7 +137,6 @@ public class BattleDisplay {
             }
             System.out.println("  [3] Cancel");
             Display.thin();
-            System.out.println("  > ");
         }
 
         // shows the ultimate confirmation menu for the active character,
@@ -190,7 +191,6 @@ public class BattleDisplay {
             }
             System.out.println("  [0] Cancel");
             Display.thin();
-            System.out.println("  > ");
         }
 
         // shows the ally picker menu to select a target for healing, with options to select any alive character,
@@ -210,7 +210,6 @@ public class BattleDisplay {
                 
             }
             Display.thin();
-            System.out.println("  > ");
         }
 
         // shows the enemy picker menu to select a target for an attack, with options to select any alive enemy,
@@ -229,7 +228,6 @@ public class BattleDisplay {
                 opt++;
             }
             Display.thin();
-            System.out.println("  > ");
         }
 
         //=================================================
@@ -240,7 +238,7 @@ public class BattleDisplay {
             pause(500);
             Display.line();
             pause(300);
-            Display.centered("L████: VICTORY!");
+            Display.centered(Display.GREEN + Display.BOLD +"L████: VICTORY!" + Display.RESET);
             pause(300);
             Display.centered("L████: Chapter " + chapter + " Cleared!");
             pause(500);
@@ -260,7 +258,7 @@ public class BattleDisplay {
             pause(500);
             Display.line();
             pause(300);
-            Display.centered("L████: DEFEAT...");
+            Display.centered(Display.RED + Display.BOLD + "L████: DEFEAT..."  + Display.RESET);
             pause(500);
             int rng =(int)(Math.random() * 3);
                 if(rng == 0){
@@ -276,13 +274,13 @@ public class BattleDisplay {
         public static void showEnemyPhaseHeader(){
             Display.gap();
             Display.thin();
-            System.out.println("-- ENEMY PHASE --");
+            System.out.println(Display.RED + "-- ENEMY PHASE --" + Display.RESET);
             Display.thin();
         }
         public static void showPlayerPhaseHeader(Character actor){
             Display.gap();
             Display.thin();
-            System.out.println("  -- " + actor.getName() + "'s Turn --");
+            System.out.println(Display.CYAN + "  -- " + actor.getName() + "'s Turn --" + Display.RESET);
             Display.thin();
         }
 
@@ -299,7 +297,12 @@ public class BattleDisplay {
             if (max <= 0) return "░".repeat(width);
             int filled = (int)((double) hp / max * width); // calculate filled portion
             filled = Math.max(0, Math.min(width, filled)); // ensure within bounds
-            return "█".repeat(filled) + "░".repeat(width - filled); // create bar string
+
+            double ratio = (double) hp / max;
+            String color = ratio > 0.5 ? Display.GREEN : ratio > 0.25 ? Display.YELLOW
+                            : Display.RED;
+
+            return color + "█".repeat(filled) + "░".repeat(width - filled); // create bar string
         }
 
         public static void log(String msg){
