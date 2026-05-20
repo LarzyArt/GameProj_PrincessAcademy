@@ -127,4 +127,18 @@ public class MainMenuDisplay {
             }
         }
     }
+
+    //Centers text
+    private String centerText(String text, int width) {
+        int spaces = (width - text.length()) / 2;
+        if (spaces < 0) spaces = 0;
+        return " ".repeat(spaces) + text + " ".repeat(width - spaces - text.length());
+    }
+
+    //Adds spaces to the right of text
+    private String padRight(String text, int length) {
+        if (length < 0) length = 0;
+        return text + " ".repeat(length);
+    }
+
 }
