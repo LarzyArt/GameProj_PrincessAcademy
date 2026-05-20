@@ -2,24 +2,25 @@ package charmees.Display;
 
 import java.util.Scanner;
 
-import charmees.Util.Characters;
-import charmees.Util.Display;
-import charmees.Util.MobNPC;
+import charmees.util.Character;
+import charmees.util.Display;
+import charmees.util.MobNPC;
 
 public class MainMenuDisplay {
 
     private Scanner sc;
-    private Characters[] characters;
+    private Character[] characters;
     private MobNPC[] mobs;
 
     // Track visits and last choice
     private static int visitCount = 0; // Tracks how many times menu was opened
     private static int lastChoice = 0; // Remembers last menu option selected
 
-    public MainMenuDisplay(Scanner sc, Characters[] characters, MobNPC[] mobs) {
+    public MainMenuDisplay(Scanner sc, Character[] characters, MobNPC[] mobs) {
         this.sc = sc;
         this.characters = characters;
         this.mobs = mobs;
+
         visitCount++;
     }
 
@@ -91,24 +92,25 @@ public class MainMenuDisplay {
                 System.out.println(Display.RED + "|  [!] Please enter a number [1-4]                 |" + Display.RESET);
                 System.out.println(Display.RED + border + Display.RESET);
                 Display.gap();
-                Display.pause(sc);
+                BattleDIsplay.pause(400);
                 continue;
             }
+
 
 
             // Route to appropriate game mode
             switch (choice) {
                 case 1:
                     lastChoice = 1;
-                    new StoryMenuDisplay(sc, characters, mobs).show();
+                    //new StoryMenuDisplay(sc, characters, mobs).show();
                     break;
                 case 2:
                     lastChoice = 2;
-                    new JournalDisplay.showJournalDisplay();
+                    //new JournalDisplay().showJournalDisplay();
                     break;
                 case 3:
                     lastChoice = 3;
-                    new ArcadeModeDisplay(sc).show();
+                    //new ArcadeModeDisplay(sc).show();
                     break;
                 case 4:
                     Display.gap();
@@ -123,7 +125,7 @@ public class MainMenuDisplay {
                     System.out.println(Display.RED + "|  [!] Invalid choice. Please enter 1-4.         |" + Display.RESET);
                     System.out.println(Display.RED + border + Display.RESET);
                     Display.gap();
-                    Display.pause(sc); // Pause so user can read error message
+                    BattleDIsplay.pause(400); // Pause so user can read error message
             }
         }
     }
