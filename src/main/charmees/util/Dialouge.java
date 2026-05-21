@@ -193,6 +193,28 @@ public class Dialouge {
         };
     }
 
+    public static String[][] getChapter3Boss50() {
+        return new String[][]{
+                {"Princess Twinkle", "You hurt me?! HOW?!"},
+                {"Lazuli", "Your power comes from stolen lives. It's fake."},
+                {"Princess Twinkle", "I did what I had to! I won't die!"}
+        };
+    }
+
+    public static String[][] getChapter3Boss25() {
+        return new String[][]{
+                {"Princess Twinkle", "My power... it's fading... NO!"},
+                {"Giantha", "Your spell is breaking. The souls are fighting back."},
+                {"Princess Twinkle", "I was nothing before! I won't go back to nothing!"}
+        };
+    }
+
+    public static String[][] getChapter3Boss10() {
+        return new String[][]{
+                {"Princess Twinkle", "PLEASE! I'll give you anything! Power! Immortality!"},
+                {"Lazuli", "Being scared of death doesn't give you the right to kill."}
+        };
+    }
 
 
     // =========================================================================
