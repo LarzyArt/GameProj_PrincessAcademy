@@ -117,6 +117,16 @@ public class PCvPCBattleDisplay {
         Display.thin();
     }
 
+    public static void showCharacterSelect(String label, String[] names, String[] classes) {
+        Display.gap();
+        Display.header(label);
+
+        for (int i = 0; i < names.length; i++) {
+            System.out.printf("  [%d] %-16s [%s]%n", i + 1, names[i], classes[i]);
+        }
+
+        Display.thin();
+    }
 }
 
 
