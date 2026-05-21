@@ -4,9 +4,6 @@ import charmees.util.Character;
 import charmees.util.Display;
 
 public class PVCBattleDisplay {
-    public static void main(String[] args) {
-        PVCBattleDisplay display = new PVCBattleDisplay();
-    }
     // =========================================================
     //  SCREEN HEADER
     // =========================================================
@@ -341,43 +338,28 @@ public class PVCBattleDisplay {
     }
 
     // =========================================================
-    //  HELPERS  (mirrors BattleDIsplay conventions)
+    //  HELPERS  — delegates to BattleDIsplay to avoid duplication
     // =========================================================
 
-    /**
-     * Generates a filled / empty HP bar using block characters.
-     * Full-health = green █, middle = yellow, critical = red.
-     */
+    /** HP bar — delegates to BattleDIsplay.hpBar(). */
     public static String hpBar(int hp, int max, int width) {
-        if (max <= 0) return Display.DIM + "░".repeat(width) + Display.RESET;
+        return BattleDIsplay.hpBar(hp, max, width);
+    }
 
-        int filled = (int)((double) hp / max * width);
-        filled = Math.max(0, Math.min(width, filled));
+    /** Integer percentage of hp/max — delegates to BattleDIsplay. */
+    public static int percent(int hp, int max) {
+        if (max <= 0) return 0;
+        return Math.max(0, Math.min(100, (int)((double) hp / max * 100)));
+    }
 
-        double ratio = (double) hp / max;
-        String colour = ratio > 0.5 ? Display.GREEN
-                : ratio > 0.25 ? Display.YELLOW
-                : Display.RED;
-
-        return colour + "█".repeat(filled) + Display.DIM
-                + "░".repeat(width - filled) + Display.RESET;
+    /** Thread.sleep wrapper — delegates to BattleDIsplay.pause(). */
+    public static void pause(int ms) {
+        BattleDIsplay.pause(ms);
     }
 
     /** Returns an ANSI colour based on remaining HP percentage. */
     private static String hpColour(int hp, int max) {
         double r = max > 0 ? (double) hp / max : 0;
         return r > 0.5 ? Display.GREEN : r > 0.25 ? Display.YELLOW : Display.RED;
-    }
-
-    /** Integer percentage of hp/max, clamped to [0, 100]. */
-    public static int percent(int hp, int max) {
-        if (max <= 0) return 0;
-        return Math.max(0, Math.min(100, (int)((double) hp / max * 100)));
-    }
-
-    /** Thread.sleep wrapper — same signature as BattleDIsplay.pause(). */
-    public static void pause(int ms) {
-        try { Thread.sleep(ms); }
-        catch (InterruptedException e) { Thread.currentThread().interrupt(); }
     }
 }
