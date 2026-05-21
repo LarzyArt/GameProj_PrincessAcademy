@@ -79,6 +79,21 @@ public class PCvPCBattleDisplay {
         Display.thin();
     }
 
+    public static void showSkillMenu(Character actor) {
+        String[] skills = actor.getSkillList();
+
+        Display.gap();
+        System.out.println(Display.BOLD + "  " + actor.getName() + " - Choose a Skill" + Display.RESET);
+        Display.thin();
+
+        int limit = Math.min(2, skills.length);
+        for (int i = 0; i < limit; i++) {
+            System.out.println("  [" + (i + 1) + "] " + skills[i]);
+        }
+
+        System.out.println("  [0] Cancel");
+        Display.thin();
+    }
 
 }
 
