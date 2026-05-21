@@ -26,14 +26,14 @@ public class ArcadeModeDisplay {
                 CharVsCharLogic charVsChar = new CharVsCharLogic(sc);
                 charVsChar.run();
             } else if (mode == 2) {
-                //PVCBattleLogic playVsChar =
-                
+                PVCBattleLogic.startArcade(sc, players, opponents);
             } else if (mode == 3) {
                 EasterEggArcadeLogic easterEgg = new EasterEggArcadeLogic(sc);
                 easterEgg.run();
             }
         }
     }
+
 
     public static void showArcadeScreen() {
         Display.gap();
