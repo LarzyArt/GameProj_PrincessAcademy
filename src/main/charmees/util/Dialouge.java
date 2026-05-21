@@ -103,6 +103,7 @@ public class Dialouge {
     }
 
 
+
     // =========================================================================
     // CHAPTER 1: The Sea at Dusk
     // =========================================================================
@@ -140,6 +141,7 @@ public class Dialouge {
     }
 
 
+    
     // =========================================================================
     // CHAPTER 2: L'arbre de Vie Garden
     // =========================================================================
@@ -237,8 +239,29 @@ public class Dialouge {
     // =========================================================================
     // EPILOGUE
     // =========================================================================
-
-
+    public static String[][] getEpilogue() {
+        return new String[][]{
+                {"L████", "Audry fell. No scream. Just silence."},
+                {"L████", "Lazuli screamed. Lynzi froze."},
+                {"L████", "Something inside Lynzi broke."},
+                {"L████", "She attacked Twinkle again and again until she stopped moving."},
+                {"L████", "The others didn't see justice. They saw murder."},
+                {"L████", "They ran. Lynzi chased them."},
+                {"L████", "She was scared. If they talked, everyone would call her a killer."},
+                {"L████", "One by one, in the dark, they fell."},
+                {"L████", "Only Lazuli got away. Bleeding. Broken. Alone."},
+                {"L████", "When morning came, the survivors lied."},
+                {"L████", "They said Lazuli was the murderer."},
+                {"L████", "She ran into the forest. And disappeared."},
+                {"", ""},
+                {"", "✦ ✦ ✦"},
+                {"", ""},
+                {"L████", "The air grows cold. Something feels different..."},
+                {"", ""},
+                {"L████", "Oh... a child still has a spark..."},
+                {"L████", "This should be fun..."}
+        };
+    }
 
 
 
