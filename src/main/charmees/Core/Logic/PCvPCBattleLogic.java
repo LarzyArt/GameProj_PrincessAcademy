@@ -33,8 +33,14 @@ public class PCvPCBattleLogic {
         this.oppBaseHP = opponent.healthPoints;
         this.oppBaseMP = opponent.manaPoints;
     }
-
-
+    private void resetBattle() {
+        player.healthPoints = playerBaseHP;
+        player.manaPoints = playerBaseMP;
+        opponent.healthPoints = oppBaseHP;
+        opponent.manaPoints = oppBaseMP;
+        turnCount = 1;
+        playerRetired = false;
+    }
 }
 
 
