@@ -24,8 +24,8 @@ public class Shiera extends Character {
                     for (int i = 0; i < hits; i++) {
                         damage += (int)(Math.random() * 10) + 1;
                     }
-                    target.takedamage(damage);
                     System.out.println(name + " used Stone Spikes! Hits " + hits + " times for " + damage + " damage.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana!");
                 break;
             case 2: // Earth Wall
@@ -36,17 +36,17 @@ public class Shiera extends Character {
                     for (int i = 0; i < hits; i++) {
                         damage += (int)(Math.random() * 10) + 1;
                     }
-                    target.takedamage(damage);
                     System.out.println(name + " used Earth Wall! Hits " + hits + " times for " + damage + " damage.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana!");
                 break;
             case 3: // Iron Maiden
                 if (manaPoints >= 10) {
                     manaPoints -= 10;
                     damage = 50;
-                    target.takedamage(damage);
                     System.out.println(name + " used Ultimate, Iron Maiden! Deals " + damage + " damage.");
-                    } else System.out.println(name + " doesn't have enough mana!");
+                    target.takedamage(damage);
+                } else System.out.println(name + " doesn't have enough mana!");
                 break;
         }
     }

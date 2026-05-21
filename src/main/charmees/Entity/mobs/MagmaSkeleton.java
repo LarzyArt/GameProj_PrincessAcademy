@@ -19,13 +19,13 @@ public class MagmaSkeleton extends MobNPC {
         switch (skill) {
             case 1: // Fire Bone
                 damage = (int)(Math.random() * 6) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Fire Bone! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
             case 2: // Lava Strike
                 damage = (int)(Math.random() * 11) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Lava Strike! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
         }
     }

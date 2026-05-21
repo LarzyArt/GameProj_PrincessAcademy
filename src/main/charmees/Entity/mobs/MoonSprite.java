@@ -19,13 +19,13 @@ public class MoonSprite extends MobNPC {
         switch (skill) {
             case 1: // Lunar Beam
                 damage = (int)(Math.random() * 6) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Lunar Beam! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
             case 2: // Moonlight Burst
                 damage = (int)(Math.random() * 11) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Moonlight Burst! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
         }
     }

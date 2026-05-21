@@ -19,13 +19,13 @@ public class PrincessPuppet extends MobNPC {
         switch (skill) {
             case 1: // Puppet Slap
                 damage = (int)(Math.random() * 6) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Puppet Slap! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
             case 2: // Royal Lash
                 damage = (int)(Math.random() * 11) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Royal Lash! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
         }
     }

@@ -20,23 +20,23 @@ public class Lynzi extends Character {
         switch (skill) {
             case 1: // Majestic Kick
                 damage = (int)(Math.random() * 21) + 20;
-                target.takedamage(damage);
                 System.out.println(name + " used Majestic Kick! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
             case 2: // Galactic Fist
                 if (manaPoints >= 2) {
                     manaPoints -= 2;
                     damage = (int)(Math.random() * 36) + 20;
-                    target.takedamage(damage);
                     System.out.println(name + " used Galactic Fist! Deals " + damage + " damage.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana!");
                 break;
             case 3: // Meteoric Smash
                 if (manaPoints >= 10) {
                     manaPoints -= 10;
                     damage = (int)(Math.random() * 151) + 100;
-                    target.takedamage(damage);
                     System.out.println(name + " used Ultimate, Meteoric Smash! Deals " + damage + " damage and is exhausted for 2 turns.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana!");
                 break;
         }

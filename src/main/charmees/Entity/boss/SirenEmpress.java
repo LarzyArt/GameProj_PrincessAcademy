@@ -19,18 +19,18 @@ public class SirenEmpress extends MobNPC {
         switch (skill) {
             case 1: // Water Whip
                 damage = (int)(Math.random() * 11) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Water Whip! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
             case 2: // Tidal Wave
                 damage = (int)(Math.random() * 21) + 10;
-                target.takedamage(damage);
                 System.out.println(name + " used Tidal Wave! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
             case 3: // Abyssal Crush
                 damage = (int)(Math.random() * 41) + 20;
-                target.takedamage(damage);
                 System.out.println(name + " used Abyssal Crush! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
         }
     }

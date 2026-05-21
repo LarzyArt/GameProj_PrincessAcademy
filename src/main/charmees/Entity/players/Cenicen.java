@@ -21,8 +21,8 @@ public class Cenicen extends Character {
                 if (manaPoints >= 3) {
                     manaPoints -= 3;
                     damage = (int)(Math.random() * 21) + 20;
-                    target.takedamage(damage);
                     System.out.println(name + " used Stan Attacc! Throws lightsticks with unwavering stan energy! Deals " + damage + " damage.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana! (Literally can't even right now)");
                 break;
             case 2: // Bias Wrecker
@@ -33,16 +33,16 @@ public class Cenicen extends Character {
                     for (int i = 0; i < hits; i++) {
                         damage += (int)(Math.random() * 13) + 7;
                     }
-                    target.takedamage(damage);
                     System.out.println(name + " used Bias Wrecker! Hits " + hits + " time(s) for " + damage + " damage. Your bias is shaking.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana! Not even a comeback stage can save this.");
                 break;
             case 3: // World Tour Finale
                 if (manaPoints >= 15) {
                     manaPoints -= 15;
                     damage = 175;
-                    target.takedamage(damage);
                     System.out.println(name + " used Ultimate, World Tour Finale! Closes the show with a devastating encore — " + damage + " fixed damage. No refunds.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana! The world tour got cancelled.");
                 break;
         }

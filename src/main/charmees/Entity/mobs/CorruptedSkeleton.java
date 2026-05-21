@@ -19,13 +19,13 @@ public class CorruptedSkeleton extends MobNPC {
         switch (skill) {
             case 1: // Bone Strike
                 damage = (int)(Math.random() * 6) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Bone Strike! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
             case 2: // Skull Bash
                 damage = (int)(Math.random() * 11) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Skull Bash! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
         }
     }

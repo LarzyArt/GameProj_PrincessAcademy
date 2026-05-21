@@ -12,6 +12,7 @@ public class StoryModeDisplay {
     static boolean Chap3 = false;
     static boolean Epilogue = false;
 
+    //Secret Code to unlock all the chapters
     static final String SECRET = "LEZLI.BOOK.ZIP";
 
     public static void startGame() {

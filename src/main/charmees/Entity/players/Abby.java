@@ -21,8 +21,8 @@ public class Abby extends Character {
                 if (manaPoints >= 2) {
                     manaPoints -= 2;
                     damage = (int)(Math.random() * 9) + 6;
-                    target.takedamage(damage);
                     System.out.println(name + " used Wrist Grab Dash! Grabs the enemy dramatically and pulls them into a wall — because personal space is a season 2 concept. Deals " + damage + " damage.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana! The FL just walked away and took all motivation with her.");
                 break;
             case 2: // Second Lead Syndrome
@@ -33,16 +33,16 @@ public class Abby extends Character {
                     for (int i = 0; i < hits; i++) {
                         damage += (int)(Math.random() * 10) + 7;
                     }
-                    target.takedamage(damage);
                     System.out.println(name + " used Second Lead Syndrome! Hits " + hits + " time(s) for " + damage + " damage. Did everything right, still lost to the male lead with better hair.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana! Too busy staring longingly out of a cafe window.");
                 break;
             case 3: // Makjang Finale
                 if (manaPoints >= 12) {
                     manaPoints -= 12;
                     damage = (int)(Math.random() * 31) + 90;
-                    target.takedamage(damage);
                     System.out.println(name + " used Ultimate, Makjang Finale! Reveals a long-lost twin, fakes amnesia, and delivers a speech in the pouring rain — " + damage + " damage. The OST is playing. You're already crying.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana! The drama got cut from 16 episodes to 12. Budget issues.");
                 break;
         }

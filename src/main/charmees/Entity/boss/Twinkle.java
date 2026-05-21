@@ -20,8 +20,8 @@ public class Twinkle extends MobNPC {
         switch (skill) {
             case 1: // Puppet Slash
                     damage = (int)(Math.random() * 26) + 5;
-                    target.takedamage(damage);
                     System.out.println(name + " used Puppet Slash! Deals " + damage + " damage.");
+                    target.takedamage(damage);
                     break;
             case 2: // Lazer Devastation
                     int hits = (int)(Math.random() * 2) + 1;
@@ -29,13 +29,13 @@ public class Twinkle extends MobNPC {
                     for (int i = 0; i < hits; i++) {
                         damage += 20;
                     }
-                    target.takedamage(damage);
                     System.out.println(name + " used Lazer Devastation! Hits " + hits + " times for " + damage + " damage.");
+                    target.takedamage(damage);
                 break;
             case 3: // Corruption
                     damage = 60;
-                    target.takedamage(damage);
                     System.out.println(name + " used Corruption! Deals " + damage + " fixed damage.");
+                    target.takedamage(damage);
                 break;
         }
     }

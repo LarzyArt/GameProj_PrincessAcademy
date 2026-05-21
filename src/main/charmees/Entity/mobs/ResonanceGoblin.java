@@ -19,13 +19,13 @@ public class ResonanceGoblin extends MobNPC {
         switch (skill) {
             case 1: // Echo Strike
                 damage = (int)(Math.random() * 6) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Echo Strike! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
             case 2: // Sonic Boom
                 damage = (int)(Math.random() * 11) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Sonic Boom! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
         }
     }

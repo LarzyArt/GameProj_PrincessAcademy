@@ -21,8 +21,8 @@ public class Mewods extends Character {
                 if (manaPoints >= 2) {
                     manaPoints -= 2;
                     damage = (int)(Math.random() * 10) + 7;
-                    target.takedamage(damage);
                     System.out.println(name + " used Unrated Warmup! Fires a shot with the confidence of someone who definitely belongs in this rank. Deals " + damage + " damage.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana! Can't buy abilities — spent all creds on the Vandal skin.");
                 break;
             case 2: // Spike Rush Panic
@@ -33,16 +33,16 @@ public class Mewods extends Character {
                     for (int i = 0; i < hits; i++) {
                         damage += (int)(Math.random() * 10) + 6;
                     }
-                    target.takedamage(damage);
                     System.out.println(name + " used Spike Rush Panic! Sprays " + hits + " shot(s) wildly for " + damage + " damage. No crosshair placement, just vibes and prayers.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana! Saving for next round like a true eco warrior.");
                 break;
             case 3: // Ace or Throw
                 if (manaPoints >= 11) {
                     manaPoints -= 11;
                     damage = (int)(Math.random() * 31) + 80;
-                    target.takedamage(damage);
                     System.out.println(name + " used Ultimate, Ace or Throw! Activates ult at full charge and somehow clutches — " + damage + " damage. The team said nothing. They know.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana! Ult isn't up. Of course it isn't. It never is when you need it.");
                 break;
         }

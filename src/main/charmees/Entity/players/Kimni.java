@@ -21,8 +21,8 @@ public class Kimni extends Character {
                 if (manaPoints >= 2) {
                     manaPoints -= 2;
                     damage = (int)(Math.random() * 11) + 10;
-                    target.takedamage(damage);
                     System.out.println(name + " used Speed Lines! Dashes across the panel so fast the background can't keep up! Deals " + damage + " damage.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana! Even the author won't give you a power-up arc.");
                 break;
             case 2: // Plot Armor Piercer
@@ -33,16 +33,16 @@ public class Kimni extends Character {
                     for (int i = 0; i < hits; i++) {
                         damage += (int)(Math.random() * 8) + 5;
                     }
-                    target.takedamage(damage);
                     System.out.println(name + " used Plot Armor Piercer! Hits " + hits + " time(s) for " + damage + " damage. Sorry, your plot armor only covers the protagonist.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana! The chapter got delayed. Come back next week.");
                 break;
             case 3: // Final Chapter Drop
                 if (manaPoints >= 9) {
                     manaPoints -= 9;
                     damage = (int)(Math.random() * 21) + 90;
-                    target.takedamage(damage);
                     System.out.println(name + " used Ultimate, Final Chapter Drop! Slams a 500-chapter manga omnibus directly onto the enemy — " + damage + " damage. The series is complete. You are not.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana! The manga went on hiatus. Classic.");
                 break;
         }

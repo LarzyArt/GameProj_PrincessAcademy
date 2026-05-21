@@ -19,13 +19,13 @@ public class WaterBlob extends MobNPC {
         switch (skill) {
             case 1: // Water Splash
                 damage = (int)(Math.random() * 6) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Water Splash! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
             case 2: // Aqua Burst
                 damage = (int)(Math.random() * 11) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Aqua Burst! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
         }
     }

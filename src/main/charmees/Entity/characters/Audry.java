@@ -21,8 +21,8 @@ public class Audry extends Character {
                 if (manaPoints >= 3) {
                     manaPoints -= 3;
                     damage = (int)(Math.random() * 21) + 20;
-                    target.takedamage(damage);
                     System.out.println(name + " used Slime Bounce! Deals " + damage + " damage.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana!");
                 break;
             case 2: // Acid Shot
@@ -33,16 +33,16 @@ public class Audry extends Character {
                     for (int i = 0; i < hits; i++) {
                         damage += (int)(Math.random() * 11) + 5;
                     }
-                    target.takedamage(damage);
                     System.out.println(name + " used Acid Shot! Hits " + hits + " times for " + damage + " damage.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana!");
                 break;
             case 3: // Beyond the Abyss
                 if (manaPoints >= 15) {
                     manaPoints -= 15;
                     damage = 150;
-                    target.takedamage(damage);
                     System.out.println(name + " used Ultimate, Beyond the Abyss! Deals " + damage + " fixed damage.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana!");
                 break;
         }

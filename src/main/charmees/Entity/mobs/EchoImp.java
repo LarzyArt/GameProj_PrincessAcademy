@@ -19,13 +19,13 @@ public class EchoImp extends MobNPC {
         switch (skill) {
             case 1: // Echo Scream
                 damage = (int)(Math.random() * 6) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Echo Scream! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
             case 2: // Sonic Wave
                 damage = (int)(Math.random() * 11) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Sonic Wave! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
         }
     }

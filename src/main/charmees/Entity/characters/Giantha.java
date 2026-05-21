@@ -19,23 +19,24 @@ public class Giantha extends Character {
         switch (skill) {
             case 1: // Giant Punch
                 damage = (int)(Math.random() * 6) + 5;
-                target.takedamage(damage);
                 System.out.println(name + " used Giant Punch! Deals " + damage + " damage.");
+                target.takedamage(damage);
                 break;
             case 2: // Giant's Roar
                 if (manaPoints >= 1) {
                     manaPoints -= 1;
                     damage = (int)(Math.random() * 6) + 10;
-                    target.takedamage(damage);
                     System.out.println(name + " used Giant Roar! Deals " + damage + " damage.");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana!");
                 break;
             case 3: // Club Smash
                 if (manaPoints >= 9) {
                     manaPoints -= 9;
                     damage = (int)(Math.random() * 21) + 20;
-                    target.takedamage(damage);
+
                     System.out.println(name + " used Ultimate, Club Smash! Deals " + damage + " damage");
+                    target.takedamage(damage);
                 } else System.out.println(name + " doesn't have enough mana!");
                 break;
         }
