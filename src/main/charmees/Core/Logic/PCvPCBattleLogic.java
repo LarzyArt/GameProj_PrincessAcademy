@@ -34,6 +34,41 @@ public class PCvPCBattleLogic {
         this.oppBaseMP = opponent.manaPoints;
     }
 
+    public void run() {
+        resetBattle();
+
+        PCvPCBattleDisplay.showTrialIntro();
+        PCvPCBattleDisplay.showMatchUp(player.getName(), opponent.getName());
+        Display.pressEnter(sc);
+
+        while (isBattleOngoing()) {
+            PCvPCBattleDisplay.showBattleField(player, playerBaseHP, opponent, oppBaseHP, turnCount);
+
+            PCvPCBattleDisplay.showPlayerPhaseHeader(player);
+            PCvPCBattleDisplay.showActionMenu(player);
+            int action = Display.readInt(sc);
+
+            switch (action) {
+                case 1 -> playerSkill();
+                case 2 -> playerUltimate();
+                case 3 -> playerRecover();
+                case 4 -> playerRetire();
+                default -> PCvPCBattleDisplay.log("Invalid choice. Enter 1 to 4.");
+            }
+
+            if (!isBattleOngoing()) {
+                break;
+            }
+
+            if (!playerRetired) {
+                cpuTurn();
+            }
+
+            turnCount++;
+        }
+
+        resolveBattle();
+    }
 
     private void resetBattle() {
         player.healthPoints = playerBaseHP;

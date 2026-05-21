@@ -16,9 +16,6 @@ public class PCvPCBattleDisplay {
         Display.thin();
     }
 
-    public static void title() {
-        showTrialIntro();
-    }
 
     public static void showMatchUp(String playerName, String opponentName) {
         Display.gap();
@@ -79,9 +76,6 @@ public class PCvPCBattleDisplay {
         Display.thin();
     }
 
-    public static void actionMenu(Character player) {
-        showActionMenu(player);
-    }
 
     public static void showSkillMenu(Character actor) {
         String[] skills = actor.getSkillList();
@@ -153,10 +147,6 @@ public class PCvPCBattleDisplay {
         Display.line();
     }
 
-    public static void win(String name) {
-        Display.gap();
-        Display.centered(Display.YELLOW + name + " wins the Trial Battle!" + Display.RESET);
-    }
 
     public static void skipped() {
         System.out.println(Display.CYAN + "\nTrial Battle skipped.\n" + Display.RESET);
