@@ -223,5 +223,20 @@ public class PCvPCBattleLogic {
         new PCvPCBattleLogic(allFighters[playerChoice - 1], allFighters[oppChoice - 1], sc).run();
     }
 
+    private static Character[] createRoster() {
+        return new Character[]{
+                new charmees.Entity.players.Abby("Abby", "Drama Queen", "SL Energy", "Lightstick", 160, 30),
+                new charmees.Entity.players.Cenicen("Cenicen", "Stan", "Idol Energy", "Lightstick", 150, 30),
+                new charmees.Entity.players.Kimni("Kimni", "Caster", "Magic", "Wand", 140, 40),
+                new charmees.Entity.players.Larzy("Larzy", "Knight", "Physical", "Spear", 180, 20),
+                new charmees.Entity.players.Mewods("Mewods", "Rogue", "Shadow", "Dagger", 145, 35),
+
+                new charmees.Entity.characters.Audry("Audry", "Slime Mage", "Magic", "Staff", 150, 30),
+                new charmees.Entity.characters.Giantha("Giantha", "Giant", "Physical", "Club", 200, 15),
+                new charmees.Entity.characters.Lazuli("Lazuli", "Healer", "Light", "Lute", 130, 45),
+                new charmees.Entity.characters.Lynzi("Lynzi", "Duelist", "Wind", "Rapier", 155, 30),
+                new charmees.Entity.characters.Shiera("Shiera", "Paladin", "Holy", "Shield", 175, 25)
+        };
+    }
 }
 
