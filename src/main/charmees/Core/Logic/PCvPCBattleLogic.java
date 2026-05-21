@@ -33,6 +33,11 @@ public class PCvPCBattleLogic {
         this.oppBaseHP = opponent.healthPoints;
         this.oppBaseMP = opponent.manaPoints;
     }
+
+
+
+
+
     private void resetBattle() {
         player.healthPoints = playerBaseHP;
         player.manaPoints = playerBaseMP;
@@ -41,6 +46,42 @@ public class PCvPCBattleLogic {
         turnCount = 1;
         playerRetired = false;
     }
+
+    private boolean isBattleOngoing() {
+        return player.isAlive() && opponent.isAlive() && !playerRetired;
+    }
+
+    private void playerSkill() {
+        PCvPCBattleDisplay.showSkillMenu(player);
+        int pick = Display.readInt(sc);
+
+        int limit = Math.min(2, player.getSkillList().length);
+        if (pick < 1 || pick > limit) {
+            PCvPCBattleDisplay.log("Cancelled.");
+            return;
+        }
+
+        executeSkill(player, opponent, pick, false);
+    }
+
+    private void playerUltimate() {
+        if (player.getSkillList().length < 3) {
+            PCvPCBattleDisplay.log(player.getName() + " has no ultimate move.");
+            return;
+        }
+
+        PCvPCBattleDisplay.showUltimateConfirm(player);
+        int confirm = Display.readInt(sc);
+
+        if (confirm != 1) {
+            PCvPCBattleDisplay.log("Cancelled.");
+            return;
+        }
+
+        executeSkill(player, opponent, 3, false);
+    }
+
+
 }
 
 
