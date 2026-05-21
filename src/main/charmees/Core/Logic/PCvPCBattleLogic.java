@@ -71,4 +71,10 @@ public class PCvPCBattleLogic {
         }
     }
 
+    private static void basicAttack(Fighter user, Fighter target) {
+        int damage = 10 + random.nextInt(11);
+        target.takeDamage(damage);
+        System.out.println(user.name + " attacks " + target.name + " for " + damage + " damage.");
+    }
+
 }
