@@ -57,22 +57,22 @@ public class MainMenuDisplay {
 
             // Menu option 1: Story Mode
             System.out.println("|  [1]  Story Mode" + padRight("", Display.WIDTH - 19) + "|");
-            System.out.println("|       > Experience the epic narrative" + padRight("", Display.WIDTH - 39) + "|");
+            System.out.println("|      > Experience the epic narrative" + padRight("", Display.WIDTH - 39) + "|");
             System.out.println("|" + padRight("", Display.WIDTH - 2) + "|");
 
             // Menu option 2: Journal
             System.out.println("|  [2]  Journal" + padRight("", Display.WIDTH - 17) + "|");
-            System.out.println("|       > Study your enemies' weaknesses" + padRight("", Display.WIDTH - 38) + "|");
+            System.out.println("|      > Study your enemies' weaknesses" + padRight("", Display.WIDTH - 38) + "|");
             System.out.println("|" + padRight("", Display.WIDTH - 2) + "|");
 
             // Menu option 3: Arcade Mode
             System.out.println("|  [3]  Arcade Mode" + padRight("", Display.WIDTH - 20) + "|");
-            System.out.println("|       > L████'s Playground" + padRight("", Display.WIDTH - 39) + "|");
+            System.out.println("|      > L████'s Playground" + padRight("", Display.WIDTH - 39) + "|");
             System.out.println("|" + padRight("", Display.WIDTH - 2) + "|");
 
             // Menu option 4: Exit
             System.out.println("|  [4]  Exit" + padRight("", Display.WIDTH - 13) + "|");
-            System.out.println("|       > L████: Bye Bye!" + padRight("", Display.WIDTH - 24) + "|");
+            System.out.println("|      > L████: Bye Bye!" + padRight("", Display.WIDTH - 24) + "|");
             System.out.println(border);
 
 
