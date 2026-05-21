@@ -101,6 +101,41 @@ public class PCvPCBattleLogic {
         PCvPCBattleDisplay.pause(500);
     }
 
+    private void cpuTurn() {
+        PCvPCBattleDisplay.showCPUPhaseHeader(opponent);
+
+        String[] skills = opponent.getSkillList();
+        int chosenSkill = chooseCpuSkill(skills);
+
+        if (chosenSkill == 0) {
+            opponent.restoreMP(5);
+            PCvPCBattleDisplay.pause(600);
+            return;
+        }
+
+        executeSkill(opponent, player, chosenSkill, true);
+        PCvPCBattleDisplay.pause(700);
+    }
+
+    private int chooseCpuSkill(String[] skills) {
+        boolean canUlt = skills.length >= 3
+                && Math.random() < 0.20
+                && opponent.manaPoints >= extractMPCost(skills[2]);
+
+        if (canUlt) return 3;
+
+        boolean canSkill2 = skills.length >= 2
+                && opponent.manaPoints >= extractMPCost(skills[1]);
+        boolean canSkill1 = skills.length >= 1
+                && opponent.manaPoints >= extractMPCost(skills[0]);
+
+        if (!canSkill1 && !canSkill2) return 0;
+        if (canSkill2 && Math.random() < 0.55) return 2;
+        if (canSkill1) return 1;
+
+        return 2;
+    }
+
 
 
 }
