@@ -62,6 +62,13 @@ public class PCvPCBattleDisplay {
         Display.thin();
     }
 
+    public static void showCPUPhaseHeader(Character opponent) {
+        Display.gap();
+        Display.thin();
+        System.out.println(Display.RED + "  " + opponent.getName() + " acts!" + Display.RESET);
+        Display.thin();
+    }
+
 }
 
 
