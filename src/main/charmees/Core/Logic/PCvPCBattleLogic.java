@@ -81,6 +81,12 @@ public class PCvPCBattleLogic {
         executeSkill(player, opponent, 3, false);
     }
 
+    private void playerRecover() {
+        player.restoreMP(RECOVER_MP);
+        PCvPCBattleDisplay.pause(500);
+    }
+
+
 
 }
 
