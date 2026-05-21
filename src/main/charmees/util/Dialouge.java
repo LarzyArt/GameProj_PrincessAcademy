@@ -76,6 +76,7 @@ public class Dialouge {
     }
 
 
+
     // =========================================================================
     // PROLOGUE
     // =========================================================================
@@ -114,4 +115,21 @@ public class Dialouge {
         };
     }
 
+    public static String[][] getChapter1PostBattle() {
+        return new String[][]{
+                {"Siren Empress", "I... I lost..."},
+                {"Lazuli", "Are you okay? What happened to you?"},
+                {"Siren Empress", "I don't... remember..."},
+                {"Shiera", "You forgot everything?"},
+                {"Siren Empress", "Only a song... I remember a song..."},
+                {"Giantha", "A song? From where?"},
+                {"Siren Empress", "The World Tree... it came from the World Tree..."},
+                {"Audry", "The World Tree?"},
+                {"Siren Empress", "The garden... behind the academy... find it..."},
+                {"Siren Empress", "Stop the song... before it takes others..."},
+                {"L████", "Then the Siren Empress turned into foam and vanished."},
+                {"Lazuli", "The World Tree... we need to find it."},
+                {"Lynzi", "Agreed. Let's go back."}
+        };
+    }
 }
