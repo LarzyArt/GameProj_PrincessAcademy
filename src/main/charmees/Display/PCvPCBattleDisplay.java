@@ -147,7 +147,32 @@ public class PCvPCBattleDisplay {
     public static void win(String name) {
         Display.gap();
         Display.centered(Display.YELLOW + name + " wins the Trial Battle!" + Display.RESET);
-    }}
+    }
+
+    public static void skipped() {
+        System.out.println(Display.CYAN + "\nTrial Battle skipped.\n" + Display.RESET);
+    }
+
+    public static void log(String msg) {
+        System.out.println("  " + msg);
+    }
+
+    public static void logInfo(String msg) {
+        System.out.println("  " + Display.CYAN + msg + Display.RESET);
+    }
+
+    public static void logDanger(String msg) {
+        System.out.println("  " + Display.RED + msg + Display.RESET);
+    }
+
+    public static void pause(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
 
 
 
