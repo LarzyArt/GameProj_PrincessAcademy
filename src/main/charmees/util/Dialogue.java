@@ -1,6 +1,8 @@
-package src.main.charmees.util;
+package charmees.util;
 
-public class Dialouge {
+import java.util.Random;
+
+public class Dialogue {
 
     private static Random random = new Random();
 
