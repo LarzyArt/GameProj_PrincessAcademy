@@ -192,5 +192,36 @@ public class PCvPCBattleLogic {
             return 0;
         }
     }
+
+    public static void startTrial(Scanner sc) {
+        Character[] allFighters = createRoster();
+
+        String[] names = new String[allFighters.length];
+        String[] classes = new String[allFighters.length];
+
+        for (int i = 0; i < allFighters.length; i++) {
+            names[i] = allFighters[i].getName();
+            classes[i] = allFighters[i].charClass;
+        }
+
+        int playerChoice = -1;
+        while (playerChoice < 1 || playerChoice > allFighters.length) {
+            PCvPCBattleDisplay.showCharacterSelect("YOUR FIGHTER", names, classes);
+            playerChoice = Display.readInt(sc);
+        }
+
+        int oppChoice = -1;
+        while (oppChoice < 1 || oppChoice > allFighters.length || oppChoice == playerChoice) {
+            PCvPCBattleDisplay.showCharacterSelect("TRIAL OPPONENT", names, classes);
+            oppChoice = Display.readInt(sc);
+
+            if (oppChoice == playerChoice) {
+                PCvPCBattleDisplay.log("Pick someone other than yourself!");
+            }
+        }
+
+        new PCvPCBattleLogic(allFighters[playerChoice - 1], allFighters[oppChoice - 1], sc).run();
+    }
+
 }
 
