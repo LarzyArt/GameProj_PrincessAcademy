@@ -43,6 +43,18 @@ public class PCvPCBattleDisplay {
         Display.thin();
     }
 
+    private static void showFighterPanel(String label, Character fighter, int maxHP) {
+        System.out.println(Display.CYAN + "  " + label + Display.RESET);
+        Display.thin();
+
+        System.out.println(Display.BOLD + "  " + fighter.getName()
+                + " [" + fighter.charClass + " - " + fighter.type + "]"
+                + Display.RESET);
+
+        System.out.println("  HP: " + fighter.healthPoints + "/" + maxHP
+                + "   MP: " + fighter.manaPoints);
+    }
+
 }
 
 
