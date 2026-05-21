@@ -165,6 +165,17 @@ public class PCvPCBattleLogic {
         PCvPCBattleDisplay.pause(600);
     }
 
+    private void resolveBattle() {
+        if (player.isAlive() && !opponent.isAlive()) {
+            PCvPCBattleDisplay.showBattleVictory(player);
+        } else {
+            PCvPCBattleDisplay.showBattleDefeat(opponent);
+        }
+
+        PCvPCBattleDisplay.logInfo("No HP/MP bonus added for now.");
+        Display.pressEnter(sc);
+    }
+
 
 }
 
