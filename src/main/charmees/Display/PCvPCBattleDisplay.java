@@ -1,6 +1,6 @@
 package charmees.Display;
 
-import charmees.Core.Logic.PCvPCBattleLogic
+import charmees.Core.Logic.PCvPCBattleLogic;
 
 public class PCvPCBattleDisplay {
     public static final String RESET = "\u001B[0m";
@@ -25,6 +25,18 @@ public class PCvPCBattleDisplay {
         System.out.println("[3] Ultimate");
         System.out.println("[4] Recover MP");
         System.out.print("Choose: ");
+    }
+
+    public static void log(String msg) {
+        System.out.println(msg);
+    }
+
+    public static void win(String name) {
+        System.out.println(YELLOW + "\n" + name + " wins the Trial Battle!" + RESET);
+    }
+
+    public static void skipped() {
+        System.out.println(CYAN + "\nTrial Battle skipped.\n" + RESET);
     }
 
 }

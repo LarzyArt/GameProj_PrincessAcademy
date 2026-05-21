@@ -3,10 +3,6 @@ package charmees.Core.Logic;
 import charmees.Display.PCvPCBattleDisplay;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Random;
-import java.util.Scanner;
-
-
 public class PCvPCBattleLogic {
     static Random random = new Random();
 
@@ -58,6 +54,20 @@ public class PCvPCBattleLogic {
             case 3 -> ultimate(user, target);
             case 4 -> recover(user);
             default -> System.out.println("Invalid choice. Turn wasted.");
+        }
+    }
+
+    private static void cpuAction(Fighter cpu, Fighter player) {
+        System.out.println("\n" + cpu.name + "'s turn!");
+
+        int roll = random.nextInt(100);
+
+        if (roll < 20 && cpu.mp >= 18) {
+            ultimate(cpu, player);
+        } else if (roll < 70 && cpu.mp >= 8) {
+            skill(cpu, player);
+        } else {
+            basicAttack(cpu, player);
         }
     }
 
