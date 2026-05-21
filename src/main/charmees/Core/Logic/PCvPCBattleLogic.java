@@ -86,6 +86,21 @@ public class PCvPCBattleLogic {
         PCvPCBattleDisplay.pause(500);
     }
 
+    private void playerRetire() {
+        PCvPCBattleDisplay.showRetireConfirm();
+        int confirm = Display.readInt(sc);
+
+        if (confirm == 1) {
+            playerRetired = true;
+            player.healthPoints = 0;
+            PCvPCBattleDisplay.logDanger(player.getName() + " retired from the trial battle.");
+        } else {
+            PCvPCBattleDisplay.log("The battle continues!");
+        }
+
+        PCvPCBattleDisplay.pause(500);
+    }
+
 
 
 }
