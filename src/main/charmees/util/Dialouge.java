@@ -159,4 +159,25 @@ public class Dialouge {
                 {"Lazuli", "Wait. We need to be careful."}
         };
     }
+
+
+    public static String[][] getChapter3PreBattle() {
+        return new String[][]{
+                {"Shiera", "This place is full of princess dolls."},
+                {"Lynzi", "They look too real..."},
+                {"Lazuli", "These were real princesses. Their life was taken."},
+                {"Kassundre", "She said she'd help me find love again..."},
+                {"Kassundre", "Instead she made me this monster."},
+                {"Kassundre", "Love is a lie! Now you all die!"}
+        };
+    }
+
+    public static String[][] getChapter3MidBattle() {
+        return new String[][]{
+                {"Kassundre", "Why won't you die?!"},
+                {"Lynzi", "Because we're stronger than you."},
+                {"Princess Twinkle", "Well done. You beat my puppet."},
+                {"Princess Twinkle", "But now you face ME. The one who built this school."}
+        };
+    }
 }
