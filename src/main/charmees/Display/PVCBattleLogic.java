@@ -337,24 +337,7 @@ public class PVCBattleLogic {
 
   
     //  STATIC FACTORY — convenience entry point------------------------------------------
-    public static void startArcade(Scanner sc) {
-        // ── Build the selectable roster ──────────────────────
-        // Players (index 0-4)
-        charmees.Entity.players.Abby    abby    = new charmees.Entity.players.Abby   ("Abby",    "Drama Queen",  "SL Energy",  "Lightstick",  160, 30);
-        charmees.Entity.players.Cenicen cenicen = new charmees.Entity.players.Cenicen("Cenicen", "Stan",         "Idol Energy","Lightstick",  150, 30);
-        charmees.Entity.players.Kimni   kimni   = new charmees.Entity.players.Kimni  ("Kimni",   "Caster",       "Magic",      "Wand",        140, 40);
-        charmees.Entity.players.Larzy   larzy   = new charmees.Entity.players.Larzy  ("Larzy",   "Knight",       "Physical",   "Spear",       180, 20);
-        charmees.Entity.players.Mewods  mewods  = new charmees.Entity.players.Mewods ("Mewods",  "Rogue",        "Shadow",     "Dagger",      145, 35);
-
-        // Characters (index 5-8, used as CPU opponents)
-        charmees.Entity.characters.Audry   audry   = new charmees.Entity.characters.Audry  ("Audry",   "Slime Mage",   "Magic",   "Staff",    150, 30);
-        charmees.Entity.characters.Giantha giantha = new charmees.Entity.characters.Giantha("Giantha", "Giant",        "Physical","Club",     200, 15);
-        charmees.Entity.characters.Lynzi   lynzi   = new charmees.Entity.characters.Lynzi  ("Lynzi",   "Duelist",      "Wind",    "Rapier",   155, 30);
-        charmees.Entity.characters.Shiera  shiera  = new charmees.Entity.characters.Shiera ("Shiera",  "Paladin",      "Holy",    "Shield",   175, 25);
-
-        Character[] allFighters = { abby, cenicen, kimni, larzy, mewods,
-                                    audry, giantha, lynzi, shiera };
-
+    public static void startArcade(Scanner sc, Character[] allFighters) {
         String[] names   = new String[allFighters.length];
         String[] classes = new String[allFighters.length];
         for (int i = 0; i < allFighters.length; i++) {
