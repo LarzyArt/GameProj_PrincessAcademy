@@ -16,8 +16,15 @@ public class PCvPCBattleDisplay {
     public static void showStatus(PCvPCBattleLogic.Fighter a, PCvPCBattleLogic.Fighter b) {
         System.out.println();
         System.out.println(a.name + " [" + a.group + "] HP: " + a.hp + "/" + a.maxHp + " MP: " + a.mp + "/" + a.maxMp);
-        System.out.println(b.name + " [" + b.group + "] HP: " + b.hp + "/" + b.maxHp + " MP: " + b.mp + "/" + b.maxMp);
-    }
+        System.out.println(b.name + " [" + b.group + "] HP: " + b.hp + "/" + b.maxHp + " MP: " + b.mp + "/" + b.maxM}
 
+    public static void actionMenu(PCvPCBattleLogic.Fighter f) {
+        System.out.println("\n" + GREEN + f.name + "'s Turn" + RESET);
+        System.out.println("[1] Basic Attack");
+        System.out.println("[2] Skill");
+        System.out.println("[3] Ultimate");
+        System.out.println("[4] Recover MP");
+        System.out.print("Choose: ");
+    }
 
 }
