@@ -117,6 +117,15 @@ public class PCvPCBattleDisplay {
         Display.thin();
     }
 
+    public static void showRetireConfirm() {
+        Display.gap();
+        Display.thin();
+        System.out.println("  Retire from the trial battle?");
+        System.out.println("  [1] Yes");
+        System.out.println("  [0] No");
+        Display.thin();
+    }
+
     public static void showCharacterSelect(String label, String[] names, String[] classes) {
         Display.gap();
         Display.header(label);
