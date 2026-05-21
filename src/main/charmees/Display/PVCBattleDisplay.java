@@ -287,6 +287,15 @@ public class PVCBattleDisplay {
         Display.thin();
     }
 
+    public static void showPostMatchMenu() {
+        Display.gap();
+        Display.header("MATCH COMPLETE");
+        System.out.println("  [1] Replay same match");
+        System.out.println("  [2] Re-select fighters");
+        System.out.println("  [3] Exit");
+        Display.thin();
+    }
+
     /**
      * Prints the match-up banner once both fighters are chosen.
      */
