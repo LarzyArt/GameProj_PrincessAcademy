@@ -79,6 +79,19 @@ public class Dialouge {
         System.out.println(speaker + ": " + line);
     }
 
+    // Say with break feature
+    private static void sayWithBreak(String speaker, String line, double chance) {
+        System.out.println(speaker + ": " + line);
+
+        if (shouldBreakCharacter(chance)) {
+            System.out.println();
+            System.out.println("  " + "( " + speaker + " pauses... )");
+            System.out.println(speaker + ": " + getBreakLine(speaker));
+            System.out.println();
+            System.out.println("  " + "( Everyone stares at " + speaker + " )");
+        }
+    }
+
 
 
     // =========================================================================
@@ -140,7 +153,22 @@ public class Dialouge {
         };
     }
 
+    // Display Chapter 1 with break character
+    public static void displayChapter1PostBattle() {
+        String[][] lines = getChapter1PostBattle();
+        for (String[] line : lines) {
+            String speaker = line[0];
+            String text = line[1];
 
+            if (speaker.equals("Shiera")) {
+                sayWithBreak("Shiera", text, 0.2);
+            } else if (speaker.equals("Audry")) {
+                sayWithBreak("Audry", text, 0.15);
+            } else {
+                say(speaker, text);
+            }
+        }
+    }
     
     // =========================================================================
     // CHAPTER 2: L'arbre de Vie Garden
