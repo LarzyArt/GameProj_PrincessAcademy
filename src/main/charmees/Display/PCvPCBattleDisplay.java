@@ -143,7 +143,11 @@ public class PCvPCBattleDisplay {
                 + opponent.getName() + " wins the Trial Battle." + Display.RESET);
         Display.line();
     }
-}
+
+    public static void win(String name) {
+        Display.gap();
+        Display.centered(Display.YELLOW + name + " wins the Trial Battle!" + Display.RESET);
+    }}
 
 
 
