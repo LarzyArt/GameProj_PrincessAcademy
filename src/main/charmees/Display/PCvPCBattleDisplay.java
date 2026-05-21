@@ -27,6 +27,22 @@ public class PCvPCBattleDisplay {
         Display.line();
     }
 
+    public static void showBattleField(Character player, int playerMaxHP,
+                                       Character opponent, int oppMaxHP,
+                                       int turnCount) {
+        Display.gap();
+        Display.header("TRIAL BATTLE - TURN " + turnCount);
+
+        showFighterPanel("OPPONENT", opponent, oppMaxHP);
+        Display.gap();
+        Display.centered(Display.YELLOW + "~ VS ~" + Display.RESET);
+        Display.gap();
+        showFighterPanel("YOUR FIGHTER", player, playerMaxHP);
+
+        Display.gap();
+        Display.thin();
+    }
+
 }
 
 
