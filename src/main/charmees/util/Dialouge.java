@@ -96,4 +96,22 @@ public class Dialouge {
                 {"L████", "They didn't know it yet... but this was only the beginning."}
         };
     }
+
+
+
+    public static String[][] getChapter1PreBattle() {
+        return new String[][]{
+                {"Lynzi", "The sea looks really angry."},
+                {"Lazuli", "The waves are huge. And the rain won't stop."},
+                {"Audry", "Something feels wrong. The magic here is too strong."},
+                {"Giantha", "Look! Something is rising from the water!"},
+                {"Shiera", "...I see a figure."},
+                {"Siren Empress", "Who dares to come to my sea?"},
+                {"Lynzi", "We're from Princess Academy. The First Princess sent us."},
+                {"Siren Empress", "I don't care. Leave now."},
+                {"Lazuli", "We can't. Not until we fix the sea."},
+                {"Siren Empress", "Then you leave me no choice. FIGHT!"}
+        };
+    }
+
 }
