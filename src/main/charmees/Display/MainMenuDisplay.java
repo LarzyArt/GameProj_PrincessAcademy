@@ -48,39 +48,29 @@ public class MainMenuDisplay {
             Display.centered("A story-driven turn-based RPG");
             Display.gap();
 
-
-            String border = "+" + "-".repeat(Display.WIDTH - 2) + "+";
-            System.out.println(border);
-
-            System.out.println("|" + centerText("M E N U", Display.WIDTH - 2) + "|");
-            System.out.println(border);
-
-            // Menu option 1: Story Mode
-            System.out.println("|  [1]  Story Mode" + padRight("", Display.WIDTH - 19) + "|");
-            System.out.println("|      > Experience the epic narrative" + padRight("", Display.WIDTH - 39) + "|");
-            System.out.println("|" + padRight("", Display.WIDTH - 2) + "|");
-
-            // Menu option 2: Journal
-            System.out.println("|  [2]  Journal" + padRight("", Display.WIDTH - 17) + "|");
-            System.out.println("|      > Study your enemies' weaknesses" + padRight("", Display.WIDTH - 38) + "|");
-            System.out.println("|" + padRight("", Display.WIDTH - 2) + "|");
-
-            // Menu option 3: Arcade Mode
-            System.out.println("|  [3]  Arcade Mode" + padRight("", Display.WIDTH - 20) + "|");
-            System.out.println("|      > L████'s Playground" + padRight("", Display.WIDTH - 39) + "|");
-            System.out.println("|" + padRight("", Display.WIDTH - 2) + "|");
-
-            // Menu option 4: Exit
-            System.out.println("|  [4]  Exit" + padRight("", Display.WIDTH - 13) + "|");
-            System.out.println("|      > L████: Bye Bye!" + padRight("", Display.WIDTH - 24) + "|");
-            System.out.println(border);
+            System.out.println("╔════════════════════════════════════════════════════╗");
+            System.out.println("║                      M E N U                       ║");
+            System.out.println("╠════════════════════════════════════════════════════╣");
+            System.out.println("║                                                    ║");
+            System.out.println("║  [1]  Story Mode                                   ║");
+            System.out.println("║       > Experience the epic narrative              ║");
+            System.out.println("║                                                    ║");
+            System.out.println("║  [2]  Journal                                      ║");
+            System.out.println("║       > Study your enemies' weaknesses             ║");
+            System.out.println("║                                                    ║");
+            System.out.println("║  [3]  Arcade Mode                                  ║");
+            System.out.println("║       > L████'s Playground                         ║");
+            System.out.println("║                                                    ║");
+            System.out.println("║  [4]  Exit                                         ║");
+            System.out.println("║       > L████: Bye Bye!                            ║");
+            System.out.println("║                                                    ║");
+            System.out.println("╚════════════════════════════════════════════════════╝");
 
 
             // Show reminder tip if user has visited more than 3 times
             if (visitCount > 3 && lastChoice != 0) {
-                String tip = "Tip: Last time you chose option " + lastChoice;
-                System.out.println(Display.DIM + "| " + tip + padRight("", Display.WIDTH - tip.length() - 3) + "|" + Display.RESET);
-                System.out.println(border);
+                System.out.println(Display.DIM + "  Tip: Last time you chose option " + lastChoice + Display.RESET);
+                Display.thin();
             }
 
             System.out.print(Display.CYAN + "  >> Choose an option [1-4]: " + Display.RESET);
@@ -88,11 +78,9 @@ public class MainMenuDisplay {
 
             if (choice == -1) {
                 Display.gap();
-                System.out.println(border);
-                System.out.println("|  [!] Please enter a number [1-4]                 |");
-                System.out.println(border);
+                System.out.println("  [!] Please enter a number [1-4]");
                 Display.gap();
-                BattleDIsplay.pause(400);
+                Display.pause(sc);
                 continue;
             }
 
@@ -114,33 +102,17 @@ public class MainMenuDisplay {
                     break;
                 case 4:
                     Display.gap();
-                    System.out.println(border);
-                    System.out.println("|          L████: Thanks for playing! Goodbye~          |");
-                    System.out.println(border);
+                    Display.line();
+                    System.out.println(Display.YELLOW + "  L████: Thanks for playing! Goodbye~" + Display.RESET);
+                    Display.line();
                     Display.gap();
                     break;
                 default:
                     Display.gap();
-                    System.out.println(border);
-                    System.out.println("|  [!] Invalid choice. Please enter 1-4.         |");
-                    System.out.println(border);
+                    System.out.println(Display.RED + "  [!] Invalid choice. Please enter 1-4." + Display.RESET);
                     Display.gap();
-                    BattleDIsplay.pause(400); // Pause so user can read error message
+                    Display.pause(400); // Pause so user can read error message
             }
         }
     }
-
-    //Centers text
-    private String centerText(String text, int width) {
-        int spaces = (width - text.length()) / 2;
-        if (spaces < 0) spaces = 0;
-        return " ".repeat(spaces) + text + " ".repeat(width - spaces - text.length());
-    }
-
-    //Adds spaces to the right of text
-    private String padRight(String text, int length) {
-        if (length < 0) length = 0;
-        return text + " ".repeat(length);
-    }
-
 }
