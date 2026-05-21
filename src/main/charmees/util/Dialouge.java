@@ -70,13 +70,17 @@ public class Dialouge {
         }
     }
 
+    // Normal say function, just prints dialogue
+    private static void say(String speaker, String line) {
+        System.out.println(speaker + ": " + line);
+    }
 
 
     // =========================================================================
     // PROLOGUE
     // =========================================================================
-    public static String[] getPrologue() {
-        return new String[]{
+    public static String[][] getPrologue() {
+        return new String[][]{
                 {"L████", "Welcome to Princess Academy. A place where princesses learn... princessy things."},
                 {"L████", "Tea parties. Royal manners. How to rule a kingdom with grace."},
                 {"L████", "Five princesses attended this season..."},
