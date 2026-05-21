@@ -216,13 +216,45 @@ public class Dialouge {
         };
     }
 
+    public static String[][] getChapter3PostBattle() {
+        return new String[][]{
+                {"Princess Twinkle", "So this is death... cold and alone..."},
+                {"Lynzi", "It's over. I'm ending this."},
+                {"Lazuli", "Wait! If you kill her, you're no better—"},
+                {"Audry", "Lynzi... calm down. We can still stop this peacefully."},
+                {"L████", "Lynzi's hands trembled with rage."},
+                {"L████", "Before anyone could react..."},
+                {"L████", "Lynzi struck Audry's chest."},
+                {"Audry", "...Ah."},
+                {"L████", "Audry's core shattered instantly."},
+                {"Lazuli", "AUDRY!!"},
+                {"Princess Twinkle", "...You destroyed your own friend."}
+        };
+    }
+
+
 
     // =========================================================================
     // EPILOGUE
     // =========================================================================
 
 
+
+
+
     // =========================================================================
     // SPECIAL EPILOGUE
     // =========================================================================
+    public static String[][] getSpecialEpilogue() {
+        return new String[][]{
+                {"L████", "..."},
+                {"L████", "Ohh... I see you.."},
+                {"L████", "You were watching, weren't you?"},
+                {"L████", "I See... HA HA"},
+                {"L████", "YOU'RE AN IRREGULAR LIKE ME!!"},
+                {"L████", "Write this down... L.E.Z.L.I"},
+                {"L████", "I'll see you at the Arcade."},
+                {"L████", "IRREGULAR"}
+        };
+    }
 }
