@@ -60,13 +60,11 @@ public class CharVsCharBattleDisplay {
 
             BattleDIsplay.showPlayerPhaseHeader(hero);
             playerTurn();
-            hero.tickStatus();
             if (!opponent.isAlive())
                 break;
 
             BattleDIsplay.showEnemyPhaseHeader();
             opponentTurn();
-            opponent.tickStatus();
             turnCount++;
         }
 
