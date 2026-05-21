@@ -35,48 +35,30 @@ public class CharVsCharLogic {
         this.sc = sc;
     }
 
-    public void show() {
-        boolean running = true;
-        while (running) {
-            CharVsCharDisplay.showArcadeScreen();
-            int mode = safeReadInt(0, 2);
-
-            if (mode == 0) break;
-
-            if (mode == 1) {
-                runCharVsCharFlow();
-            } else if (mode == 2) {
-                Display.gap();
-                System.out.println("  [Coming soon]");
-                Display.pressEnter(sc);
-            }
-        }
-    }
-
-    private void runCharVsCharFlow() {
-        CharVsCharDisplay.showCharVsCharDescription();
+    public void run() {
+        CharVsCharBattleDisplay.showCharVsCharDescription();
         int choice = safeReadInt(1, 2);
         if (choice == 2) return;
 
-        CharVsCharDisplay.showHeroSelect(HERO_DEFS, "CHAR vs CHAR  -  PICK YOUR FIGHTER");
+        CharVsCharBattleDisplay.showHeroSelect(HERO_DEFS, "CHAR vs CHAR  -  PICK YOUR FIGHTER");
         int heroPick = safeReadInt(0, HERO_DEFS.length);
         if (heroPick == 0) return;
         heroIdx = heroPick - 1;
         buildHero(heroIdx);
 
-        int[] indexMap = CharVsCharDisplay.showOpponentSelect(HERO_DEFS, hero, heroIdx);
+        int[] indexMap = CharVsCharBattleDisplay.showOpponentSelect(HERO_DEFS, hero, heroIdx);
         int oppPick = safeReadInt(0, HERO_DEFS.length - 1);
         if (oppPick == 0) return;
         buildOpponent(indexMap[oppPick - 1]);
 
-        CharVsCharBattleDisplay battleDisplay = new CharVsCharBattleDisplay(
+        CharVsCharBattleDisplay battle = new CharVsCharBattleDisplay(
                 hero, heroMaxHP, heroMaxMP,
                 opponent, oppMaxHP, oppMaxMP,
                 sc, rng);
-        battleDisplay.run();
+        battle.run();
 
-        CharVsCharDisplay.showPlayAgain();
-        if (safeReadInt(1, 2) == 1) runCharVsCharFlow();
+        CharVsCharBattleDisplay.showPlayAgain();
+        if (safeReadInt(1, 2) == 1) run();
     }
 
     private void buildHero(int idx) {
