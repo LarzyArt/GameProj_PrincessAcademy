@@ -169,7 +169,9 @@ public class Dialouge {
             }
         }
     }
-    
+
+
+
     // =========================================================================
     // CHAPTER 2: L'arbre de Vie Garden
     // =========================================================================
@@ -198,6 +200,23 @@ public class Dialouge {
                 {"Lazuli", "Wait. We need to be careful."}
         };
     }
+
+    // Display Chapter 2 with break character
+    public static void displayChapter2PostBattle() {
+        String[][] lines = getChapter2PostBattle();
+        for (String[] line : lines) {
+            String speaker = line[0];
+            String text = line[1];
+
+            if (speaker.equals("Lazuli")) {
+                sayWithBreak("Lazuli", text, 0.2);
+            } else {
+                say(speaker, text);
+            }
+        }
+    }
+
+
 
 
     // =========================================================================
@@ -260,6 +279,21 @@ public class Dialouge {
                 {"Lazuli", "AUDRY!!"},
                 {"Princess Twinkle", "...You destroyed your own friend."}
         };
+    }
+
+    // Display Chapter 3 with break character
+    public static void displayChapter3PostBattle() {
+        String[][] lines = getChapter3PostBattle();
+        for (String[] line : lines) {
+            String speaker = line[0];
+            String text = line[1];
+
+            if (speaker.equals("Lynzi")) {
+                sayWithBreak("Lynzi", text, 0.2);
+            } else {
+                say(speaker, text);
+            }
+        }
     }
 
 
