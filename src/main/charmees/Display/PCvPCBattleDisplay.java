@@ -55,6 +55,13 @@ public class PCvPCBattleDisplay {
                 + "   MP: " + fighter.manaPoints);
     }
 
+    public static void showPlayerPhaseHeader(Character player) {
+        Display.gap();
+        Display.thin();
+        System.out.println(Display.GREEN + "  " + player.getName() + "'s Turn" + Display.RESET);
+        Display.thin();
+    }
+
 }
 
 
