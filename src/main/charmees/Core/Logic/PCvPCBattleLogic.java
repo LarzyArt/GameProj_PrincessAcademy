@@ -136,6 +136,34 @@ public class PCvPCBattleLogic {
         return 2;
     }
 
+    private void executeSkill(Character user, Character target, int skillNum, boolean cpu) {
+        String[] skills = user.getSkillList();
+
+        if (skillNum < 1 || skillNum > skills.length) {
+            PCvPCBattleDisplay.log(user.getName() + " does not have that skill.");
+            return;
+        }
+
+        String skillName = skills[skillNum - 1];
+        String targetType = user.getSkillTargetType(skillNum);
+
+        if (targetType.equals("ENEMY")) {
+            int hpBefore = target.healthPoints;
+            user.useSkill(skillNum, wrapTarget(target), null, new Character[]{user});
+            int damage = hpBefore - target.healthPoints;
+
+            if (damage > 0) {
+                String cpuLabel = cpu ? " (CPU)" : "";
+                PCvPCBattleDisplay.log(user.getName() + cpuLabel + " uses " + skillName
+                        + " -> " + damage + " damage to " + target.getName() + "!");
+            }
+        } else {
+            PCvPCBattleDisplay.log(user.getName() + " uses " + skillName + "!");
+            user.useSkill(skillNum, null, user, new Character[]{user});
+        }
+
+        PCvPCBattleDisplay.pause(600);
+    }
 
 
 }
