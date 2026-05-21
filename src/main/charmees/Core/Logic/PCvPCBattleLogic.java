@@ -193,6 +193,33 @@ public class PCvPCBattleLogic {
         }
     }
 
+    private MobNPC wrapTarget(Character target) {
+        return new MobNPC(
+                target.getName(),
+                target.charClass,
+                target.type,
+                target.weapon,
+                target.healthPoints,
+                0) {
+
+            @Override
+            public void takedamage(int damage) {
+                target.healthPoints -= damage;
+
+                if (target.healthPoints < 0) {
+                    target.healthPoints = 0;
+                }
+
+                this.healthPoints = target.healthPoints;
+            }
+
+            @Override
+            public boolean isAlive() {
+                return target.healthPoints > 0;
+            }
+        };
+    }
+
     public static void startTrial(Scanner sc) {
         Character[] allFighters = createRoster();
 
