@@ -127,6 +127,14 @@ public class PCvPCBattleDisplay {
 
         Display.thin();
     }
+
+    public static void showBattleVictory(Character player) {
+        Display.gap();
+        Display.line();
+        Display.centered(Display.YELLOW + Display.BOLD
+                + player.getName() + " wins the Trial Battle!" + Display.RESET);
+        Display.line();
+    }
 }
 
 
