@@ -1,17 +1,18 @@
 package charmees.Display;
 import charmees.util.Display;
 import java.util.Scanner;
+import charmees.Core.Logic.PCvPCBattleLogic;
+
 
 public class StoryModeDisplay {
-
     static Scanner scanner = new Scanner(System.in);
 
     static boolean Chap1 = false;
-    static boolean Chap2  = false;
-    static boolean Chap3   = false;
+    static boolean Chap2 = false;
+    static boolean Chap3 = false;
     static boolean Epilogue = false;
 
-    static final String SECRET = "LEZLI.BOOK.ZIP"; // Word that will unlock chap 1 to epilogue
+    static final String SECRET = "LEZLI.BOOK.ZIP";
 
     public static void startGame() {
         while (true) {
@@ -19,35 +20,40 @@ public class StoryModeDisplay {
 
             String input = scanner.nextLine().trim();
 
-            switch(input){
+            switch (input) {
                 case "1" -> Chap1();
+
                 case "2" -> {
                     if (Chap1) {
                         Chap2();
                     } else {
-                        System.out.println(Display.RED + "\n[LOCKED] Complete Chapter 1 first to proceed.\n" + Display.RESET);
+                        System.out.println("\n[LOCKED] Complete Chapter 1 first.\n");
                     }
                 }
+
                 case "3" -> {
                     if (Chap1 && Chap2) {
                         Chap3();
                     } else {
-                        System.out.println(Display.RED + "\n[LOCKED] Complete Chapter 1  and 2 first to proceed.\n" + Display.RESET);
+                        System.out.println("\n[LOCKED] Complete Chapter 1 and 2 first.\n");
                     }
                 }
+
                 case "4" -> Prologue();
-                case "5" ->
-                {
+
+                case "5" -> {
                     if (Chap1 && Chap2 && Chap3) {
                         Epilogue();
                     } else {
-                        System.out.println(Display.RED + "\n[LOCKED] Complete Chapter 1 , 2 and 3 first to proceed.\n" + Display.RESET);
+                        System.out.println("\n[LOCKED] Complete Chapter 1, 2, and 3 first.\n");
                     }
                 }
+
                 case "0" -> {
-                    System.out.println(Display.CYAN + "\nGoodbye!\n" + Display.RESET);
+                    System.out.println("\nGoodbye!\n");
                     return;
                 }
+
                 default -> handleSecretWord(input);
             }
         }
@@ -76,58 +82,84 @@ public class StoryModeDisplay {
 
     public static String tag(boolean unlocked) {
         if (unlocked) {
-            return Display.GREEN + "[OPEN]" + Display.RESET;
+            return Display.GREEN + "[OPEN]" + RESET;
         } else {
-            return Display.RED + "[LOCKED]" + Display.RESET;
+            return Display.RED + "[LOCKED]" + RESET;
         }
     }
 
     public static void handleSecretWord(String input) {
         if (input.equals(SECRET)) {
-            // Unlock everything at once
             Chap1 = true;
-            Chap2  = true;
-            Chap3   = true;
-            Epilogue    = true;
-            System.out.println("\n  All chapters unlocked!\n");
+            Chap2 = true;
+            Chap3 = true;
+            Epilogue = true;
+            System.out.println("\nAll chapters unlocked!\n");
         } else {
-            System.out.println("\n  Invalid choice. Try again.\n");
+            System.out.println("\nInvalid choice. Try again.\n");
         }
     }
 
-    // ── Story sections ───────────────────────────────────────────────
+    public static boolean allMainChaptersComplete() {
+        return Chap1 && Chap2 && Chap3;
+    }
+
+    public static void maybeOfferTrialBattle() {
+        if (allMainChaptersComplete()) {
+            return;
+        }
+
+        if (Math.random() >= 0.40) {
+            return;
+        }
+
+        System.out.println("\nA Trial Battle appeared!");
+        System.out.println("[1] Enter Trial Battle");
+        System.out.println("[0] Skip");
+        System.out.print("Choose: ");
+
+        String choice = scanner.nextLine().trim();
+
+        if (choice.equals("1")) {
+            PCvPCBattleLogic.startTrial(scanner);
+        } else {
+            PCvPCBattleDisplay.skipped();
+        }
+    }
 
     public static void Prologue() {
-        System.out.println("\n--- (Prologue) ---");
+        System.out.println("\n--- Prologue ---");
         System.out.println("Your prologue content here...");
-        System.out.println();
     }
 
     public static void Chap1() {
-        System.out.println("\n--- (Chapter 1) ---");
+        System.out.println("\n--- Chapter 1 ---");
         System.out.println("Your Chapter 1 content here...");
         Chap1 = true;
-        System.out.println("\n[Chapter 1 complete!]\n");
+        System.out.println("\n[Chapter 1 complete!]");
+        maybeOfferTrialBattle();
     }
 
     public static void Chap2() {
-        System.out.println("\n--- (Chapter 2) ---");
+        System.out.println("\n--- Chapter 2 ---");
         System.out.println("Your Chapter 2 content here...");
         Chap2 = true;
-        System.out.println("\n[Chapter 2 complete!]\n");
+        System.out.println("\n[Chapter 2 complete!]");
+        maybeOfferTrialBattle();
     }
 
     public static void Chap3() {
-        System.out.println("\n--- (Chapter 3) ---");
+        System.out.println("\n--- Chapter 3 ---");
         System.out.println("Your Chapter 3 content here...");
         Chap3 = true;
-        System.out.println("\n[Chapter 3 complete!]\n");
+        System.out.println("\n[Chapter 3 complete!]");
+        maybeOfferTrialBattle();
     }
 
     public static void Epilogue() {
-        System.out.println("\n--- (Epilogue) ---");
+        System.out.println("\n--- Epilogue ---");
         System.out.println("Your epilogue content here...");
         Epilogue = true;
-        System.out.println("\n[Epilogue complete!]\n");
+        System.out.println("\n[Epilogue complete!]");
     }
 }
