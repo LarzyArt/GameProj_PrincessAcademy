@@ -69,6 +69,17 @@ public class PCvPCBattleDisplay {
         Display.thin();
     }
 
+    public static void showActionMenu(Character player) {
+        Display.gap();
+        System.out.println("  What will " + Display.BOLD + player.getName() + Display.RESET + " do?");
+        System.out.println("  [1] Skill");
+        System.out.println("  [2] Ultimate");
+        System.out.println("  [3] Recover MP");
+        System.out.println("  [4] Retire");
+        Display.thin();
+    }
+
+
 }
 
 
