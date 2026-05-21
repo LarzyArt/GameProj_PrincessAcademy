@@ -18,15 +18,15 @@ public class ArcadeModeDisplay {
             showArcadeScreen();
             int mode = safeReadInt(0, 2);
 
-            if (mode == 0) break;
+            if (mode == 0)
+                break;
 
             if (mode == 1) {
                 CharVsCharLogic charVsChar = new CharVsCharLogic(sc);
                 charVsChar.run();
             } else if (mode == 2) {
-                Display.gap();
-                System.out.println("  [Coming soon]");
-                Display.pressEnter(sc);
+                EasterEggArcadeLogic easterEgg = new EasterEggArcadeLogic(sc);
+                easterEgg.run();
             }
         }
     }
@@ -51,8 +51,10 @@ public class ArcadeModeDisplay {
     private int safeReadInt(int min, int max) {
         while (true) {
             int v = Display.readInt(sc);
-            if (v == 0 && min > 0) return 0;
-            if (v >= min && v <= max) return v;
+            if (v == 0 && min > 0)
+                return 0;
+            if (v >= min && v <= max)
+                return v;
             System.out.printf("  Please enter %d-%d.%n", min, max);
         }
     }
