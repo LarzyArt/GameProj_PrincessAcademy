@@ -35,9 +35,6 @@ public class PCvPCBattleLogic {
     }
 
 
-
-
-
     private void resetBattle() {
         player.healthPoints = playerBaseHP;
         player.manaPoints = playerBaseMP;
@@ -177,6 +174,23 @@ public class PCvPCBattleLogic {
     }
 
 
-}
+    private int extractMPCost(String skillLabel) {
+        try {
+            int idx = skillLabel.indexOf("Cost:");
+            if (idx < 0) return 0;
 
+            String sub = skillLabel.substring(idx + 5).trim();
+            StringBuilder sb = new StringBuilder();
+
+            for (char c : sub.toCharArray()) {
+                if (c >= '0' && c <= '9') sb.append(c);
+                else if (sb.length() > 0) break;
+            }
+
+            return sb.length() > 0 ? Integer.parseInt(sb.toString()) : 0;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+}
 
