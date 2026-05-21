@@ -4,6 +4,10 @@ public class Dialouge {
 
     private static Random random = new Random();
 
+    // =========================================================================
+    // SPECIAL FEATURE: Characters break character (ONLY in chapters 1, 2, 3)
+    // =========================================================================
+
     // Returns true if character should break character based on chance
     private static boolean shouldBreakCharacter(double chance) {
         return random.nextDouble() < chance;
@@ -99,7 +103,9 @@ public class Dialouge {
     }
 
 
-
+    // =========================================================================
+    // CHAPTER 1: The Sea at Dusk
+    // =========================================================================
     public static String[][] getChapter1PreBattle() {
         return new String[][]{
                 {"Lynzi", "The sea looks really angry."},
@@ -134,6 +140,9 @@ public class Dialouge {
     }
 
 
+    // =========================================================================
+    // CHAPTER 2: L'arbre de Vie Garden
+    // =========================================================================
     public static String[][] getChapter2PreBattle() {
         return new String[][]{
                 {"Giantha", "This garden feels wrong."},
@@ -161,6 +170,9 @@ public class Dialouge {
     }
 
 
+    // =========================================================================
+    // CHAPTER 3: True Love, Fake Pain
+    // =========================================================================
     public static String[][] getChapter3PreBattle() {
         return new String[][]{
                 {"Shiera", "This place is full of princess dolls."},
@@ -180,4 +192,15 @@ public class Dialouge {
                 {"Princess Twinkle", "But now you face ME. The one who built this school."}
         };
     }
+
+
+
+    // =========================================================================
+    // EPILOGUE
+    // =========================================================================
+
+
+    // =========================================================================
+    // SPECIAL EPILOGUE
+    // =========================================================================
 }
