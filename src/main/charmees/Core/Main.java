@@ -6,7 +6,9 @@ import charmees.util.MobNPC;
 import charmees.Entity.characters.*;
 import charmees.Entity.boss.*;
 import charmees.Entity.mobs.*;
+import charmees.Entity.players.*;
 import charmees.Display.*;
+import charmees.Core.logic.*;
 
 
 public class Main {
@@ -49,10 +51,10 @@ public class Main {
             new MoonSprite("Moon Sprite", "Minion", "Melee", "Astral magic", 110, 2),
         };
 
-        //BattleLogic battlelogic = new BattleLogic(characters, mobs, 1, skillinput);
-        //battlelogic.run();
-        MainMenuDisplay mainmenu = new MainMenuDisplay(skillinput, characters, mobs);
-        mainmenu.show();
+        BattleLogic battlelogic = new BattleLogic(characters, mobs, 1, skillinput);
+        battlelogic.run();
+        //MainMenuDisplay mainmenu = new MainMenuDisplay(skillinput, characters, mobs);
+        //mainmenu.show();
 
 
 
