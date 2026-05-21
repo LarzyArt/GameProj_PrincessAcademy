@@ -11,6 +11,7 @@ public class StoryModeDisplay {
     static boolean Chap2 = false;
     static boolean Chap3 = false;
     static boolean Epilogue = false;
+    static boolean SpecialEpisode = false;
 
     //Secret Code to unlock all the chapters
     static final String SECRET = "LEZLI.BOOK.ZIP";
@@ -50,6 +51,14 @@ public class StoryModeDisplay {
                     }
                 }
 
+                case "6" -> {
+                    if (Chap1 && Chap2 && Chap3) {
+                        SpecialEpisode();
+                    } else {
+                        System.out.println("\n[LOCKED] Complete Chapter 1, 2, and 3 first.\n");
+                    }
+                }
+
                 case "0" -> {
                     System.out.println("\nGoodbye!\n");
                     return;
@@ -65,16 +74,17 @@ public class StoryModeDisplay {
         System.out.println(Display.CYAN + "     ║        STORY MODE SELECTION          ║" + Display.RESET);
         System.out.println(Display.CYAN + "     ╚══════════════════════════════════════╝" + Display.RESET);
         System.out.println();
-        System.out.println("     ┌─ Choose Your Story ────────┐");
-        System.out.printf ("     │  [1] (Chapter 1)  %s       │%n", tag(true));
-        System.out.printf ("     │  [2] (Chapter 2)  %s       │%n", tag(Chap1));
-        System.out.printf ("     │  [3] (Chapter 3)  %s       │%n", tag(Chap1 && Chap2));
-        System.out.println("     └────────────────────────────┘");
+        System.out.println("     ┌─ Choose Your Story ───────────────┐");
+        System.out.printf ("     │  [1] (Chapter 1)  %s              │%n", tag(true));
+        System.out.printf ("     │  [2] (Chapter 2)  %s              │%n", tag(Chap1));
+        System.out.printf ("     │  [3] (Chapter 3)  %s              │%n", tag(Chap1 && Chap2));
+        System.out.println("     └───────────────────────────────────┘");
         System.out.println();
-        System.out.println("     ┌─ Extra ────────────────────┐");
-        System.out.printf ("     │  [4] (Prologue)   %s       │%n", tag(true));
-        System.out.printf ("     │  [5] (Epilogue)   %s       │%n", tag(Chap1 && Chap2 && Chap3));
-        System.out.println("     └────────────────────────────┘");
+        System.out.println("     ┌─ Extra ───────────────────────────┐");
+        System.out.printf ("     │  [4] (Prologue)          %s       │%n", tag(true));
+        System.out.printf ("     │  [5] (Epilogue)          %s       │%n", tag(Chap1 && Chap2 && Chap3));
+        System.out.printf ("     │  [6] (Special Episode)   %s       │%n", tag(Chap1 && Chap2 && Chap3));
+        System.out.println("     └───────────────────────────────────┘");
         System.out.println();
         System.out.println("     [0] Exit");
         System.out.println();
@@ -95,6 +105,7 @@ public class StoryModeDisplay {
             Chap2 = true;
             Chap3 = true;
             Epilogue = true;
+            SpecialEpisode = true;
             System.out.println("\nAll chapters unlocked!\n");
         } else {
             System.out.println("\nInvalid choice. Try again.\n");
@@ -162,5 +173,12 @@ public class StoryModeDisplay {
         System.out.println("Your epilogue content here...");
         Epilogue = true;
         System.out.println("\n[Epilogue complete!]");
+    }
+
+    public static void SpecialEpisode() {
+        System.out.println("\n--- Special Episode ---");
+        System.out.println("Your Special Episode content here...");
+        Epilogue = true;
+        System.out.println("\n[Special Episode complete!]");
     }
 }
