@@ -49,29 +49,29 @@ public class MainMenuDisplay {
             Display.gap();
 
 
-            String border = Display.CYAN + "+" + "-".repeat(Display.WIDTH - 2) + "+" + Display.RESET;
+            String border = "+" + "-".repeat(Display.WIDTH - 2) + "+";
             System.out.println(border);
 
-            System.out.println(Display.YELLOW + Display.BOLD + "|" + centerText("M E N U", Display.WIDTH - 2) + "|" + Display.RESET);
+            System.out.println("|" + centerText("M E N U", Display.WIDTH - 2) + "|");
             System.out.println(border);
 
             // Menu option 1: Story Mode
-            System.out.println(Display.GREEN + "|  [1]  Story Mode" + padRight("", Display.WIDTH - 19) + "|" + Display.RESET);
+            System.out.println("|  [1]  Story Mode" + padRight("", Display.WIDTH - 19) + "|");
             System.out.println("|       > Experience the epic narrative" + padRight("", Display.WIDTH - 39) + "|");
             System.out.println("|" + padRight("", Display.WIDTH - 2) + "|");
 
             // Menu option 2: Journal
-            System.out.println(Display.CYAN + "|  [2]  Journal" + padRight("", Display.WIDTH - 17) + "|" + Display.RESET);
+            System.out.println("|  [2]  Journal" + padRight("", Display.WIDTH - 17) + "|");
             System.out.println("|       > Study your enemies' weaknesses" + padRight("", Display.WIDTH - 38) + "|");
             System.out.println("|" + padRight("", Display.WIDTH - 2) + "|");
 
             // Menu option 3: Arcade Mode
-            System.out.println(Display.YELLOW + "|  [3]  Arcade Mode" + padRight("", Display.WIDTH - 20) + "|" + Display.RESET);
+            System.out.println("|  [3]  Arcade Mode" + padRight("", Display.WIDTH - 20) + "|");
             System.out.println("|       > L████'s Playground" + padRight("", Display.WIDTH - 39) + "|");
             System.out.println("|" + padRight("", Display.WIDTH - 2) + "|");
 
             // Menu option 4: Exit
-            System.out.println(Display.RED + "|  [4]  Exit" + padRight("", Display.WIDTH - 13) + "|" + Display.RESET);
+            System.out.println("|  [4]  Exit" + padRight("", Display.WIDTH - 13) + "|");
             System.out.println("|       > L████: Bye Bye!" + padRight("", Display.WIDTH - 24) + "|");
             System.out.println(border);
 
@@ -88,9 +88,9 @@ public class MainMenuDisplay {
 
             if (choice == -1) {
                 Display.gap();
-                System.out.println(Display.RED + border + Display.RESET);
-                System.out.println(Display.RED + "|  [!] Please enter a number [1-4]                 |" + Display.RESET);
-                System.out.println(Display.RED + border + Display.RESET);
+                System.out.println(border);
+                System.out.println("|  [!] Please enter a number [1-4]                 |");
+                System.out.println(border);
                 Display.gap();
                 BattleDIsplay.pause(400);
                 continue;
@@ -114,16 +114,16 @@ public class MainMenuDisplay {
                     break;
                 case 4:
                     Display.gap();
-                    System.out.println(Display.GREEN + border + Display.RESET);
-                    System.out.println(Display.GREEN + "|          L████: Thanks for playing! Goodbye~          |" + Display.RESET);
-                    System.out.println(Display.GREEN + border + Display.RESET);
+                    System.out.println(border);
+                    System.out.println("|          L████: Thanks for playing! Goodbye~          |");
+                    System.out.println(border);
                     Display.gap();
                     break;
                 default:
                     Display.gap();
-                    System.out.println(Display.RED + border + Display.RESET);
-                    System.out.println(Display.RED + "|  [!] Invalid choice. Please enter 1-4.         |" + Display.RESET);
-                    System.out.println(Display.RED + border + Display.RESET);
+                    System.out.println(border);
+                    System.out.println("|  [!] Invalid choice. Please enter 1-4.         |");
+                    System.out.println(border);
                     Display.gap();
                     BattleDIsplay.pause(400); // Pause so user can read error message
             }
