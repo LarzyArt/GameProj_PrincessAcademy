@@ -1,42 +1,33 @@
 package charmees.Display;
 
-import charmees.Core.Logic.PCvPCBattleLogic;
+import charmees.util.Character;
+import charmees.util.Display;
 
 public class PCvPCBattleDisplay {
-    public static final String RESET = "\u001B[0m";
-    public static final String RED = "\u001B[31m";
-    public static final String GREEN = "\u001B[32m";
-    public static final String YELLOW = "\u001B[33m";
-    public static final String CYAN = "\u001B[36m";
+
+    public static void showTrialIntro() {
+        Display.gap();
+        Display.banner();
+        Display.centered("[ TRIAL BATTLE - P/C vs P/C ]");
+        Display.line();
+        Display.centered("Choose any player or character, then choose who to fight.");
+        Display.centered("No HP/MP bonus is added for now.");
+        Display.gap();
+        Display.thin();
+    }
 
     public static void title() {
-        System.out.println(CYAN + "\n=== TRIAL BATTLE: P/C vs P/C ===" + RESET);
+        showTrialIntro();
     }
 
-    public static void showStatus(PCvPCBattleLogic.Fighter a, PCvPCBattleLogic.Fighter b) {
-        System.out.println();
-        System.out.println(a.name + " [" + a.group + "] HP: " + a.hp + "/" + a.maxHp + " MP: " + a.mp + "/" + a.maxMp);
-        System.out.println(b.name + " [" + b.group + "] HP: " + b.hp + "/" + b.maxHp + " MP: " + b.mp + "/" + b.maxM}
 
-    public static void actionMenu(PCvPCBattleLogic.Fighter f) {
-        System.out.println("\n" + GREEN + f.name + "'s Turn" + RESET);
-        System.out.println("[1] Basic Attack");
-        System.out.println("[2] Skill");
-        System.out.println("[3] Ultimate");
-        System.out.println("[4] Recover MP");
-        System.out.print("Choose: ");
-    }
 
-    public static void log(String msg) {
-        System.out.println(msg);
-    }
 
-    public static void win(String name) {
-        System.out.println(YELLOW + "\n" + name + " wins the Trial Battle!" + RESET);
-    }
 
-    public static void skipped() {
-        System.out.println(CYAN + "\nTrial Battle skipped.\n" + RESET);
-    }
 
-}
+
+
+
+
+
+
