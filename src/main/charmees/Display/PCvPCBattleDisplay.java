@@ -79,6 +79,10 @@ public class PCvPCBattleDisplay {
         Display.thin();
     }
 
+    public static void actionMenu(Character player) {
+        showActionMenu(player);
+    }
+
     public static void showSkillMenu(Character actor) {
         String[] skills = actor.getSkillList();
 
@@ -91,6 +95,24 @@ public class PCvPCBattleDisplay {
             System.out.println("  [" + (i + 1) + "] " + skills[i]);
         }
 
+        System.out.println("  [0] Cancel");
+        Display.thin();
+    }
+
+    public static void showUltimateConfirm(Character actor) {
+        String[] skills = actor.getSkillList();
+
+        Display.gap();
+        System.out.println(Display.YELLOW + Display.BOLD + "  ULTIMATE MOVE" + Display.RESET);
+        Display.thin();
+
+        if (skills.length >= 3) {
+            System.out.println("  " + skills[2]);
+        } else {
+            System.out.println("  No ultimate move available.");
+        }
+
+        System.out.println("  [1] Use it");
         System.out.println("  [0] Cancel");
         Display.thin();
     }
