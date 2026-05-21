@@ -20,6 +20,15 @@ public class PCvPCBattleDisplay {
         showTrialIntro();
     }
 
+    public static void showMatchUp(String playerName, String opponentName) {
+        Display.gap();
+        Display.line();
+        Display.centered(playerName + " VS " + opponentName);
+        Display.line();
+    }
+
+}
+
 
 
 
