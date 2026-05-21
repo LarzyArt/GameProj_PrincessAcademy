@@ -132,4 +132,31 @@ public class Dialouge {
                 {"Lynzi", "Agreed. Let's go back."}
         };
     }
+
+
+    public static String[][] getChapter2PreBattle() {
+        return new String[][]{
+                {"Giantha", "This garden feels wrong."},
+                {"Audry", "That tree... so much dark magic."},
+                {"Resonara", "I can't stop... the song won't stop..."},
+                {"Lynzi", "She's covered in black goo."},
+                {"Resonara", "I don't want to fight! But I can't stop myself!"},
+                {"Lazuli", "We have to help her. But she won't let us near."}
+        };
+    }
+
+    public static String[][] getChapter2PostBattle() {
+        return new String[][]{
+                {"Resonara", "The voice... it's gone now..."},
+                {"Audry", "Who did this to you?"},
+                {"Resonara", "Princess Twinkle. The First Princess."},
+                {"Lazuli", "The First Princess?"},
+                {"Resonara", "She wanted the tree's power to stay young forever."},
+                {"Resonara", "Behind her throne... there's a secret door..."},
+                {"Resonara", "Go there. Stop her."},
+                {"L████", "Then her eyes closed. She was finally free."},
+                {"Lynzi", "A secret door. Let's go."},
+                {"Lazuli", "Wait. We need to be careful."}
+        };
+    }
 }
