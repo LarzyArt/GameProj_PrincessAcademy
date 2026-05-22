@@ -35,7 +35,7 @@ public class ArcadeModeDisplay {
         }
     }
 
-    private Character[] buildRoster() {
+    public Character[] buildRoster() {
         Character[] roster = new Character[CharVsCharLogic.HERO_DEFS.length];
         for (int i = 0; i < CharVsCharLogic.HERO_DEFS.length; i++) {
             roster[i] = CharVsCharLogic.makeCharacter(i);
