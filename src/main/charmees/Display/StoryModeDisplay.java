@@ -24,7 +24,10 @@ public class StoryModeDisplay {
     //Secret Code to unlock all the chapters
     static final String SECRET = "LEZLI.BOOK.ZIP";
 
-    public static void startGame() {
+    public static void startGame(Scanner scanner, Character[] characters, MobNPC[] mobs) {
+        StoryModeDisplay.characters = characters;
+        StoryModeDisplay.mobs = mobs;
+
         BattleLogic chap1 = new BattleLogic(characters, mobs, 1, scanner);
         BattleLogic chap2 = new BattleLogic(characters, mobs, 2, scanner);
         BattleLogic chap3 = new BattleLogic(characters, mobs, 3, scanner);
@@ -153,46 +156,4 @@ public class StoryModeDisplay {
         }
     }
 
-    public static void Prologue() {
-        System.out.println("\n--- Prologue ---");
-        System.out.println("Your prologue content here...");
-    }
-
-    public static void Chap1() {
-        System.out.println("\n--- Chapter 1 ---");
-        System.out.println("Your Chapter 1 content here...");
-        Chap1 = true;
-        System.out.println("\n[Chapter 1 complete!]");
-        maybeOfferTrialBattle();
-    }
-
-    public static void Chap2() {
-        System.out.println("\n--- Chapter 2 ---");
-        System.out.println("Your Chapter 2 content here...");
-        Chap2 = true;
-        System.out.println("\n[Chapter 2 complete!]");
-        maybeOfferTrialBattle();
-    }
-
-    public static void Chap3() {
-        System.out.println("\n--- Chapter 3 ---");
-        System.out.println("Your Chapter 3 content here...");
-        Chap3 = true;
-        System.out.println("\n[Chapter 3 complete!]");
-        maybeOfferTrialBattle();
-    }
-
-    public static void Epilogue() {
-        System.out.println("\n--- Epilogue ---");
-        System.out.println("Your epilogue content here...");
-        Epilogue = true;
-        System.out.println("\n[Epilogue complete!]");
-    }
-
-    public static void SpecialEpisode() {
-        System.out.println("\n--- Special Episode ---");
-        System.out.println("Your Special Episode content here...");
-        Epilogue = true;
-        System.out.println("\n[Special Episode complete!]");
-    }
 }
