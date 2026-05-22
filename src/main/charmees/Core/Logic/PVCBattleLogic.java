@@ -2,6 +2,7 @@ package charmees.Core.Logic;
 
 import charmees.util.Character;
 import charmees.util.Display;
+import charmees.Display.PVCBattleDisplay;
 import java.util.Scanner;
 
 /**
