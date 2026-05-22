@@ -1,8 +1,9 @@
-package charmees.Display;
+package charmees.Core.Logic;
+
 
 import charmees.util.Character;
 import charmees.util.Display;
-
+import charmees.Display.CharVsCharBattleDisplay;
 import charmees.Entity.characters.Audry;
 import charmees.Entity.characters.Giantha;
 import charmees.Entity.characters.Lazuli;

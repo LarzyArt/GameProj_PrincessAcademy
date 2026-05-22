@@ -2,7 +2,7 @@ package charmees.Display;
 
 import charmees.util.Character;
 import charmees.util.Display;
-
+import charmees.Core.Logic.*;
 import java.util.Scanner;
 
 public class ArcadeModeDisplay {
