@@ -80,7 +80,7 @@ public class MainMenuDisplay {
                 Display.gap();
                 System.out.println("  [!] Please enter a number [1-4]");
                 Display.gap();
-                Display.pause(sc);
+                BattleDIsplay.pause(400);
                 continue;
             }
 
@@ -90,15 +90,18 @@ public class MainMenuDisplay {
             switch (choice) {
                 case 1:
                     lastChoice = 1;
-                    //new StoryMenuDisplay(sc, characters, mobs).show();
+                    StoryModeDisplay storymode = new StoryModeDisplay(sc, characters, mobs);
+                    storymode.StartGame();
                     break;
                 case 2:
                     lastChoice = 2;
-                    //new JournalDisplay().showJournalDisplay();
+                    JournalDisplay journal = new journalDisplay(sc);
+                    journal.showJournalDisplay();
                     break;
                 case 3:
                     lastChoice = 3;
-                    //new ArcadeModeDisplay(sc).show();
+                    ArcadeModeDisplay arcademode = new ArcadeModeDisplay();
+                    arcademode.showArcadeScreen();
                     break;
                 case 4:
                     Display.gap();
@@ -111,7 +114,7 @@ public class MainMenuDisplay {
                     Display.gap();
                     System.out.println(Display.RED + "  [!] Invalid choice. Please enter 1-4." + Display.RESET);
                     Display.gap();
-                    Display.pause(400); // Pause so user can read error message
+                    BatteDIsplay.pause(400); // Pause so user can read error message
             }
         }
     }
