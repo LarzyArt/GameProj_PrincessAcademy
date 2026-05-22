@@ -3,6 +3,7 @@ package charmees.Display;
 import charmees.util.Character;
 import charmees.util.MobNPC;
 import charmees.util.Display;
+import java.util.Scanner;
 
 public class BattleDIsplay {
 
@@ -72,8 +73,8 @@ public class BattleDIsplay {
                         ? Display.RED : Display.YELLOW;
 
                     String target = (i == targetIdx) ? " <-- TARGET" + Display.RESET : "";
-                    System.out.println(" " + nameColor + m.getName() + " [" + m.charClass + "]"
-                    + Display.RESET + " HP: " + m.healthPoints + "/" + mobMaxHP[i] + target);
+                    System.out.println(" " + nameColor + m.getName() + Display.RESET + " [" + m.charClass + "]"
+                    + Display.RESET + " HP: " + m.healthPoints + "/" + mobMaxHP[i] + target + Display.RESET);
                     System.out.println(" " + hpBar(m.healthPoints, mobMaxHP[i], 30)
                     + " " + percent(m.healthPoints,mobMaxHP[i]) + "%");
                 }
@@ -83,9 +84,9 @@ public class BattleDIsplay {
             public static void showActiveChar(Character c, int maxHP){
                 System.out.println("ACTIVE CHARACTER: ");
                 Display.thin();
-                System.out.println(" " + Display.CYAN + c.getName() + " " 
+                System.out.println(" " + Display.CYAN + c.getName() + " " + Display.RESET
                 + "   HP: " + c.healthPoints + "/" + maxHP
-                + "   MP: " + c.manaPoints + "/" + c.manaPoints);
+                + "   MP: " + Display.MAGENTA + c.manaPoints + Display.RESET);
 
                 System.out.println(" " + hpBar(c.healthPoints, maxHP, 30)
                 + " " + percent(c.healthPoints, maxHP) + "%");
@@ -93,19 +94,20 @@ public class BattleDIsplay {
 
         // Bench Section
         private static void showBench(Character[] characters, int activeIdx, int[] charMaxHP){
+            Display.thin();
             System.out.print("   PARTY: ");
             for(int i = 0; i < characters.length; i++){
                 Character c = characters[i];
                 String label;
 
                 if(!c.isAlive()){
-                    label = c.getName() + " [DEFEATED]";
+                    label = c.getName() + " [KO]";
                 } else if (i == activeIdx){
-                    label = c.getName() + " [IN BATTLE]";
+                    label = c.getName() + " [IN]";
                 } else if (i == 2) {
                     label = c.getName() + "[HEALER]";
                 } else {
-                    label = c.getName() + " [BENCH] [" + percent(c.healthPoints, charMaxHP[i]) + "%]";
+                    label = c.getName() + "[" + percent(c.healthPoints, charMaxHP[i]) + "%]";
                 }
 
                 System.out.print(label);
@@ -123,10 +125,10 @@ public class BattleDIsplay {
             System.out.println("What will " + actor.getName() + "do?");
             Display.gap();
 
-            System.out.println(Display.YELLOW + "  [1] SKILL"); // skill option(skill 1 or skill 2) will be handled in BattleLogic based on the character
-            System.out.println(Display.RED + "  [2] ULTIMATE"); // uses signature move (skill 3) will be handled in BattleLogic based on the character
-            System.out.println(Display.MAGENTA + "  [3] SWITCH"); // switch to another character in the bench
-            System.out.println(Display.YELLOW + "  [4] LAZULI'S BLESSING"); // heals characters based on lazuli's skills, will be handled in BattleLogic based on the character 
+            System.out.println(Display.YELLOW + "  [1] SKILL" + Display.RESET); // skill option(skill 1 or skill 2) will be handled in BattleLogic based on the character
+            System.out.println(Display.RED + "  [2] ULTIMATE" + Display.RESET); // uses signature move (skill 3) will be handled in BattleLogic based on the character
+            System.out.println(Display.MAGENTA + "  [3] SWITCH" + Display.RESET); // switch to another character in the bench
+            System.out.println(Display.YELLOW + "  [4] LAZULI'S BLESSING" + Display.RESET); // heals characters based on lazuli's skills, will be handled in BattleLogic based on the character 
 
             Display.thin();
         }
@@ -162,7 +164,6 @@ public class BattleDIsplay {
             System.out.println(" [1] Use it!");
             System.out.println(" [0] Cancel");
             Display.thin();
-            System.out.println(" > ");
         }
 
         // shows the switch menu to switch active character, with options to select any alive bench character,
@@ -186,7 +187,6 @@ public class BattleDIsplay {
 
                 System.out.println("   [0]Cancel");
                 Display.thin();
-                System.out.println("   > ");
         }
 
         // shows the heal menu for lazuli's blessing, with options to select any character to heal,
@@ -255,11 +255,11 @@ public class BattleDIsplay {
             Display.centered("L████: Chapter " + chapter + " Cleared!");
             pause(500);
             if (chapter == 1){
-                Display.centered("L█z̴̧̜͈̓̈́̃́̕██: Ohhh... are you new?");
+                Display.centered("L████: Ohhh... are you new?");
             } else if (chapter == 2){
-                Display.centered("L█z̴̧̜͈̓̈́̃́̕l̵̨̨̡̗͓̲͓͂͜ͅ█: This looks fun... I wanna play with you!");
+                Display.centered("L████: This looks fun... I wanna play with you!");
             } else if (chapter == 3){
-                Display.centered("Ļ̶͕̝̖͚̟͇̙͇̀e̴̥̖̠̭̻̣̰͒̓́̅̓͑́͆͠z̴̧̜͈̓̈́̃́̕l̵̨̨̡̗͓̲͓͂͜ͅì̵̧̧̦̫̮̦̻̈́̈̑͑̍̚͘: huh... y̷̨̛̼̟̞͍̘͈̟̬͇̝͊̐̔̕ọ̵̻̭͈̥̅̏̾̆̑̀̐̓͆̕͠u̸͇͛̾̃̄̾̆ ̵̶̡̨̫̠̺̬̜͕̖̰͙̻̆͌̎́̈́̇̍̚̚w̷̬̓̾͋̆̐͊̿̑͌͆̕ǫ̸̡̯̜͕̮̻̖̯͚̠̻̬̎̀͂͠ņ̸̜̝͓͕̥̼̈́́̑͒̒̆͐͆̃̀̋̃͐̚?");
+                Display.centered("L████: huh... you WON?!");
             }
             Display.thin();
             Display.gap();
@@ -276,9 +276,9 @@ public class BattleDIsplay {
                 if(rng == 0){
                     Display.centered("L████: Not quite what I expected...");
                 } else if (rng == 1){
-                    Display.centered("L█z̴̧̜͈̓̈́̃́̕██: Ohh... I'm Disappointed :'<");
+                    Display.centered("L████: Ohh... I'm Disappointed :'<");
                 }  else if (rng == 2){
-                    Display.centered("L█z̴̧̜͈̓̈́̃́̕l̵̨̨̡̗͓̲͓͂͜ͅ█: REWIND TIME! b̴̨̛̮͚̜̝̠̭͐̄̊̊͋̿̋̚̕̕͜͝r̴̰̅r̶̹̩̝̣͇̖̰̎ŗ̵̼̫̠̈̌̿̔̉̅̈́̑͒̍̅r̸̨̥̠͉̠͓͛̚a̷̡̰̼͖̠̗̖͉̜͔͇͑̍̀̀̉̅͒͘͠͝͝͠b̷̨̢̲̟̻̣̠̫̞̫̗̟͑́̾̏̿̓̐̉̄͐͐e̶̙͈̪̣̫̺̲̓͛̇̂̕j̵̣̭͈̘̻̀͆͒́̀̓̆̊̈́̒̅d̵̢̡̧̺̟̻̠̜͋̿͒̂̓̎̀̈́͜͝q̶͙̩̞̝͙͔̫̹̳͋́͆͆̀̍̅͛́̚͜͠͝w̴̪͈̫̿̽̏́̒͛k̴̥͆̑́͑̏̽̕̕ͅē̶̼͙̈́̈́͛̌͠ͅq̵̧̪̭͕͚̮͍̜̞̜̇̿̃̽͐͋̕͜");
+                    Display.centered("L████: REWIND TIME!");
                 }
             Display.thin();
             Display.gap();
@@ -300,7 +300,25 @@ public class BattleDIsplay {
         // =================================================
         // DIALOGUE -prints each line, waits for enter between them
         // =================================================
-        // tentative not final
+        public static void showDialogue(String[][] lines, Scanner sc) {
+            if (lines == null || lines.length == 0) return;
+            Display.gap();
+            Display.line();
+            for (String[] line : lines) {
+                if (line[0].isEmpty() && line[1].isEmpty()) {
+                    Display.gap(); // empty lines used as spacers in epilogue
+                    continue;
+                }
+                Display.gap();
+                if (!line[0].isEmpty())
+                    System.out.println("  " + Display.CYAN + line[0] + Display.RESET + ":");
+                System.out.println("  \"" + line[1] + "\"");
+                Display.gap();
+                BattleDIsplay.pause(1000);
+            }
+            Display.line();
+            Display.gap();
+        }
 
         // ================================================
         //HELPERS
@@ -314,7 +332,8 @@ public class BattleDIsplay {
             String color = ratio > 0.5 ? Display.GREEN : ratio > 0.25 ? Display.YELLOW
                             : Display.RED;
 
-            return color + "█".repeat(filled) + "░".repeat(width - filled); // create bar string
+            return color + "█".repeat(filled) + Display.RESET 
+            + "░".repeat(width - filled) + Display.RESET; // create bar string
         }
 
         public static void log(String msg){

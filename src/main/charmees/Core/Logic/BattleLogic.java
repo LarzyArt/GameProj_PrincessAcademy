@@ -1,4 +1,4 @@
-package charmees.Core.Logic;
+package charmees.Core.logic;
 
 import charmees.Display.BattleDIsplay;
 import charmees.util.*;
@@ -23,8 +23,8 @@ public class BattleLogic {
     private final int[] mobMaxHP;
 
     // dialogue triggers for certain HP Boss thresholds
-    // private boolean boss50Trigger = false;
-    // private boolean boss10Trigger = false;
+    private boolean boss50Trigger = false;
+    private boolean boss10Trigger = false;
     private boolean bossWakeUpShown = false;
 
     // constructors
@@ -56,7 +56,14 @@ public class BattleLogic {
 
 
     public void run() {
-        // lore (tentative)
+        // lore / pre battle dialogue
+            if (chapter == 1) {
+                BattleDIsplay.showDialogue(Dialogue.getChapter1PreBattle(), sc);
+            } else if (chapter == 2) {
+                BattleDIsplay.showDialogue(Dialogue.getChapter2PreBattle(), sc);
+            } else if (chapter == 3) {
+                BattleDIsplay.showDialogue(Dialogue.getChapter3PreBattle(), sc);
+            }
 
         //  main battle loop
         while(isBattleOngoing()){
@@ -230,6 +237,11 @@ public class BattleLogic {
                 characters[i].healthPoints = charMaxHP[i];
         }
 
+        // refresh HUD so player sees updated HP before enemy phase
+        BattleDIsplay.showBattleField(characters, mobs, chapter,
+            activeIdx, targetIdx, charMaxHP,
+            mobMaxHP, turnCount, isBossLocked());
+
         endPlayerTurn();
     }
 
@@ -238,7 +250,7 @@ public class BattleLogic {
     // =================================================
     private void endPlayerTurn() {
         // dialogue trigger tenattive
-
+        checkBossDialogueTriggers();
         if (!isBattleOngoing())
             return;
 
@@ -286,7 +298,8 @@ public class BattleLogic {
             
             if(bossExists){
                 bossWakeUpShown = true;
-                //tentative dialogue
+                if (chapter == 3)
+                        BattleDIsplay.showDialogue(Dialogue.getChapter3MidBattle(), sc);
             }
         }
 
@@ -328,7 +341,10 @@ public class BattleLogic {
 
         if (!anyEnemy) {
             BattleDIsplay.showVictoryDisplay(chapter);
-            // BattleDIsplay.showDialogue(BattleDialogue.getPostBattleLines(chapter), sc);
+            // post battle — uses Dialogue's own display methods for break character feature
+            if (chapter == 1)       Dialogue.displayChapter1PostBattle();
+            else if (chapter == 2)  Dialogue.displayChapter2PostBattle();
+            else if (chapter == 3)  Dialogue.displayChapter3PostBattle();
         } else if (!anyFighter) {
             BattleDIsplay.showDefeatDisplay();
         }
@@ -424,6 +440,35 @@ public class BattleLogic {
 
         return null; // should never reach here
     }
+    
+    
+    
+    // =================================================
+    // DIALOGUE
+    // =================================================
+
+    private void checkBossDialogueTriggers(){
+        for(int i = 0; i < mobs.length; i++){
+            MobNPC m = mobs[i];
+            if(m.chapter != chapter) continue;
+            if(!m.charClass.equals("Boss") && !m.charClass.equals("Miniboss")) continue;
+            if(!m.isAlive()) continue;
+
+            double ratio = (double) m.healthPoints / mobMaxHP[i];
+            
+            if (!boss50Trigger && ratio <= 0.50) {
+                boss50Trigger = true;
+                // Chapter 3 only has boss threshold dialogues
+                if (chapter == 3)
+                    BattleDIsplay.showDialogue(Dialogue.getChapter3Boss50(), sc);                   }
+                if (!boss10Trigger && ratio <= 0.10) {
+                    boss10Trigger = true;
+                    if (chapter == 3)
+                        BattleDIsplay.showDialogue(Dialogue.getChapter3Boss10(), sc);
+            }
+        }
+    }
+    
 
     // =================================================
     // HELPERS
