@@ -1,18 +1,20 @@
 package charmees.Display;
+import charmees.util.Character;
 import charmees.util.Dialogue;
 import charmees.util.Display;
-import charmees.Entity.characters.*;
-import charmees.Entity.mobs.*;
-import charmees.Entity.boss.*;
+import charmees.util.MobNPC;
+import charmees.util.Character;
 import java.util.Scanner;
 import charmees.Core.Logic.PCvPCBattleLogic;
 import charmees.Core.Logic.*;
 import charmees.Display.MainMenuDisplay;
+import charmees.util.MobNPC;
 
 
 public class StoryModeDisplay {
     static Scanner scanner = new Scanner(System.in);
-
+    private static Character[] characters;
+    private static MobNPC[] mobs;
     static boolean Chap1 = false;
     static boolean Chap2 = false;
     static boolean Chap3 = false;
@@ -29,6 +31,7 @@ public class StoryModeDisplay {
         while (true) {
             printMenu();
 
+            System.out.print(Display.YELLOW + "Enter choice: " + Display.RESET);
             String input = scanner.nextLine().trim();
 
             switch (input) {
@@ -72,6 +75,7 @@ public class StoryModeDisplay {
                     System.out.println("\nGoodbye!\n");
                     BattleDIsplay.pause(400);
                     MainMenuDisplay mainmenu = new MainMenuDisplay(scanner, characters, mobs);
+                    mainmenu.show();
                  return;
                 }
 
@@ -86,20 +90,19 @@ public class StoryModeDisplay {
         System.out.println(Display.CYAN + "     ╚══════════════════════════════════════╝" + Display.RESET);
         System.out.println();
         System.out.println("     ┌─ Choose Your Story ───────────────┐");
-        System.out.printf ("     │  [1] (Chapter 1)  %s              │%n", tag(true));
-        System.out.printf ("     │  [2] (Chapter 2)  %s              │%n", tag(Chap1));
-        System.out.printf ("     │  [3] (Chapter 3)  %s              │%n", tag(Chap1 && Chap2));
+        System.out.printf ("       [1] (Chapter 1)  %s              %n", tag(true));
+        System.out.printf ("       [2] (Chapter 2)  %s              %n", tag(Chap1));
+        System.out.printf ("       [3] (Chapter 3)  %s              %n", tag(Chap1 && Chap2));
         System.out.println("     └───────────────────────────────────┘");
         System.out.println();
         System.out.println("     ┌─ Extra ───────────────────────────┐");
-        System.out.printf ("     │  [4] (Prologue)          %s       │%n", tag(true));
-        System.out.printf ("     │  [5] (Epilogue)          %s       │%n", tag(Chap1 && Chap2 && Chap3));
-        System.out.printf ("     │  [6] (Special Episode)   %s       │%n", tag(Chap1 && Chap2 && Chap3));
+        System.out.printf ("       [4] (Prologue)          %s       %n", tag(true));
+        System.out.printf ("       [5] (Epilogue)          %s       %n", tag(Chap1 && Chap2 && Chap3));
+        System.out.printf ("       [6] (Special Episode)   %s       %n", tag(Chap1 && Chap2 && Chap3));
         System.out.println("     └───────────────────────────────────┘");
         System.out.println();
         System.out.println("     [0] Exit");
         System.out.println();
-        System.out.print(Display.YELLOW + "Enter choice: " + Display.RESET);
     }
 
     public static String tag(boolean unlocked) {
