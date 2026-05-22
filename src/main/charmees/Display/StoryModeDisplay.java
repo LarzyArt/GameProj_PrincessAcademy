@@ -1,7 +1,13 @@
 package charmees.Display;
+import charmees.util.Dialogue;
 import charmees.util.Display;
+import charmees.Entity.characters.*;
+import charmees.Entity.mobs.*;
+import charmees.Entity.boss.*;
 import java.util.Scanner;
 import charmees.Core.Logic.PCvPCBattleLogic;
+import charmees.Core.Logic.*;
+import charmees.Display.MainMenuDisplay;
 
 
 public class StoryModeDisplay {
@@ -17,17 +23,20 @@ public class StoryModeDisplay {
     static final String SECRET = "LEZLI.BOOK.ZIP";
 
     public static void startGame() {
+        BattleLogic chap1 = new BattleLogic(characters, mobs, 1, scanner);
+        BattleLogic chap2 = new BattleLogic(characters, mobs, 2, scanner);
+        BattleLogic chap3 = new BattleLogic(characters, mobs, 3, scanner);
         while (true) {
             printMenu();
 
             String input = scanner.nextLine().trim();
 
             switch (input) {
-                case "1" -> Chap1();
+                case "1" -> chap1.run();
 
                 case "2" -> {
                     if (Chap1) {
-                        Chap2();
+                        chap2.run();
                     } else {
                         System.out.println("\n[LOCKED] Complete Chapter 1 first.\n");
                     }
@@ -35,17 +44,17 @@ public class StoryModeDisplay {
 
                 case "3" -> {
                     if (Chap1 && Chap2) {
-                        Chap3();
+                        chap3.run();
                     } else {
                         System.out.println("\n[LOCKED] Complete Chapter 1 and 2 first.\n");
                     }
                 }
 
-                case "4" -> Prologue();
+                case "4" -> BattleDIsplay.showDialogue(Dialogue.getPrologue(), scanner);
 
                 case "5" -> {
                     if (Chap1 && Chap2 && Chap3) {
-                        Epilogue();
+                        BattleDIsplay.showDialogue(Dialogue.getEpilogue(), scanner);
                     } else {
                         System.out.println("\n[LOCKED] Complete Chapter 1, 2, and 3 first.\n");
                     }
@@ -53,7 +62,7 @@ public class StoryModeDisplay {
 
                 case "6" -> {
                     if (Chap1 && Chap2 && Chap3) {
-                        SpecialEpisode();
+                        BattleDIsplay.showDialogue(Dialogue.getSpecialEpilogue(), scanner);
                     } else {
                         System.out.println("\n[LOCKED] Complete Chapter 1, 2, and 3 first.\n");
                     }
@@ -61,7 +70,9 @@ public class StoryModeDisplay {
 
                 case "0" -> {
                     System.out.println("\nGoodbye!\n");
-                    return;
+                    BattleDIsplay.pause(400);
+                    MainMenuDisplay mainmenu = new MainMenuDisplay(scanner, characters, mobs);
+                 return;
                 }
 
                 default -> handleSecretWord(input);
@@ -93,9 +104,9 @@ public class StoryModeDisplay {
 
     public static String tag(boolean unlocked) {
         if (unlocked) {
-            return Display.GREEN + "[OPEN]" + RESET;
+            return Display.GREEN + "[OPEN]" + Display.RESET;
         } else {
-            return Display.RED + "[LOCKED]" + RESET;
+            return Display.RED + "[LOCKED]" + Display.RESET;
         }
     }
 
